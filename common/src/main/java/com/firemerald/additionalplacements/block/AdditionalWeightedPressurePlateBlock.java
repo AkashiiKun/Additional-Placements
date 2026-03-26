@@ -1,0 +1,56 @@
+package com.firemerald.additionalplacements.block;
+
+import com.firemerald.additionalplacements.block.interfaces.IWeightedPressurePlateBlock;
+import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
+import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
+
+import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BeaconBeamBlock;
+import net.minecraft.world.level.block.WeightedPressurePlateBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import org.jetbrains.annotations.ApiStatus;
+
+public abstract class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock> implements IWeightedPressurePlateBlock<WeightedPressurePlateBlock> {
+	public static AdditionalWeightedPressurePlateBlock of(WeightedPressurePlateBlock plate) {
+		return plate instanceof BeaconBeamBlock ? ofBeaconBeam(plate) : ofNonBeaconBeam(plate);
+	}
+
+	@ApiStatus.Internal
+	@ExpectPlatform
+	public static AdditionalWeightedPressurePlateBlock ofNonBeaconBeam(WeightedPressurePlateBlock block) {
+		throw new AssertionError();
+	}
+
+	@ApiStatus.Internal
+	@ExpectPlatform
+	public static AdditionalWeightedPressurePlateBlock ofBeaconBeam(WeightedPressurePlateBlock block) {
+		throw new AssertionError();
+	}
+
+	protected AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
+	{
+		super(plate);
+	}
+
+	@Override
+	protected int getSignalStrength(Level level, BlockPos pos)
+	{
+		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalFloorBlock.PLACING).ordinal() - 1].move(pos);
+		int i = Math.min(level.getEntitiesOfClass(Entity.class, aabb).size(), parentBlock.maxWeight);
+		if (i > 0) return Mth.ceil(15 * (float) Math.min(parentBlock.maxWeight, i) / parentBlock.maxWeight);
+		else return 0;
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public StateModelDefinition getModelDefinition(BlockState state) {
+		return PressurePlateModels.getWeightedPressurePlateModel(state);
+	}
+}

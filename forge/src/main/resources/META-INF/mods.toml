@@ -1,0 +1,35 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+#issueTrackerURL = ""
+license = "MIT"
+
+[[mods]]
+modId = "additionalplacements"
+version = "${version}"
+displayName = "Additional Placements"
+authors = "FirEmerald"
+description = '''
+Adds additional placements for blocks:\nSlabs can be placed vertically.\nStairs can be placed vertically.\nCarpets can be placed on walls and ceilings.\nPressure plates can be placed on walls and ceilings.
+'''
+#logoFile = ""
+
+[[dependencies.additionalplacements]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.additionalplacements]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.additionalplacements]]
+modId = "architectury"
+mandatory = true
+versionRange = "[9.2.14,)"
+ordering = "AFTER"
+side = "BOTH"
