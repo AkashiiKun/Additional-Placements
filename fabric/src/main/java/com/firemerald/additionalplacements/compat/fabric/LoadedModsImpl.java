@@ -6,11 +6,15 @@ public enum LoadedModsImpl {
     ;
     public static void populatePlatform() {
         for (LoadedModsImpl val : LoadedModsImpl.values()) {
-            if (FabricLoader.getInstance().isModLoaded(val.modId)) {
+            if (isModLoaded(val.modId)) {
                 val.isPresent = true;
                 val.whenDetected.run();
             }
         }
+    }
+
+    public static boolean isModLoaded(String modId) {
+        return FabricLoader.getInstance().isModLoaded(modId);
     }
 
     public final String modId;

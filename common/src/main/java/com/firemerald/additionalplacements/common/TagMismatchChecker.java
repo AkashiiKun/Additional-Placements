@@ -8,7 +8,7 @@ import java.util.function.IntPredicate;
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.config.APConfigs;
-import dev.architectury.platform.Platform;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import org.apache.commons.lang3.tuple.Triple;
@@ -131,7 +131,7 @@ public class TagMismatchChecker extends Thread {
 	}
 
 	public static boolean canGenerateTags(Player player, IntPredicate hasPermission) {
-		if (Platform.getEnv() == EnvType.CLIENT) return canGenerateTagsClient(player);
+		if (PlatformUtils.isClient()) return canGenerateTagsClient(player);
 		else return hasPermission.test(2);
 	}
 
