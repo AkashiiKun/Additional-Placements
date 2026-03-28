@@ -19,14 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends AdditionalPlacementBlock<T> implements BucketPickup, LiquidBlockContainer {
-	public AdditionalPlacementLiquidBlock(T parentBlock)
-	{
+	public AdditionalPlacementLiquidBlock(T parentBlock) {
 		super(parentBlock);
 	}
 
 	@Override
 	public @NotNull ItemStack pickupBlock(@Nullable Player player, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState) {
-		ItemStack ret = this.getOtherBlock().pickupBlock(player, level, pos, this.getModelState(blockState));
+		ItemStack ret = this.additionalplacements$getOtherBlock().pickupBlock(player, level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
@@ -38,7 +37,7 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 
 	@Override
 	public boolean canPlaceLiquid(@Nullable Player player, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Fluid fluid) {
-		return this.getOtherBlock().canPlaceLiquid(player, level, pos, getModelState(blockState), fluid);
+		return this.additionalplacements$getOtherBlock().canPlaceLiquid(player, level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override

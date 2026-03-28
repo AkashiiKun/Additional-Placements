@@ -97,7 +97,7 @@ public class CommonModEvents {
                 BiMap<Block, Block> newMap = HashBiMap.create(oldMap);
                 oldMap.forEach((b1, b2) -> {
                     if (b1 instanceof IPlacementBlock<?> p1 && b2 instanceof IPlacementBlock<?> p2) {
-                        if (p1.hasAdditionalStates() && p2.hasAdditionalStates()) newMap.put(p1.getOtherBlock(), p2.getOtherBlock());
+                        if (p1.additionalplacements$hasAdditionalStates() && p2.additionalplacements$hasAdditionalStates()) newMap.put(p1.additionalplacements$getOtherBlock(), p2.additionalplacements$getOtherBlock());
                     }
                 });
                 return newMap;
