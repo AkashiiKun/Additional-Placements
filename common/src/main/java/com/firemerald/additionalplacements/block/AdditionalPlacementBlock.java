@@ -169,13 +169,15 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean useShapeForLightOcclusion(@NotNull BlockState state) {
-		return true;
+		BlockState modelState = getModelState(state);
+		return modelState.getBlock().useShapeForLightOcclusion(modelState);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public void attack(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player) {
-		getModelState(state).attack(level, pos, player);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().attack(modelState, level, pos, player);
 	}
 
 	@Override
@@ -195,26 +197,28 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@SuppressWarnings("deprecation")
 	public void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
 		BlockState modelState = getModelState(state);
-		modelState.onPlace(level, pos, getModelStateSafe(oldState), movedByPiston);
+		modelState.getBlock().onPlace(modelState, level, pos, getModelStateSafe(oldState), movedByPiston);
 		applyChanges(state, modelState, level, pos);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
-		getModelState(state).onRemove(level, pos, getModelStateSafe(newState), movedByPiston);
+		BlockState modelState = getModelState(state);
+		modelState.getBlock().onRemove(modelState, level, pos, getModelStateSafe(newState), movedByPiston);
 	}
 
 	@Override
 	public boolean isRandomlyTicking(@NotNull BlockState state) {
-		return getModelState(state).isRandomlyTicking();
+		BlockState modelState = getModelState(state);
+		return modelState.getBlock().isRandomlyTicking(modelState);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
 		BlockState modelState = getModelState(state);
-		modelState.randomTick(level, pos, rand);
+		modelState.getBlock().randomTick(modelState, level, pos, rand);
 		applyChanges(state, modelState, level, pos);
 	}
 
@@ -222,7 +226,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@SuppressWarnings("deprecation")
 	public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
 		BlockState modelState = getModelState(state);
-		modelState.tick(level, pos, rand);
+		modelState.getBlock().tick(modelState, level, pos, rand);
 		applyChanges(state, modelState, level, pos);
 	}
 
@@ -230,7 +234,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@SuppressWarnings("deprecation")
 	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
 		BlockState modelState = getModelState(state);
-		InteractionResult res = modelState.use(level, player, hand, hitResult);
+		InteractionResult res = modelState.getBlock().use(modelState, level, pos, player, hand, hitResult);
 		applyChanges(state, modelState, level, pos);
 		return res;
 	}
@@ -349,30 +353,35 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Override
 	@SuppressWarnings("deprecation")
 	public @NotNull FluidState getFluidState(@NotNull BlockState state) {
-		return this.getModelState(state).getFluidState();
+		BlockState modelState = getModelState(state);
+		return modelState.getBlock().getFluidState(modelState);
 	}
 
 	@Override
     @SuppressWarnings("deprecation")
 	public boolean skipRendering(@NotNull BlockState thisState, @NotNull BlockState adjacentState, @NotNull Direction dir) {
-		return this.getModelState(thisState).skipRendering(adjacentState, dir);
+		//TODO make better?
+		return false;
 	}
 
 	@Override
 	public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
-		return this.getModelState(state).propagatesSkylightDown(level, pos);
+		BlockState modelState = getModelState(state);
+		return modelState.getBlock().propagatesSkylightDown(modelState, level, pos);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
-		return this.getModelState(state).getShadeBrightness(level, pos);
+		BlockState modelState = getModelState(state);
+		return modelState.getBlock().getShadeBrightness(modelState, level, pos);
 	}
 
 	@Override
 	@SuppressWarnings("deprecation")
 	public boolean isSignalSource(@NotNull BlockState state) {
-		return getModelState(state).isSignalSource();
+		BlockState modelState = getModelState(state);
+		return modelState.getBlock().isSignalSource(modelState);
 	}
 
 	public abstract boolean rotatesLogic(BlockState state);
