@@ -65,7 +65,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		this.parentBlock = parentBlock;
 	}
 
-	@Override
+	@SuppressWarnings("unchecked")
+    @Override
 	public T additionalplacements$getOtherBlock() {
 		return parentBlock;
 	}
@@ -164,13 +165,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public void handlePrecipitation(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Biome.Precipitation precipitation) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().handlePrecipitation(modelState, level, pos, precipitation);
-	}
-
-	@Override
-	@SuppressWarnings("deprecation")
-	public boolean useShapeForLightOcclusion(@NotNull BlockState state) {
-		BlockState modelState = getModelState(state);
-		return modelState.getBlock().useShapeForLightOcclusion(modelState);
 	}
 
 	@Override
