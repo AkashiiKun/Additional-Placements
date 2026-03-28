@@ -67,6 +67,10 @@ subprojects {
         maven { url = "https://maven.terraformersmc.com/releases" } // Mod Menu, EMI
         maven { url = "https://maven.createmod.net" } // Ponder
         maven {
+            name = 'Nucleoid'
+            url = 'https://maven.nucleoid.xyz/'
+        }
+        maven {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
         }

@@ -4,7 +4,6 @@ import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.forge.APNetworkImpl;
 import com.firemerald.additionalplacements.network.server.ServerPlayPacket;
 import net.minecraftforge.event.network.CustomPayloadEvent;
-import net.minecraftforge.network.NetworkDirection;
 
 public interface ServerPlayPacketImpl extends ServerPacketImpl, ServerPlayPacket {
     @Override

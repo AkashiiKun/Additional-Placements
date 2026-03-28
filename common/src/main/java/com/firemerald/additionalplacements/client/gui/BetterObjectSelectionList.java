@@ -48,7 +48,7 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 	}
 
 	@Override
-	public void updateNarration(@NotNull NarrationElementOutput narrationElementOutput) {
+	public void updateWidgetNarration(@NotNull NarrationElementOutput narrationElementOutput) {
 		E e = this.getHovered();
 		if (e != null) {
 			this.narrateListElementPosition(narrationElementOutput.nest(), e);

@@ -1,13 +1,9 @@
 package com.firemerald.additionalplacements.compat.forge;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
-import com.firemerald.additionalplacements.client.models.Unwrapper;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLEnvironment;
-import team.chisel.ctm.client.model.AbstractCTMBakedModel;
 
 public enum LoadedModsImpl {
+    /* disabled due to only being on neoforge and not forge
     CTM("ctm", () -> {
         if (FMLEnvironment.dist == Dist.CLIENT) {
             AdditionalPlacementsMod.LOGGER.info("Connected Textures Mod detected, registering ctm BakedModel unwrappers");
@@ -16,7 +12,9 @@ public enum LoadedModsImpl {
                 else return null;
             });
         }
-    });
+    })
+     */
+    ;
 
     public static void populatePlatform() {
         for (LoadedModsImpl val : LoadedModsImpl.values()) {

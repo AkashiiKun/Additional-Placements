@@ -100,7 +100,7 @@ public interface IForgeAdditionalPlacementBlock<T extends Block> extends IPlacem
     }
 
     @Override
-    default ItemStack getCloneItemStack(BlockState state, HitResult target, BlockGetter level, BlockPos pos, Player player) {
+    default ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().getCloneItemStack(modelState, target, level, pos, player);
     }

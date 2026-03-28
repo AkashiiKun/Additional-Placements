@@ -40,12 +40,12 @@ public class APDynamicResources implements PackResources {
             true,
             new Pack.ResourcesSupplier() {
                 @Override
-                public PackResources openPrimary(String id) {
+                public @NotNull PackResources openPrimary(@NotNull String id) {
                     return new APDynamicResources();
                 }
 
                 @Override
-                public PackResources openFull(String id, Pack.Info info) {
+                public @NotNull PackResources openFull(@NotNull String id, Pack.@NotNull Info info) {
                     return new APDynamicResources();
                 }
             },

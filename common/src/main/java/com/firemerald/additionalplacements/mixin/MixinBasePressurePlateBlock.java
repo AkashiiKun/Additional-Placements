@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.state.properties.BlockSetType;
 public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateBlockExtensions {
 	@Final
 	@Shadow
-    private BlockSetType type;
+	public BlockSetType type;
 
 	@Shadow
 	protected abstract BlockState setSignalForState(BlockState pState, int pStrength);

@@ -58,7 +58,7 @@ dependencies {
     modImplementation "maven.modrinth:balm:$balm_version"
     modImplementation "maven.modrinth:kleeslabs:$kleeslabs_version"
     //modCompileOnly "maven.modrinth:continuity:$continuity_version"
-    modCompileOnly "curse.maven:ctm-267602:$ctm_file"
+    //modCompileOnly "curse.maven:ctm-267602:$ctm_file"
 
     modCompileOnly("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
     modCompileOnly "net.createmod.ponder:Ponder-Forge-$create_mc_version:$ponder_version"

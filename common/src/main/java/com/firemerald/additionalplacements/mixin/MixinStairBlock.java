@@ -31,7 +31,7 @@ public abstract class MixinStairBlock implements IVanillaStairBlock {
     private AdditionalStairBlock additionalplacements$stairs;
 	@Final
 	@Shadow
-	private BlockState baseState;
+	protected BlockState baseState;
 
 	@Unique
     private StairBlock additionalplacements$asStair() {
