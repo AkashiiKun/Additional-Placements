@@ -5,12 +5,11 @@ import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBloc
 import com.firemerald.additionalplacements.block.AdditionalBlockStateProperties;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
 import com.firemerald.additionalplacements.client.models.Unwrapper;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import dev.architectury.platform.Platform;
 import me.pepperbell.continuity.client.model.CtmBakedModel;
 import me.pepperbell.continuity.client.model.EmissiveBakedModel;
-import net.fabricmc.api.EnvType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public enum LoadedMods {
     DOUBLESLABS("doubleslabs", () -> AdditionalPlacementsMod.LOGGER.info("DoubleSlabs detected, disabling vertical slab placement under certain conditions")),
     CONTINUITY("continuity", () -> {
-        if (Platform.getEnv() == EnvType.CLIENT) {
+        if (PlatformUtils.isClient()) {
             AdditionalPlacementsMod.LOGGER.info("Continuity detected, registering continuity BakedModel unwrappers");
             Unwrapper.registerUnwrapper(model -> {
                 if (model instanceof CtmBakedModel ctm) return ctm.getWrappedModel();
@@ -68,7 +67,7 @@ public enum LoadedMods {
     public static void populate() {
         AdditionalPlacementsMod.LOGGER.info("Checking loaded mods...");
         for (LoadedMods val : LoadedMods.values()) {
-            if (Platform.isModLoaded(val.modId)) {
+            if (isModLoaded(val.modId)) {
                 val.isPresent = true;
                 val.whenDetected.run();
             }
@@ -79,6 +78,11 @@ public enum LoadedMods {
 
     @ExpectPlatform
     public static void populatePlatform() {
+        throw new AssertionError();
+    }
+
+    @ExpectPlatform
+    public static boolean isModLoaded(String modId) {
         throw new AssertionError();
     }
 

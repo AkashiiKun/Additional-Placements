@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.config;
 
-import dev.architectury.platform.Platform;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -25,7 +25,7 @@ public class APConfigs {
         final Pair<StartupConfig, ForgeConfigSpec> startupSpecPair = new ForgeConfigSpec.Builder().configure(StartupConfig::new);
         startup = startupSpecPair.getLeft();
         startupSpec = startupSpecPair.getRight();
-		startup.loadConfig(Platform.getConfigFolder().resolve("additionalplacements-startup.toml"), startupSpec);
+		startup.loadConfig(PlatformUtils.getConfigFolder().resolve("additionalplacements-startup.toml"), startupSpec);
         final Pair<CommonConfig, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
         common = commonSpecPair.getLeft();
         registerConfig.accept(ModConfig.Type.COMMON, commonSpec = commonSpecPair.getRight());
