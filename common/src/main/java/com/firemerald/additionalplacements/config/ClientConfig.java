@@ -12,7 +12,7 @@ public class ClientConfig {
 	public final BooleanValue defaultPlacementLogicState, loginPlacementLogicStateMessage, togglePlacementLogicStateMessage, enablePlacementHighlight;
 	public final LongValue toggleQuickpressTime;
 	public final ConfigValue<String> gridColor, previewColor;
-	private float[] gridColorVal = {.4f, 0, 0, 0}, previewColorVal = {.4f, 1, 1, 1};
+	private float[] gridColorVal = {.4f, 0, 0, 0}, previewColorVal = {.4f, 1, 1, 1}; //order intentionally left reversed to aid in capturing missed config load events
 
 	public ClientConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Client settings").push("client");

@@ -32,10 +32,10 @@ import net.minecraft.world.level.block.Block;
 public class FabricModEvents implements ModInitializer {
     @Override
     public void onInitialize() {
-        APNetworkImpl.register();
-        loadRegistry();
         ModConfigEvents.loading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigLoaded);
         ModConfigEvents.reloading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigReloaded);
+        APNetworkImpl.register();
+        loadRegistry();
         CommandRegistrationCallback.EVENT.register(CommonModEvents::onRegisterCommands);
         CommonLifecycleEvents.TAGS_LOADED.register(CommonModEvents::onTagsUpdated);
         ServerLifecycleEvents.SERVER_STARTED.register(FabricModEvents::onServerStarted);
