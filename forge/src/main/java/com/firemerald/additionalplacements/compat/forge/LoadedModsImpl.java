@@ -18,11 +18,15 @@ public enum LoadedModsImpl {
 
     public static void populatePlatform() {
         for (LoadedModsImpl val : LoadedModsImpl.values()) {
-            if (ModList.get().isLoaded(val.modId)) {
+            if (isModLoaded(val.modId)) {
                 val.isPresent = true;
                 val.whenDetected.run();
             }
         }
+    }
+
+    public static boolean isModLoaded(String modId) {
+        return ModList.get().isLoaded(modId);
     }
 
     public final String modId;
