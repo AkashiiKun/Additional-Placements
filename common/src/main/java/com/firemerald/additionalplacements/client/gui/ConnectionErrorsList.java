@@ -11,11 +11,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
 public class ConnectionErrorsList extends BetterObjectSelectionList<ConnectionErrorsList.Entry> {
-	public ConnectionErrorsList(ConnectionErrorsScreen screen, int x, int y, int width, int height, MessageTree rootError, boolean wasSinglePlayer) {
+	public ConnectionErrorsList(ConnectionErrorsScreen screen, int x, int y, int width, int height, MessageTree rootError) {
 		super(screen.getMinecraft(), x, y, width, height, screen.getFont().lineHeight + 4);
 		this.setRenderHeader(true, 2);
 		int spaceWidth = screen.getFont().width("  ");
-		if (wasSinglePlayer) addEntry(new Entry(screen, Component.translatable("msg.additionalplacements.local_world_notice"), 0));
 		rootError.forEach((message, level) -> addEntry(new Entry(screen, message, level * spaceWidth)), 0);
 	}
 

@@ -5,6 +5,7 @@ import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
 import com.firemerald.additionalplacements.forge.AdditionalPlacementsForge;
 
+import com.firemerald.additionalplacements.network.forge.CheckDataConfigurationTaskImpl;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -12,6 +13,7 @@ import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.event.TagsUpdatedEvent.UpdateCause;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.minecraftforge.event.network.GatherLoginConfigurationTasksEvent;
 import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -69,5 +71,10 @@ public class CommonEventHandler {
     @SubscribeEvent
     public static void onServerStopping(ServerStoppingEvent event) {
         CommonModEvents.onServerStopping(event.getServer());
+    }
+
+    @SubscribeEvent
+    public static void onGatherLoginConfigurationTasks(GatherLoginConfigurationTasksEvent event) {
+        event.addTask(new CheckDataConfigurationTaskImpl());
     }
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
@@ -15,6 +16,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends AdditionalPlacementBlock<T> implements BucketPickup, LiquidBlockContainer {
 	public AdditionalPlacementLiquidBlock(T parentBlock)
@@ -23,8 +25,8 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public @NotNull ItemStack pickupBlock(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState) {
-		ItemStack ret = this.additionalplacements$getOtherBlock().pickupBlock(level, pos, this.getModelState(blockState));
+	public @NotNull ItemStack pickupBlock(@Nullable Player player, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState) {
+		ItemStack ret = this.getOtherBlock().pickupBlock(player, level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
@@ -35,8 +37,8 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public boolean canPlaceLiquid(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Fluid fluid) {
-		return this.additionalplacements$getOtherBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
+	public boolean canPlaceLiquid(@Nullable Player player, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Fluid fluid) {
+		return this.getOtherBlock().canPlaceLiquid(player, level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class ConfigurationCheckFailedPacket implements ClientLoginPacket {
+public abstract class ConfigurationCheckFailedPacket implements ClientConfigurationPacket {
 	@ExpectPlatform
 	public static ConfigurationCheckFailedPacket of(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {
 		throw new AssertionError();
@@ -83,16 +83,14 @@ public abstract class ConfigurationCheckFailedPacket implements ClientLoginPacke
 		public void run() {
 			Minecraft minecraft = Minecraft.getInstance();
 			Screen desScreen = new TitleScreen();
-			boolean wasSinglePlayer;
 			if (!minecraft.isLocalServer()) {
-				wasSinglePlayer = false;
-				if (minecraft.isConnectedToRealms()) {
+				if (minecraft.getCurrentServer().isRealm()) {
 					desScreen = new RealmsMainScreen(desScreen);
 				} else {
 					desScreen = new JoinMultiplayerScreen(desScreen);
 				}
-			} else wasSinglePlayer = true;
-			minecraft.clearLevel(new ConnectionErrorsScreen(rootError, desScreen, wasSinglePlayer));
+			}
+			minecraft.disconnect(new ConnectionErrorsScreen(rootError, desScreen));
 		}
 	}
 }

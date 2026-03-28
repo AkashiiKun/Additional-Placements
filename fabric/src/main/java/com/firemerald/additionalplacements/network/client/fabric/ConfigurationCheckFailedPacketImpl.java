@@ -9,7 +9,7 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
 
-public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailedPacket implements ClientLoginPacketImpl {
+public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailedPacket implements ClientConfigurationPacketImpl {
     public static final ResourceLocation ID = AdditionalPlacementsMod.rl("configuration_check_failed");
 
     public static ConfigurationCheckFailedPacket of(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {

@@ -18,7 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public abstract class CheckDataClientPacket implements ClientLoginPacket {
+public abstract class CheckDataClientPacket implements ClientConfigurationPacket {
 	@ExpectPlatform
 	public static CheckDataClientPacket of() {
 		throw new AssertionError();

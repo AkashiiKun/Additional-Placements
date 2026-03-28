@@ -8,12 +8,10 @@ import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
 
-public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailedPacket implements ClientLoginPacketImpl {
+public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailedPacket implements ClientConfigurationPacketImpl {
     public static ConfigurationCheckFailedPacket of(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {
         return new ConfigurationCheckFailedPacketImpl(compiledErrors);
     }
-
-    private int loginIndex = -1;
 
     public ConfigurationCheckFailedPacketImpl(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {
         super(compiledErrors);
@@ -21,15 +19,5 @@ public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailed
 
     public ConfigurationCheckFailedPacketImpl(FriendlyByteBuf buf) {
         super(buf);
-    }
-
-    @Override
-    public void setLoginIndex(int loginIndex) {
-        this.loginIndex = loginIndex;
-    }
-
-    @Override
-    public int getLoginIndex() {
-        return loginIndex;
     }
 }

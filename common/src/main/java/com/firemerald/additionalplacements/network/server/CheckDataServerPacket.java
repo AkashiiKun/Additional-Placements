@@ -4,7 +4,9 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.network.APPacket;
+import com.firemerald.additionalplacements.network.CheckDataConfigurationTask;
 import dev.architectury.injectables.annotations.ExpectPlatform;
+import net.minecraft.server.network.ConfigurationTask;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -18,7 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class CheckDataServerPacket implements ServerLoginPacket {
+public abstract class CheckDataServerPacket implements ServerConfigurationPacket {
 	@ExpectPlatform
 	public static CheckDataServerPacket of(Map<ResourceLocation, CompoundTag> serverData) {
 		throw new AssertionError();
@@ -54,7 +56,7 @@ public abstract class CheckDataServerPacket implements ServerLoginPacket {
 	}
 
 	@Override
-	public @Nullable APPacket handleServer(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
+	public @Nullable APPacket handleServer(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect, Consumer<ConfigurationTask.Type> finishTask) {
 		List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors = new ArrayList<>();
 		Registration.forEach((id, type) -> {
 			Pair<CompoundTag, List<MessageTree>> clientData = this.serverData.get(id);
@@ -71,10 +73,13 @@ public abstract class CheckDataServerPacket implements ServerLoginPacket {
 			type.checkClientData(clientTag, serverErrors::add);
 			if (!clientErrors.isEmpty() || !serverErrors.isEmpty()) compiledErrors.add(Triple.of(id, clientErrors, serverErrors));
 		});
+		APPacket rep;
 		if (!compiledErrors.isEmpty()) {
 			//if it turns out this CAN prevent the above packet from being sent, move disconnect to client-side. It did not prevent it in testing.
 			disconnect.accept(Component.translatable("msg.additionalplacements.disconnected"));
-			return ConfigurationCheckFailedPacket.of(compiledErrors);
-		} else return null;
+			rep = ConfigurationCheckFailedPacket.of(compiledErrors);
+		} else rep = null;
+		finishTask.accept(CheckDataConfigurationTask.TYPE); //finish task, very important!
+		return rep;
 	}
 }

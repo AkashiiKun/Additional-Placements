@@ -23,6 +23,7 @@ import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.repository.Pack;
+import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraft.world.flag.FeatureFlagSet;
@@ -37,16 +38,25 @@ public class APDynamicResources implements PackResources {
             "Additional Placements dynamic resources",
             Component.literal("title"),
             true,
-            unknown -> new APDynamicResources(),
-            getPackInfo(Component.literal("description"), 15, FeatureFlagSet.of()),
-            PackType.CLIENT_RESOURCES,
+            new Pack.ResourcesSupplier() {
+                @Override
+                public PackResources openPrimary(String id) {
+                    return new APDynamicResources();
+                }
+
+                @Override
+                public PackResources openFull(String id, Pack.Info info) {
+                    return new APDynamicResources();
+                }
+            },
+            getPackInfo(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
             Pack.Position.BOTTOM,
             true,
             PackSource.BUILT_IN
     );
 
     @ExpectPlatform
-    public static Pack.Info getPackInfo(Component description, int format, FeatureFlagSet featureFlagSet) {
+    public static Pack.Info getPackInfo(Component description, PackCompatibility compatibility, FeatureFlagSet featureFlagSet, List<String> overlays) {
         throw new AssertionError();
     }
 

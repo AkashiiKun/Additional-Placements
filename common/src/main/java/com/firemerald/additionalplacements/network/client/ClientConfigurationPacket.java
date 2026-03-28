@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
-public interface ClientLoginPacket extends ClientPacket {
+public interface ClientConfigurationPacket extends ClientPacket {
     @Environment(EnvType.CLIENT)
     @Nullable APPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect);
 }

@@ -42,12 +42,12 @@ dependencies {
 
     include(implementation(annotationProcessor("io.github.llamalad7:mixinextras-fabric:0.5.0")))
 
-    modImplementation "maven.modrinth:double-slabs:$doubleslabs_version"
+    modCompileOnly "maven.modrinth:double-slabs:$doubleslabs_version"
     modImplementation "maven.modrinth:balm:$balm_version"
     modImplementation "maven.modrinth:kleeslabs:$kleeslabs_version"
     modImplementation "maven.modrinth:continuity:$continuity_version"
 
-    modImplementation("com.simibubi.create:create-fabric-$create_mc_version:$create_version")
+    modCompileOnly("com.simibubi.create:create-fabric-$create_mc_version:$create_version")
     modLocalRuntime("com.terraformersmc:modmenu:$modmenu_version")
 }
 

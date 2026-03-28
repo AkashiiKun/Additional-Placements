@@ -1,5 +1,5 @@
 plugins {
-    id 'dev.architectury.loom' version '1.13-SNAPSHOT' apply false
+    id 'dev.architectury.loom' version '1.14-SNAPSHOT' apply false
     id 'architectury-plugin' version '3.4-SNAPSHOT'
     id 'com.github.johnrengelman.shadow' version '8.1.1' apply false
 }
@@ -66,6 +66,10 @@ subprojects {
         maven { url = "https://maven.blamejared.com" } // JEI
         maven { url = "https://maven.terraformersmc.com/releases" } // Mod Menu, EMI
         maven { url = "https://maven.createmod.net" } // Ponder
+        maven {
+            name = 'ParchmentMC'
+            url = 'https://maven.parchmentmc.org'
+        }
     }
 
     dependencies {

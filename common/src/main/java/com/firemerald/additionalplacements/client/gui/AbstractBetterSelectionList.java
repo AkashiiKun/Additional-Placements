@@ -22,12 +22,14 @@ import net.minecraft.client.gui.navigation.ScreenDirection;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelectionList.Entry<E>> extends AbstractContainerEventHandler implements Renderable, NarratableEntry {
 	protected static final int SCROLLBAR_WIDTH = 6;
+	private static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("widget/scroller");
 	protected final Minecraft minecraft;
 	protected final int normalItemHeight;
 	private final List<E> children = new TrackedList();
@@ -232,8 +234,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 			}
 
 			guiGraphics.fill(scrollPos, this.getY(), scrollPos + 6, this.getBottom(), -16777216);
-			guiGraphics.fill(scrollPos, scrollY, scrollPos + 6, scrollY + scrollSize, -8355712);
-			guiGraphics.fill(scrollPos, scrollY, scrollPos + 6 - 1, scrollY + scrollSize - 1, -4144960);
+			guiGraphics.blitSprite(SCROLLER_SPRITE, scrollPos, scrollY, 6, scrollSize);
 		}
 
 		this.renderDecorations(guiGraphics, mouseX, mouseY);
@@ -389,7 +390,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	@Override
-	public boolean mouseScrolled(double mouseX, double mouseY, double scrollY) {
+	public boolean mouseScrolled(double mouseX, double mouseY, double scrollX, double scrollY) {
 		this.setScrollAmount(this.getScrollAmount() - scrollY * this.normalItemHeight / 2.0D);
 		return true;
 	}

@@ -7,12 +7,10 @@ import net.minecraft.resources.ResourceLocation;
 
 import java.util.Map;
 
-public class CheckDataServerPacketImpl extends CheckDataServerPacket implements ServerLoginPacketImpl {
+public class CheckDataServerPacketImpl extends CheckDataServerPacket implements ServerConfigurationPacketImpl {
     public static CheckDataServerPacket of(Map<ResourceLocation, CompoundTag> serverData) {
         return new CheckDataServerPacketImpl(serverData);
     }
-
-    private int loginIndex = -1;
 
     public CheckDataServerPacketImpl(Map<ResourceLocation, CompoundTag> serverData) {
         super(serverData);
@@ -20,15 +18,5 @@ public class CheckDataServerPacketImpl extends CheckDataServerPacket implements 
 
     public CheckDataServerPacketImpl(FriendlyByteBuf buf) {
         super(buf);
-    }
-
-    @Override
-    public void setLoginIndex(int loginIndex) {
-        this.loginIndex = loginIndex;
-    }
-
-    @Override
-    public int getLoginIndex() {
-        return loginIndex;
     }
 }

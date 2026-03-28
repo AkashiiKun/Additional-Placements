@@ -8,8 +8,8 @@ import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
 import com.firemerald.additionalplacements.compat.LoadedMods;
 import com.firemerald.additionalplacements.network.fabric.APNetworkImpl;
-import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
-import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
+import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeModConfigEvents;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.config.APConfigs;
@@ -34,8 +34,8 @@ public class FabricModEvents implements ModInitializer {
     public void onInitialize() {
         APNetworkImpl.register();
         loadRegistry();
-        ModConfigEvents.loading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigLoaded);
-        ModConfigEvents.reloading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigReloaded);
+        ForgeModConfigEvents.loading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigLoaded);
+        ForgeModConfigEvents.reloading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigReloaded);
         CommandRegistrationCallback.EVENT.register(CommonModEvents::onRegisterCommands);
         CommonLifecycleEvents.TAGS_LOADED.register(CommonModEvents::onTagsUpdated);
         ServerLifecycleEvents.SERVER_STARTED.register(FabricModEvents::onServerStarted);

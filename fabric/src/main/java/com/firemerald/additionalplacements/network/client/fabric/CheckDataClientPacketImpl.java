@@ -5,7 +5,7 @@ import com.firemerald.additionalplacements.network.client.CheckDataClientPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
-public class CheckDataClientPacketImpl extends CheckDataClientPacket implements ClientLoginPacketImpl {
+public class CheckDataClientPacketImpl extends CheckDataClientPacket implements ClientConfigurationPacketImpl {
     public static final ResourceLocation ID = AdditionalPlacementsMod.rl("check_data");
 
     public static CheckDataClientPacket of() {

@@ -54,17 +54,17 @@ dependencies {
     common(project(path: ':common', configuration: 'namedElements')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionForge')
 
-    modImplementation "maven.modrinth:double-slabs:$doubleslabs_version"
+    modCompileOnly "maven.modrinth:double-slabs:$doubleslabs_version"
     modImplementation "maven.modrinth:balm:$balm_version"
     modImplementation "maven.modrinth:kleeslabs:$kleeslabs_version"
-    modCompileOnly "maven.modrinth:continuity:$continuity_version"
+    //modCompileOnly "maven.modrinth:continuity:$continuity_version"
     modCompileOnly "curse.maven:ctm-267602:$ctm_file"
 
-    modImplementation("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
-    modImplementation "net.createmod.ponder:Ponder-Forge-$create_mc_version:$ponder_version"
+    modCompileOnly("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
+    modCompileOnly "net.createmod.ponder:Ponder-Forge-$create_mc_version:$ponder_version"
     modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-$create_mc_version:$flywheel_version"
-    modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-$create_mc_version:$flywheel_version"
-    modImplementation "com.tterrag.registrate:Registrate:$registrate_version"
+    //modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-$create_mc_version:$flywheel_version"
+    modCompileOnly "com.tterrag.registrate:Registrate:$registrate_version"
 
     compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:0.5.0"))
     implementation(include("io.github.llamalad7:mixinextras-forge:0.5.0"))
