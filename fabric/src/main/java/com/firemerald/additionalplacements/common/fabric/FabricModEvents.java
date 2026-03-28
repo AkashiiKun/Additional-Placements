@@ -10,7 +10,6 @@ import com.firemerald.additionalplacements.compat.LoadedMods;
 import com.firemerald.additionalplacements.network.fabric.APNetworkImpl;
 import fuzs.forgeconfigapiport.api.config.v2.ForgeConfigRegistry;
 import fuzs.forgeconfigapiport.api.config.v2.ModConfigEvents;
-import net.minecraftforge.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.config.APConfigs;
@@ -70,9 +69,5 @@ public class FabricModEvents implements ModInitializer {
     public static void onServerStarted(MinecraftServer server) {
         init();
         CommonModEvents.onServerStarted(server);
-    }
-
-    private static void onModConfigLoaded(ModConfig config) {
-        APConfigs.onConfigLoaded(config.getSpec());
     }
 }

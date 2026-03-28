@@ -10,6 +10,7 @@ import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 
 public class ConnectionErrorsScreen extends Screen {
 	private final MessageTree rootError;
@@ -42,7 +43,7 @@ public class ConnectionErrorsScreen extends Screen {
 
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         renderBackground(guiGraphics);
         errorList.render(guiGraphics, mouseX, mouseY, partialTick);
         okButton.render(guiGraphics, mouseX, mouseY, partialTick);

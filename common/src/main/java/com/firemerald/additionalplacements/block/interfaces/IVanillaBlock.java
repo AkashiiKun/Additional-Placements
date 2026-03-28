@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.block.interfaces;
 
 import net.minecraft.world.level.block.Block;
 
-public interface IVanillaBlock<T extends Block & IPlacementBlock<?>> extends IPlacementBlock<T>
-{
-	void setOtherBlock(T block);
+public interface IVanillaBlock<T extends Block & IPlacementBlock<?>> extends IPlacementBlock<T> {
+	void additionalplacements$setOtherBlock(T block);
 }

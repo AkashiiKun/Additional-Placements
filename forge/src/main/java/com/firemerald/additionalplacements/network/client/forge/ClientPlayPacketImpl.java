@@ -1,11 +1,9 @@
 package com.firemerald.additionalplacements.network.client.forge;
 
-import com.firemerald.additionalplacements.network.APNetwork;
 import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.ClientPlayPacket;
 import com.firemerald.additionalplacements.network.forge.APNetworkImpl;
 import com.firemerald.additionalplacements.network.forge.APPacketImpl;
-import com.firemerald.additionalplacements.network.server.ServerPlayPacket;
 import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkEvent;
 

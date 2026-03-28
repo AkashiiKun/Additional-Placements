@@ -30,8 +30,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 
-public class TagMismatchChecker extends Thread
-{
+public class TagMismatchChecker extends Thread {
 	private static TagMismatchChecker thread = null;
 	public static final Component MESSAGE =
 			Component.translatable("msg.additionalplacements.mismatchedtags.0")
@@ -41,16 +40,14 @@ public class TagMismatchChecker extends Thread
 			.append(Component.translatable("msg.additionalplacements.mismatchedtags.2")).setStyle(Style.EMPTY.withColor(ChatFormatting.WHITE).withUnderlined(false));
 	public static final Component FAILED = Component.translatable("msg.additionalplacements.generate.notfixed").setStyle(Style.EMPTY.withColor(ChatFormatting.RED));
 
-	public static void startChecker(MinecraftServer server, boolean autoGenerate, boolean fromAutoGenerate)
-	{
+	public static void startChecker(MinecraftServer server, boolean autoGenerate, boolean fromAutoGenerate) {
 		setThread(new TagMismatchChecker(server, autoGenerate, fromAutoGenerate));
 		thread.setPriority(APConfigs.common().checkerPriority.get());
 		CommonModEvents.misMatchedTags = false;
 		thread.start();
 	}
 
-	public static void stopChecker()
-	{
+	public static void stopChecker() {
 		setThread(null);
 	}
 
@@ -59,14 +56,12 @@ public class TagMismatchChecker extends Thread
 		thread = newThread;
 	}
 
-
 	private final MinecraftServer server;
 	private final boolean autoGenerate, fromAutoGenerate;
 	private boolean halted = false;
 	private final List<Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>>> blockMissingExtra = new LinkedList<>();
 
-	private TagMismatchChecker(MinecraftServer server, boolean autoGenerate, boolean fromAutoGenerate)
-	{
+	private TagMismatchChecker(MinecraftServer server, boolean autoGenerate, boolean fromAutoGenerate) {
 		super("Additional Placements Tag Mismatch Checker");
 		this.server = server;
 		this.autoGenerate = autoGenerate;
@@ -74,13 +69,10 @@ public class TagMismatchChecker extends Thread
 	}
 
 	@Override
-	public void run()
-	{
-		for (Block block : BuiltInRegistries.BLOCK)
-		{
+	public void run() {
+		for (Block block : BuiltInRegistries.BLOCK) {
 			if (halted) return;
-			if (block instanceof AdditionalPlacementBlock)
-			{
+			if (block instanceof AdditionalPlacementBlock) {
 				Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>> mismatch = ((AdditionalPlacementBlock<?>) block).checkTagMismatch();
 				if (mismatch != null) blockMissingExtra.add(mismatch);
 			}
@@ -89,13 +81,10 @@ public class TagMismatchChecker extends Thread
 	}
 
 	//this is only ever called on the server thread
-	public void process()
-	{
+	public void process() {
 		thread = null;
-		if (!halted) //wasn't canceled
-		{
-			if (!blockMissingExtra.isEmpty())
-			{
+		if (!halted) { //wasn't canceled
+			if (!blockMissingExtra.isEmpty()) {
 				CommonModEvents.misMatchedTags = true;
 				if (fromAutoGenerate) CommonModEvents.autoGenerateFailed = true;
 				if (!autoGenerate) {
@@ -105,8 +94,7 @@ public class TagMismatchChecker extends Thread
 					});
 				}
 				AdditionalPlacementsMod.LOGGER.warn("Found missing and/or extra tags on generated blocks. Use \"/ap_tags_export\" to generate the tags, then \"/reload\" to re-load them (or re-load the world if that fails).");
-				if (APConfigs.common().logTagMismatch.get())
-				{
+				if (APConfigs.common().logTagMismatch.get()) {
 					AdditionalPlacementsMod.LOGGER.warn("====== BEGIN LIST ======");
 					blockMissingExtra.forEach(blockMissingExtra -> {
                         AdditionalPlacementsMod.LOGGER.warn("\t{}", BuiltInRegistries.BLOCK.getKey(blockMissingExtra.getLeft()));
@@ -124,21 +112,17 @@ public class TagMismatchChecker extends Thread
 						}
 					});
 					AdditionalPlacementsMod.LOGGER.warn("====== END LIST ======");
-				}
-				else AdditionalPlacementsMod.LOGGER.info("Not logging tag mismatches as it is disabled in the common config");
-				if (autoGenerate)
-				{
+				} else AdditionalPlacementsMod.LOGGER.info("Not logging tag mismatches as it is disabled in the common config");
+				if (autoGenerate) {
 					AdditionalPlacementsMod.LOGGER.info("Rebuilding block tags and reloading datapacks as automatic tag rebuilding is enabled");
 					CommandDispatcher<CommandSourceStack> dispatch = server.getCommands().getDispatcher();
 					CommandSourceStack source = server.createCommandSourceStack();
-					try
-					{
+					try {
 						CommonModEvents.reloadedFromChecker = true;
 						dispatch.execute("ap_tags_export", source);
 						dispatch.execute("reload", source);
 					}
-					catch (CommandSyntaxException e)
-					{
+					catch (CommandSyntaxException e) {
 						AdditionalPlacementsMod.LOGGER.error("Unexpected error whilst automatically rebuilding tags", e);
 					}
 				}
@@ -146,26 +130,22 @@ public class TagMismatchChecker extends Thread
 		}
 	}
 
-	public static boolean canGenerateTags(Player player, IntPredicate hasPermission)
-	{
+	public static boolean canGenerateTags(Player player, IntPredicate hasPermission) {
 		if (Platform.getEnv() == EnvType.CLIENT) return canGenerateTagsClient(player);
 		else return hasPermission.test(2);
 	}
 
 	@Environment(EnvType.CLIENT)
-	public static boolean canGenerateTagsClient(Player player)
-	{
+	public static boolean canGenerateTagsClient(Player player) {
 		Player clientPlayer = Minecraft.getInstance().player;
 		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
 	}
 
-	public static boolean canGenerateTags(Player player)
-	{
+	public static boolean canGenerateTags(Player player) {
 		return canGenerateTags(player, player::hasPermissions);
 	}
 
-	public static boolean canGenerateTags(CommandSourceStack source)
-	{
+	public static boolean canGenerateTags(CommandSourceStack source) {
 		return source.source instanceof RconConsoleSource || source.source instanceof MinecraftServer || (source.getEntity() instanceof Player && canGenerateTags((Player) source.getEntity(), source::hasPermission));
 	}
 }

@@ -5,10 +5,9 @@ import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
 import org.jetbrains.annotations.NotNull;
 
-public interface IAdditionalBeaconBeamBlock<T extends Block> extends IPlacementBlock<T>, BeaconBeamBlock
-{
+public interface IAdditionalBeaconBeamBlock<T extends Block> extends IPlacementBlock<T>, BeaconBeamBlock {
 	@Override
     default @NotNull DyeColor getColor() {
-    	return ((BeaconBeamBlock) getOtherBlock()).getColor();
+    	return ((BeaconBeamBlock) additionalplacements$getOtherBlock()).getColor();
     }
 }

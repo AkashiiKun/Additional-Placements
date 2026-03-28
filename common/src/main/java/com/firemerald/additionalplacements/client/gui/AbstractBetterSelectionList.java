@@ -23,6 +23,7 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelectionList.Entry<E>> extends AbstractContainerEventHandler implements Renderable, NarratableEntry {
@@ -115,7 +116,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	 * {@return a List containing all GUI element children of this GUI element}
 	 */
 	@Override
-	public final List<E> children() {
+	public final @NotNull List<E> children() {
 		return this.children;
 	}
 
@@ -196,7 +197,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	@Override
-	public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+	public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
 		this.hovered = this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null;
 		if (this.renderBackground) {
 			guiGraphics.setColor(0.125F, 0.125F, 0.125F, 1.0F);
@@ -319,7 +320,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 					if (clicked.mouseClicked(mouseX, mouseY, button)) {
 						E focused = this.getFocused();
 						if (focused != clicked && focused instanceof ContainerEventHandler containereventhandler) {
-                            containereventhandler.setFocused((GuiEventListener) null);
+                            containereventhandler.setFocused(null);
 						}
 
 						this.setFocused(clicked);
@@ -424,11 +425,10 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 	@Nullable
 	protected E nextEntry(ScreenDirection direction, Predicate<E> predicate, @Nullable E selected) {
-
         if (!this.children().isEmpty() && (int) (byte) switch (direction) {
-case RIGHT, LEFT -> 0;
-case UP -> -1;
-case DOWN -> 1;
+			case RIGHT, LEFT -> 0;
+			case UP -> -1;
+			case DOWN -> 1;
         } != 0) {
 			int start;
 			if (selected == null) {
@@ -444,7 +444,6 @@ case DOWN -> 1;
                     case DOWN -> 1;
                 };
 			}
-
 			for (int index = start; index >= 0 && index < this.children.size(); index += (byte) switch (direction) {
                 case RIGHT, LEFT -> 0;
                 case UP -> -1;
@@ -532,7 +531,7 @@ case DOWN -> 1;
 	 * {@return the narration priority}
 	 */
 	@Override
-	public NarrationPriority narrationPriority() {
+	public @NotNull NarrationPriority narrationPriority() {
 		if (this.isFocused()) {
 			return NarrationPriority.FOCUSED;
 		} else {
@@ -549,7 +548,7 @@ case DOWN -> 1;
 	protected boolean removeEntry(E entry) {
 		boolean flag = this.children.remove(entry);
 		if (flag && entry == this.getSelected()) {
-			this.setSelected((E) null);
+			this.setSelected(null);
 		}
 
 		return flag;

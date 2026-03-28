@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.block;
 
-import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.ICarpetBlock;
 import com.firemerald.additionalplacements.client.models.definitions.CarpetModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
@@ -20,8 +19,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.ApiStatus;
 
-public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock>
-{
+public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock> {
 	public static final VoxelShape[] SHAPES = {
 			Block.box(0, 15, 0, 16, 16, 16),
 			Block.box(0, 0, 0, 16, 16, 1),
@@ -30,8 +28,7 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 			Block.box(15, 0, 0, 16, 16, 16)
 	};
 
-	public static AdditionalCarpetBlock of(CarpetBlock carpet)
-	{
+	public static AdditionalCarpetBlock of(CarpetBlock carpet) {
 		return carpet instanceof BeaconBeamBlock ? ofBeaconBeam(carpet) : ofNonBeaconBeam(carpet);
 	}
 
@@ -47,41 +44,35 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 		throw new AssertionError();
 	}
 
-	protected AdditionalCarpetBlock(CarpetBlock carpet)
-	{
+	protected AdditionalCarpetBlock(CarpetBlock carpet) {
 		super(carpet);
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
-		((IVanillaCarpetBlock) carpet).setOtherBlock(this);
+		((IVanillaCarpetBlock) carpet).additionalplacements$setOtherBlock(this);
 	}
 
 	@Override
-	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
+	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
 		return SHAPES[state.getValue(PLACING).ordinal() - 1];
 	}
 
 	@Override
-	public String getTagTypeName()
-	{
+	public String getTagTypeName() {
 		return "carpet";
 	}
 
 	@Override
-	public String getTagTypeNamePlural()
-	{
+	public String getTagTypeNamePlural() {
 		return "carpets";
 	}
 
 	@Override
-	public BlockState updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos)
-	{
+	public BlockState additionalplacements$updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos) {
 		return !thisState.canSurvive(level, thisPos) ? Blocks.AIR.defaultBlockState() : thisState;
 	}
 
 	@Override
-	@Deprecated
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos)
-	{
+	@SuppressWarnings("deprecation")
+	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		return !level.isEmptyBlock(pos.relative(state.getValue(PLACING)));
 	}
 

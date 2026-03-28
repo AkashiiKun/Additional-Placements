@@ -17,6 +17,7 @@
 	"msg.additionalplacements.placement_enable": "Additional Placements placement logic enabled",
 	"msg.additionalplacements.placement_disable": "Additional Placements placement logic disabled",
 	"msg.additionalplacements.disconnected": "Additional Placements configuration conflict",
+	"msg.additionalplacements.configurationerrors": "Additional Placement configuration errors were detected while attempting to connect to the server",
 	"msg.additionalplacements.errors.type": "The following generation types refused the connection:",
 	"msg.additionalplacements.errors.client": "Client-side refused:",
 	"msg.additionalplacements.errors.server": "Server-side refused:",

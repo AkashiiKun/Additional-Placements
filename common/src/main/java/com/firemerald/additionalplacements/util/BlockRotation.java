@@ -411,8 +411,4 @@ public enum BlockRotation
 	}
 
 	protected abstract VoxelShape createRotatedBox(double minX, double minY, double minZ, double maxX, double maxY, double maxZ);
-
-	public static int negateByte(int input) {
-		return (0x100 - input) & 0xFF;
-	}
 }

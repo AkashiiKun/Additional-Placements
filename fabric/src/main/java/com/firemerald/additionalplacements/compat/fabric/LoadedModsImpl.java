@@ -1,7 +1,5 @@
 package com.firemerald.additionalplacements.compat.fabric;
 
-import com.firemerald.additionalplacements.compat.LoadedMods;
-import dev.architectury.platform.Platform;
 import net.fabricmc.loader.api.FabricLoader;
 
 public enum LoadedModsImpl {

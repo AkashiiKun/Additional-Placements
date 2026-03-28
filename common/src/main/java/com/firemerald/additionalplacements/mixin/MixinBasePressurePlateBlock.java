@@ -29,27 +29,27 @@ public abstract class MixinBasePressurePlateBlock implements IBasePressurePlateB
 	protected abstract int getPressedTime();
 
 	@Override
-	public void playOnSoundPublic(LevelAccessor pLevel, BlockPos pPos) {
+	public void additionalplacements$playOnSoundPublic(LevelAccessor pLevel, BlockPos pPos) {
 		pLevel.playSound(null, pPos, this.type.pressurePlateClickOn(), SoundSource.BLOCKS);
 	}
 
 	@Override
-	public void playOffSoundPublic(LevelAccessor pLevel, BlockPos pPos) {
+	public void additionalplacements$playOffSoundPublic(LevelAccessor pLevel, BlockPos pPos) {
 		pLevel.playSound(null, pPos, this.type.pressurePlateClickOff(), SoundSource.BLOCKS);
 	}
 
 	@Override
-	public BlockState setSignalForStatePublic(BlockState pState, int pStrength) {
+	public BlockState additionalplacements$setSignalForStatePublic(BlockState pState, int pStrength) {
 		return setSignalForState(pState, pStrength);
 	}
 
 	@Override
-	public int getSignalForStatePublic(BlockState pState) {
+	public int additionalplacements$getSignalForStatePublic(BlockState pState) {
 		return getSignalForState(pState);
 	}
 
 	@Override
-	public int getPressedTimePublic() {
+	public int additionalplacements$getPressedTimePublic() {
 		return getPressedTime();
 	}
 }

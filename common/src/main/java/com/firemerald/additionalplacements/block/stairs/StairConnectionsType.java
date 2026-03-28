@@ -7,6 +7,7 @@ import java.util.stream.Stream;
 import com.firemerald.additionalplacements.block.stairs.common.CommonStairShapeState;
 
 import net.minecraft.world.level.block.state.properties.Property;
+import org.jetbrains.annotations.NotNull;
 
 public class StairConnectionsType extends Property<CommonStairShapeState> {
 	public static final StairConnectionsType
@@ -53,17 +54,17 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 	}
 
 	@Override
-	public Collection<CommonStairShapeState> getPossibleValues() {
+	public @NotNull Collection<CommonStairShapeState> getPossibleValues() {
 		return values;
 	}
 
 	@Override
-	public String getName(CommonStairShapeState value) {
+	public @NotNull String getName(CommonStairShapeState value) {
 		return value.getSerializedName();
 	}
 
 	@Override
-	public Optional<CommonStairShapeState> getValue(String name) {
+	public @NotNull Optional<CommonStairShapeState> getValue(@NotNull String name) {
 		return Optional.ofNullable(valueMap.get(name));
 	}
 

@@ -14,46 +14,38 @@ import net.minecraftforge.client.model.generators.BlockModelProvider;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 
-public class ModelType<T extends AdditionalPlacementBlock<?>>
-{
+public class ModelType<T extends AdditionalPlacementBlock<?>> {
 	final String[] models;
 	boolean has = false;
 	T block = null;
 	String folder = null;
 	ResourceLocation parentFolder = null;
 
-	public ModelType(String... models)
-	{
+	public ModelType(String... models) {
 		this.models = models;
 	}
 
-	public void set(T block, String folder, ResourceLocation parentFolder)
-	{
+	public void set(T block, String folder, ResourceLocation parentFolder) {
 		has = true;
 		this.block = block;
 		this.folder = folder;
 		this.parentFolder = parentFolder;
 	}
 
-	public void set(T block, String folder)
-	{
+	public void set(T block, String folder) {
 		set(block, folder, null);
 	}
 
-	public void set(String folder)
-	{
+	public void set(String folder) {
 		set(null, folder, null);
 	}
 
-	public void setParent(ResourceLocation parentFolder)
-	{
+	public void setParent(ResourceLocation parentFolder) {
 		this.parentFolder = parentFolder;
 	}
 
-	public void build(BlockStateProvider stateProvider, BiConsumer<BlockModelBuilder, String> actions, boolean uvLock)
-	{
-		if (has)
-		{
+	public void build(BlockStateProvider stateProvider, BiConsumer<BlockModelBuilder, String> actions, boolean uvLock) {
+		if (has) {
 			Asserts.notNull(folder, "folder");
 			BlockModelProvider modelProvider = stateProvider.models();
 			Function<String, BlockModelBuilder> startModel;
@@ -61,8 +53,7 @@ public class ModelType<T extends AdditionalPlacementBlock<?>>
 			else startModel = model -> modelProvider.withExistingParent(folder + model, new ResourceLocation(parentFolder.getNamespace(), parentFolder.getPath() + model));
 			if (actions == null) actions = (builder, model) -> {};
 			for (String model : models) actions.accept(startModel.apply(model), model);
-			if (block != null)
-			{
+			if (block != null) {
 				stateProvider.getVariantBuilder(block).forAllStatesExcept(state -> {
 					StateModelDefinition modelDef = block.getModelDefinition(state);
 					return ConfiguredModel.builder()
@@ -76,8 +67,7 @@ public class ModelType<T extends AdditionalPlacementBlock<?>>
 		}
 	}
 
-	public void clear()
-	{
+	public void clear() {
 		has = false;
 		this.block = null;
 		this.folder = null;

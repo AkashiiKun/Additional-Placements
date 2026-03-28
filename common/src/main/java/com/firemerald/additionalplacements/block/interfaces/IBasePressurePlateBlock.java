@@ -9,21 +9,18 @@ import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public interface IBasePressurePlateBlock<T extends Block> extends IFloorBlock<T>
-{
+public interface IBasePressurePlateBlock<T extends Block> extends IFloorBlock<T> {
 	interface IVanillaBasePressurePlateBlock<T extends AdditionalBasePressurePlateBlock<?>> extends IBasePressurePlateBlock<T>, IVanillaBlock<T> {}
 
 	@Override
-	default BlockState forPlacing(Direction dir, BlockState blockState)
-	{
-    	if (dir == Direction.DOWN) return getDefaultVanillaState(blockState);
-    	else return getDefaultAdditionalState(blockState).setValue(AdditionalFloorBlock.PLACING, dir);
+	default BlockState additionalplacements$forPlacing(Direction dir, BlockState blockState) {
+    	if (dir == Direction.DOWN) return additionalplacements$getDefaultVanillaState(blockState);
+    	else return additionalplacements$getDefaultAdditionalState(blockState).setValue(AdditionalFloorBlock.PLACING, dir);
 	}
 
 	@Override
 	@Nullable
-	default Direction getPlacing(BlockState blockState)
-	{
+	default Direction additionalplacements$getPlacing(BlockState blockState) {
 		if (blockState.getBlock() instanceof PressurePlateBlock) return Direction.DOWN;
 		else return blockState.getValue(AdditionalFloorBlock.PLACING);
 	}

@@ -1,0 +1,9 @@
+accessWidener v2 named
+accessible field  net/minecraft/world/level/block/PressurePlateBlock         sensitivity                       Lnet/minecraft/world/level/block/PressurePlateBlock$Sensitivity;
+accessible field  net/minecraft/world/level/block/WeightedPressurePlateBlock maxWeight                         I
+accessible field  net/minecraft/commands/CommandSourceStack                  source                            Lnet/minecraft/commands/CommandSource;
+accessible method net/minecraft/tags/BlockTags                               create                            (Ljava/lang/String;)Lnet/minecraft/tags/TagKey;
+mutable    field  net/minecraft/world/item/HoneycombItem                     WAXABLES                          Ljava/util/function/Supplier;
+mutable    field  net/minecraft/world/item/HoneycombItem                     WAX_OFF_BY_BLOCK                  Ljava/util/function/Supplier;
+accessible field  net/minecraft/world/level/block/CrossCollisionBlock        PROPERTY_BY_DIRECTION             Ljava/util/Map;
+accessible field  net/minecraft/world/level/block/state/StateHolder          PROPERTY_ENTRY_TO_STRING_FUNCTION Ljava/util/function/Function;

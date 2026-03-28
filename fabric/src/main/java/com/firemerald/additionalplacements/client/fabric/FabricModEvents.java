@@ -29,8 +29,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
 @Environment(EnvType.CLIENT)
-public class FabricModEvents implements ClientModInitializer
-{
+public class FabricModEvents implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ItemTooltipCallback.EVENT.register(CommonModEvents::onItemTooltip);
@@ -47,9 +46,8 @@ public class FabricModEvents implements ClientModInitializer
     public static void init(Minecraft client) {
         if (!hasInit) {
             BuiltInRegistries.BLOCK.forEach(block -> {
-                if (block instanceof AdditionalPlacementBlock)
-                {
-                    BlockState modelState = ((AdditionalPlacementBlock<?>) block).getOtherBlockState();
+                if (block instanceof AdditionalPlacementBlock<?> additionalPlacementBlock) {
+                    BlockState modelState = additionalPlacementBlock.getOtherBlockState();
                     BlockRenderLayerMap.INSTANCE.putBlock(block, ItemBlockRenderTypes.getChunkRenderType(modelState));
                 }
             });
@@ -59,8 +57,7 @@ public class FabricModEvents implements ClientModInitializer
     }
 
     public static boolean onHighlightBlock(WorldRenderContext context, @Nullable HitResult hitResult) {
-        //TODO
-        if (hitResult instanceof BlockHitResult blockHitResult) {
+        if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK && hitResult instanceof BlockHitResult blockHitResult) {
             ClientModEvents.onHighlightBlock(context.worldRenderer(), context.camera(), blockHitResult, context.tickDelta(), context.matrixStack(), context.consumers());
         }
         return true;

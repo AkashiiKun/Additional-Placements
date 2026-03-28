@@ -5,6 +5,7 @@ import com.mojang.math.Transformation;
 import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.resources.model.ModelState;
 import net.minecraft.util.Mth;
+import org.jetbrains.annotations.NotNull;
 
 public class PlacementModelState implements ModelState {
 	private static final PlacementModelState[][] VALUES = new PlacementModelState[4][4];
@@ -24,7 +25,7 @@ public class PlacementModelState implements ModelState {
 	}
 
     @Override
-    public Transformation getRotation() {
+    public @NotNull Transformation getRotation() {
         return rotation;
     }
 

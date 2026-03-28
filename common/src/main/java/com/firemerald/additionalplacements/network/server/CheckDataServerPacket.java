@@ -32,7 +32,7 @@ public abstract class CheckDataServerPacket implements ServerLoginPacket {
 			CompoundTag clientTag = type.getClientCheckData();
 			List<MessageTree> clientErrors = new ArrayList<>();
 			CompoundTag serverTag = serverData.get(id);
-			type.checkServerData(serverTag, (Consumer<MessageTree>) clientErrors::add);
+			type.checkServerData(serverTag, clientErrors::add);
 			if (clientTag != null || !clientErrors.isEmpty()) this.serverData.put(id, Pair.of(clientTag, clientErrors));
 		});
 	}

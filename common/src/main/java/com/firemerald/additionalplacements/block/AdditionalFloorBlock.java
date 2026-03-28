@@ -17,8 +17,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AdditionalFloorBlock<T extends Block> extends AdditionalPlacementBlock<T> implements IFloorBlock<T>, ISimpleRotationBlock, IStateFixer
-{
+public abstract class AdditionalFloorBlock<T extends Block> extends AdditionalPlacementBlock<T> implements IFloorBlock<T>, ISimpleRotationBlock, IStateFixer {
 	private boolean rotateLogic = true, rotateTex = true, rotateModel = true;
 	public static final DirectionProperty PLACING = AdditionalBlockStateProperties.HORIZONTAL_OR_UP_PLACING;
 
@@ -28,27 +27,23 @@ public abstract class AdditionalFloorBlock<T extends Block> extends AdditionalPl
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder)
-	{
+	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
 		builder.add(PLACING);
 		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
-	public Direction getPlacing(BlockState blockState)
-	{
+	public Direction additionalplacements$getPlacing(BlockState blockState) {
 		return blockState.getValue(PLACING);
 	}
 
 	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState)
-	{
+	public BlockState additionalplacements$getDefaultVanillaState(BlockState currentState) {
 		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState)
-	{
+	public BlockState additionalplacements$getDefaultAdditionalState(BlockState currentState) {
 		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
 

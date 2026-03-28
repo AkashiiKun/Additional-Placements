@@ -5,17 +5,17 @@ import com.firemerald.additionalplacements.network.server.*;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.ApiStatus;
 
-public class APNetwork
-{
+public class APNetwork {
     @ExpectPlatform
-    @Deprecated
+    @ApiStatus.Internal
     public static void sendToServer(ServerPacket packet) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
-    @Deprecated
+    @ApiStatus.Internal
     public static void sendToClient(ClientPacket packet, ServerPlayer player) {
         throw new AssertionError();
     }

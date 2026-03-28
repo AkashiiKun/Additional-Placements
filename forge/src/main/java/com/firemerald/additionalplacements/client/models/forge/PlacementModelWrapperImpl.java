@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.client.models.forge;
 import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.PlacementModelWrapper;
 import com.mojang.blaze3d.vertex.PoseStack;
-import dev.architectury.platform.Mod;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;

@@ -28,10 +28,8 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Environment(EnvType.CLIENT)
-public class BlockModelUtils
-{
-	public static BlockState getModeledState(BlockState state)
-	{
+public class BlockModelUtils {
+	public static BlockState getModeledState(BlockState state) {
 		if (state != null && state.getBlock() instanceof AdditionalPlacementBlock<?> block) return block.getModelState(state);
 		else return state;
 	}
@@ -59,8 +57,7 @@ public class BlockModelUtils
 
 	public static final float[] ZERO_POINT = {0, 0, 0};
 
-	public static float getFaceSize(int[] vertices, int vertexSize, int posOffset)
-	{
+	public static float getFaceSize(int[] vertices, int vertexSize, int posOffset) {
 		float[] first = newVertex(vertices, 0, posOffset);
 		float[] prev = new float[3];
 		float[] cur = newVertex(vertices, vertexSize, first, posOffset);
@@ -75,13 +72,11 @@ public class BlockModelUtils
 		return size;
 	}
 
-	public static float[] newVertex(int[] vertices, int vertexIndex, int posOffset)
-	{
+	public static float[] newVertex(int[] vertices, int vertexIndex, int posOffset) {
 		return newVertex(vertices, vertexIndex, ZERO_POINT, posOffset);
 	}
 
-	public static float[] newVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset)
-	{
+	public static float[] newVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset) {
 		return new float[] {
 			Float.intBitsToFloat(vertices[vertexIndex + posOffset]) - origin[0],
 			Float.intBitsToFloat(vertices[vertexIndex + posOffset + 1]) - origin[1],
@@ -89,21 +84,18 @@ public class BlockModelUtils
 		};
 	}
 
-	public static float[] getVertex(int[] vertices, int vertexIndex, int posOffset, float[] des)
-	{
+	public static float[] getVertex(int[] vertices, int vertexIndex, int posOffset, float[] des) {
 		return getVertex(vertices, vertexIndex, ZERO_POINT, posOffset, des);
 	}
 
-	public static float[] getVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset, float[] des)
-	{
+	public static float[] getVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset, float[] des) {
 		des[0] = Float.intBitsToFloat(vertices[vertexIndex + posOffset]) - origin[0];
 		des[1] = Float.intBitsToFloat(vertices[vertexIndex + posOffset + 1]) - origin[1];
 		des[2] = Float.intBitsToFloat(vertices[vertexIndex + posOffset + 2]) - origin[2];
 		return des;
 	}
 
-	public static float getArea(float[] ab, float[] ac)
-	{
+	public static float getArea(float[] ab, float[] ac) {
 		return .5f * Mth.sqrt(
 				Mth.square(ab[0] * ac[1] - ab[1] * ac[0]) +
 				Mth.square(ab[1] * ac[2] - ab[2] * ac[1]) +
@@ -111,24 +103,20 @@ public class BlockModelUtils
 				);
 	}
 
-	public static int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertexSize, int uvOffset)
-	{
+	public static int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertexSize, int uvOffset) {
 		int[] updatedVertices = vertices.clone();
-		for (int vertexIndex = uvOffset; vertexIndex < vertices.length; vertexIndex += vertexSize)
-		{
+		for (int vertexIndex = uvOffset; vertexIndex < vertices.length; vertexIndex += vertexSize) {
 			updatedVertices[vertexIndex] = changeUVertexElementSprite(oldSprite, newSprite, vertices[vertexIndex]);
 			updatedVertices[vertexIndex + 1] = changeVVertexElementSprite(oldSprite, newSprite, vertices[vertexIndex + 1]);
 	    }
 		return updatedVertices;
 	}
 
-	private static int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
-	{
+	private static int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex) {
 		return Float.floatToRawIntBits(newSprite.getU(oldSprite.getUOffset(Float.intBitsToFloat(vertex))));
 	}
 
-	private static int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex)
-	{
+	private static int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex) {
 		return Float.floatToRawIntBits(newSprite.getV(oldSprite.getVOffset(Float.intBitsToFloat(vertex))));
 	}
 
@@ -176,8 +164,7 @@ public class BlockModelUtils
 		throw new AssertionError();
 	}
 
-	public static List<BakedQuad> retexturedQuads(Direction side, Function<Direction, List<BakedQuad>> getOurQuads, Function<Direction, List<BakedQuad>> getTheirQuads, RenderType renderType)
-	{
+	public static List<BakedQuad> retexturedQuads(Direction side, Function<Direction, List<BakedQuad>> getOurQuads, Function<Direction, List<BakedQuad>> getTheirQuads, RenderType renderType) {
 		VertexFormat format = renderType == null ? DefaultVertexFormat.BLOCK : renderType.format();
 		int vertexSize = format.getIntegerSize();
 		int posOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_POSITION);
@@ -186,8 +173,7 @@ public class BlockModelUtils
 		Pair<TextureAtlasSprite, Integer>[] textures = new Pair[6];
 		List<BakedQuad> originalQuads = getOurQuads.apply(side);
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
-		for (BakedQuad originalQuad : originalQuads)
-		{
+		for (BakedQuad originalQuad : originalQuads) {
 			Direction modelSide = originalQuad.getDirection();
 			int dirIndex = modelSide.get3DDataValue();
 			Pair<TextureAtlasSprite, Integer> texture = textures[dirIndex];
@@ -197,8 +183,7 @@ public class BlockModelUtils
 		return bakedQuads;
 	}
 
-	public static List<BakedQuad> rotatedQuads(BlockRotation rotation, boolean rotateTex, Direction side, Function<Direction, List<BakedQuad>> getQuads, RenderType renderType)
-	{
+	public static List<BakedQuad> rotatedQuads(BlockRotation rotation, boolean rotateTex, Direction side, Function<Direction, List<BakedQuad>> getQuads, RenderType renderType) {
 		VertexFormat format = renderType == null ? DefaultVertexFormat.BLOCK : renderType.format();
 		int vertexSize = format.getIntegerSize();
 		int posOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_POSITION);
@@ -206,8 +191,7 @@ public class BlockModelUtils
 		int normOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_NORMAL);
 		List<BakedQuad> originalQuads =  getQuads.apply(rotation.unapply(side));
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
-		for (BakedQuad originalQuad : originalQuads)
-		{
+		for (BakedQuad originalQuad : originalQuads) {
     		bakedQuads.add(transformed(
 					originalQuad,
 					rotation.applyVertices(originalQuad.getDirection(), originalQuad.getVertices(), vertexSize, posOffset, uvOffset, normOffset, rotateTex, originalQuad.getSprite()),

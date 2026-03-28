@@ -3,8 +3,6 @@ package com.firemerald.additionalplacements.network.client;
 import com.firemerald.additionalplacements.network.APPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.Minecraft;
-import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 

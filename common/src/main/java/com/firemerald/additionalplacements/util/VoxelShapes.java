@@ -6,8 +6,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class VoxelShapes
-{
+public class VoxelShapes {
 	public static final VoxelShape
 	BLOCK = Block.box(0, 0, 0, 16, 16, 16), //NNN+PNN+NPN+PPN+NNP+PNP+NPP+PPP
 	//side(s) of the block
@@ -147,8 +146,7 @@ public class VoxelShapes
 	private static final VoxelShape[][][] OUTER_FLAT_STAIRS_BY_TOP_AND_FACING = new VoxelShape[6][4][2];
 	private static final VoxelShape[][][] OUTER_TWIST_STAIRS_BY_FACING = new VoxelShape[6][4][2];
 
-	static
-	{
+	static {
 		setPillar(Direction.WEST, Direction.DOWN, PILLAR_WEST_DOWN);
 		setPillar(Direction.EAST, Direction.DOWN, PILLAR_EAST_DOWN);
 		setPillar(Direction.WEST, Direction.UP, PILLAR_WEST_UP);
@@ -240,71 +238,58 @@ public class VoxelShapes
 		setOuterTwistStairs(Direction.WEST, Direction.NORTH, STAIRS_TWIST_CLOCKWISE_WEST_NORTH, STAIRS_TWIST_COUNTER_CLOCKWISE_WEST_NORTH);
 	}
 
-	private static int getIndex(Direction dir)
-	{
+	private static int getIndex(Direction dir) {
 		return dir.ordinal();
 	}
 
-	private static int getIndex(Direction dir, Direction ignored)
-	{
+	private static int getIndex(Direction dir, Direction ignored) {
 		int index = getIndex(dir);
 		int index2 = getIndex(ignored);
 		if (index > index2) return index - 2;
 		else return index;
 	}
 
-	private static int getIndex(Direction dir, Direction ignored1, Direction ignored2)
-	{
+	private static int getIndex(Direction dir, Direction ignored1, Direction ignored2) {
 		int index = getIndex(dir);
 		int index2 = getIndex(ignored1);
 		int index3 = getIndex(ignored2);
-		if (index > index2)
-		{
+		if (index > index2) {
 			if (index > index3) return index - 4;
 			else return index - 2;
-		}
-		else
-		{
+		} else {
 			if (index > index3) return index - 2;
 			else return index;
 		}
 	}
 
-	private static void set(VoxelShape[][][] array, Direction side1, Direction side2, int index3, VoxelShape shape)
-	{
+	private static void set(VoxelShape[][][] array, Direction side1, Direction side2, int index3, VoxelShape shape) {
 		array[getIndex(side1)][getIndex(side2, side1)][index3] =
 		array[getIndex(side2)][getIndex(side1, side2)][index3] = shape;
 	}
 
-	private static VoxelShape get(VoxelShape[][][] array, Direction side1, Direction side2, int index3)
-	{
+	private static VoxelShape get(VoxelShape[][][] array, Direction side1, Direction side2, int index3) {
 		return array[getIndex(side1)][getIndex(side2, side1)][index3];
 	}
 
-	private static void set(VoxelShape[][] array, Direction side1, Direction side2, VoxelShape shape)
-	{
+	private static void set(VoxelShape[][] array, Direction side1, Direction side2, VoxelShape shape) {
 		array[getIndex(side1)][getIndex(side2, side1)] =
 		array[getIndex(side2)][getIndex(side1, side2)] = shape;
 	}
 
-	private static VoxelShape get(VoxelShape[][] array, Direction side1, Direction side2)
-	{
+	private static VoxelShape get(VoxelShape[][] array, Direction side1, Direction side2) {
 		return array[getIndex(side1)][getIndex(side2, side1)];
 	}
 
-	private static void set(VoxelShape[][] array, Direction ignore, Direction side1, Direction side2, VoxelShape shape)
-	{
+	private static void set(VoxelShape[][] array, Direction ignore, Direction side1, Direction side2, VoxelShape shape) {
 		array[getIndex(side1, ignore)][getIndex(side2, ignore, side1)] =
 		array[getIndex(side2, ignore)][getIndex(side1, ignore, side2)] = shape;
 	}
 
-	private static VoxelShape get(VoxelShape[][] array, Direction ignore, Direction side1, Direction side2)
-	{
+	private static VoxelShape get(VoxelShape[][] array, Direction ignore, Direction side1, Direction side2) {
 		return array[getIndex(side1, ignore)][getIndex(side2, ignore, side1)];
 	}
 
-	private static void set(VoxelShape[][][] array, Direction side1, Direction side2, Direction side3, VoxelShape shape)
-	{
+	private static void set(VoxelShape[][][] array, Direction side1, Direction side2, Direction side3, VoxelShape shape) {
 		array[getIndex(side1)][getIndex(side2, side1)][getIndex(side3, side1, side2)] =
 		array[getIndex(side2)][getIndex(side3, side2)][getIndex(side1, side2, side3)] =
 		array[getIndex(side3)][getIndex(side1, side3)][getIndex(side2, side3, side1)] =
@@ -313,139 +298,112 @@ public class VoxelShapes
 		array[getIndex(side2)][getIndex(side1, side2)][getIndex(side3, side2, side1)] = shape;
 	}
 
-	private static VoxelShape get(VoxelShape[][][] array, Direction side1, Direction side2, Direction side3)
-	{
+	private static VoxelShape get(VoxelShape[][][] array, Direction side1, Direction side2, Direction side3) {
 		return array[getIndex(side1)][getIndex(side2, side1)][getIndex(side3, side1, side2)];
 	}
 
-	public static VoxelShape getSlab(Direction side)
-	{
+	public static VoxelShape getSlab(Direction side) {
 		return SLABS_BY_SIDE[getIndex(side)];
 	}
 
-	private static void setPillar(Direction side1, Direction side2, VoxelShape shape)
-	{
+	private static void setPillar(Direction side1, Direction side2, VoxelShape shape) {
 		set(PILLARS_BY_SIDE, side1, side2, shape);
 	}
 
-	public static VoxelShape getPillar(Direction side1, Direction side2)
-	{
+	public static VoxelShape getPillar(Direction side1, Direction side2) {
 		return get(PILLARS_BY_SIDE, side1, side2);
 	}
 
-	private static void setCorner(Direction side1, Direction side2, Direction side3, VoxelShape shape)
-	{
+	private static void setCorner(Direction side1, Direction side2, Direction side3, VoxelShape shape) {
 		set(CORNERS_BY_SIDE, side1, side2, side3, shape);
 	}
 
-	public static VoxelShape getCorner(Direction side1, Direction side2, Direction side3)
-	{
+	public static VoxelShape getCorner(Direction side1, Direction side2, Direction side3) {
 		return get(CORNERS_BY_SIDE, side1, side2, side3);
 	}
 
-	private static void setStraightStairs(Direction face1, Direction face2, VoxelShape shape)
-	{
+	private static void setStraightStairs(Direction face1, Direction face2, VoxelShape shape) {
 		set(STRAIGHT_STAIRS_BY_FACING, face1, face2, shape);
 	}
 
-	public static VoxelShape getStraightStairs(Direction face1, Direction face2)
-	{
+	public static VoxelShape getStraightStairs(Direction face1, Direction face2) {
 		return get(STRAIGHT_STAIRS_BY_FACING, face1, face2);
 	}
 
-	public static VoxelShape getStraightStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getStraightStairs(ComplexFacing facing) {
 		return getStraightStairs(facing.forward, facing.up);
 	}
 
-	private static void setInnerStairs(Direction face1, Direction face2, Direction face3, VoxelShape shape)
-	{
+	private static void setInnerStairs(Direction face1, Direction face2, Direction face3, VoxelShape shape) {
 		set(INNER_STAIRS_BY_FACING, face1, face2, face3, shape);
 	}
 
-	public static VoxelShape getInnerStairs(Direction face1, Direction face2, Direction face3)
-	{
+	public static VoxelShape getInnerStairs(Direction face1, Direction face2, Direction face3) {
 		return get(INNER_STAIRS_BY_FACING, face1, face2, face3);
 	}
 
-	public static VoxelShape getLeftInnerStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getLeftInnerStairs(ComplexFacing facing) {
 		return getInnerStairs(facing.forward, facing.up, facing.left);
 	}
 
-	public static VoxelShape getRightInnerStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getRightInnerStairs(ComplexFacing facing) {
 		return getInnerStairs(facing.forward, facing.up, facing.right);
 	}
 
-	private static void setOuterStairs(Direction face1, Direction face2, Direction face3, VoxelShape shape)
-	{
+	private static void setOuterStairs(Direction face1, Direction face2, Direction face3, VoxelShape shape) {
 		set(OUTER_STAIRS_BY_FACING, face1, face2, face3, shape);
 	}
 
-	public static VoxelShape getOuterStairs(Direction face1, Direction face2, Direction face3)
-	{
+	public static VoxelShape getOuterStairs(Direction face1, Direction face2, Direction face3) {
 		return get(OUTER_STAIRS_BY_FACING, face1, face2, face3);
 	}
 
-	public static VoxelShape getLeftOuterStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getLeftOuterStairs(ComplexFacing facing) {
 		return getOuterStairs(facing.forward, facing.up, facing.left);
 	}
 
-	public static VoxelShape getRightOuterStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getRightOuterStairs(ComplexFacing facing) {
 		return getOuterStairs(facing.forward, facing.up, facing.right);
 	}
 
-	private static void setOuterFlatStairs(Direction top, Direction face1, Direction face2, VoxelShape shape)
-	{
+	private static void setOuterFlatStairs(Direction top, Direction face1, Direction face2, VoxelShape shape) {
 		set(OUTER_FLAT_STAIRS_BY_TOP_AND_FACING[getIndex(top)], top, face1, face2, shape);
 	}
 
-	public static VoxelShape getOuterFlatStairs(Direction top, Direction face1, Direction face2)
-	{
+	public static VoxelShape getOuterFlatStairs(Direction top, Direction face1, Direction face2) {
 		return get(OUTER_FLAT_STAIRS_BY_TOP_AND_FACING[getIndex(top)], top, face1, face2);
 	}
 
-	public static VoxelShape getLeftOuterBackFlatStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getLeftOuterBackFlatStairs(ComplexFacing facing) {
 		return getOuterFlatStairs(facing.up, facing.forward, facing.left);
 	}
 
-	public static VoxelShape getRightOuterBackFlatStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getRightOuterBackFlatStairs(ComplexFacing facing) {
 		return getOuterFlatStairs(facing.up, facing.forward, facing.right);
 	}
 
-	public static VoxelShape getLeftOuterBottomFlatStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getLeftOuterBottomFlatStairs(ComplexFacing facing) {
 		return getOuterFlatStairs(facing.forward, facing.up, facing.left);
 	}
 
-	public static VoxelShape getRightOuterBottomFlatStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getRightOuterBottomFlatStairs(ComplexFacing facing) {
 		return getOuterFlatStairs(facing.forward, facing.up, facing.right);
 	}
 
-	private static void setOuterTwistStairs(Direction top, Direction front, VoxelShape clockwise, VoxelShape counterClockwise)
-	{
+	private static void setOuterTwistStairs(Direction top, Direction front, VoxelShape clockwise, VoxelShape counterClockwise) {
 		set(OUTER_TWIST_STAIRS_BY_FACING, top, front, 0, clockwise);
 		set(OUTER_TWIST_STAIRS_BY_FACING, top, front, 1, counterClockwise);
 	}
 
-	public static VoxelShape getOuterTwistStairs(Direction top, Direction front, boolean clockwise)
-	{
+	public static VoxelShape getOuterTwistStairs(Direction top, Direction front, boolean clockwise) {
 		return get(OUTER_TWIST_STAIRS_BY_FACING, top, front, clockwise ? 0 : 1);
 	}
 
-	public static VoxelShape getClockwiseTwistStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getClockwiseTwistStairs(ComplexFacing facing) {
 		return getOuterTwistStairs(facing.up, facing.forward, true);
 	}
 
-	public static VoxelShape getCounterClockwiseTwistStairs(ComplexFacing facing)
-	{
+	public static VoxelShape getCounterClockwiseTwistStairs(ComplexFacing facing) {
 		return getOuterTwistStairs(facing.up, facing.forward, false);
 	}
 }

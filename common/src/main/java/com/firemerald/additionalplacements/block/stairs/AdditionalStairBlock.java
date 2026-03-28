@@ -63,12 +63,11 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	public final StairConnectionsType connectionsType;
 	public boolean rotateLogic = false, rotateModel = false, rotateTex = false;
 
-	protected AdditionalStairBlock(StairBlock stairs, StairConnectionsType connectionsType)
-	{
+	protected AdditionalStairBlock(StairBlock stairs, StairConnectionsType connectionsType) {
 		super(stairs);
 		this.connectionsType = connectionsType;
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(connectionsType, connectionsType.defaultShapeState));
-		((IVanillaStairBlock) stairs).setOtherBlock(this);
+		((IVanillaStairBlock) stairs).additionalplacements$setOtherBlock(this);
 	}
 
 	@Override
@@ -77,39 +76,34 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder)
-	{
+	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
 		builder.add(connectionsTypeStatic);
 		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState)
-	{
+	public BlockState additionalplacements$getDefaultVanillaState(BlockState currentState) {
 		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState)
-	{
+	public BlockState additionalplacements$getDefaultAdditionalState(BlockState currentState) {
 		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
 
 	@Override
-	public String getTagTypeName()
-	{
+	public String getTagTypeName() {
 		return "stair";
 	}
 
 	@Override
-	public String getTagTypeNamePlural()
-	{
+	public String getTagTypeNamePlural() {
 		return "stairs";
 	}
 
 	@Override
 	public BlockState withUnrotatedPlacement(BlockState worldState, BlockState modelState) {
-		VanillaStairShapeState modelShapeState = getShapeState(worldState).model();
+		VanillaStairShapeState modelShapeState = additionalplacements$getShapeState(worldState).model();
 		return modelState
 				.setValue(StairBlock.FACING, modelShapeState.facing)
 				.setValue(StairBlock.HALF, modelShapeState.half)
@@ -117,12 +111,12 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	public boolean canRotate(BlockState state) {
-		return this.getShapeState(state).isRotatedModel();
+		return this.additionalplacements$getShapeState(state).isRotatedModel();
 	}
 
 	@Override
 	public BlockRotation getRotation(BlockState state) {
-		return this.getShapeState(state).modelRotation();
+		return this.additionalplacements$getShapeState(state).modelRotation();
 	}
 
 	@Override
@@ -152,9 +146,8 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
-	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
-		CommonStairShapeState shapeState = this.getShapeState(state);
+	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		CommonStairShapeState shapeState = this.additionalplacements$getShapeState(state);
 		return shapeState.shape.getVoxelShape(shapeState.facing);
 	}
 
@@ -167,7 +160,7 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	@Override
 	@Environment(EnvType.CLIENT)
 	public StateModelDefinition getModelDefinition(BlockState state) {
-		return StairModels.getModelDefinition(getShapeState(state));
+		return StairModels.getModelDefinition(additionalplacements$getShapeState(state));
 	}
 
 	@Override
@@ -223,7 +216,7 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 			vanillaShapeState = commonShapeState.vanilla();
 		}
 		if (vanillaShapeState != null) { //make vanilla
-			changeBlock.accept(getOtherBlock());
+			changeBlock.accept(additionalplacements$getOtherBlock());
 			IStateFixer.setProperty(properties, StairBlock.FACING, vanillaShapeState.facing);
 			IStateFixer.setProperty(properties, StairBlock.HALF, vanillaShapeState.half);
 			IStateFixer.setProperty(properties, StairBlock.SHAPE, vanillaShapeState.shape);
@@ -233,22 +226,21 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
-	public BlockState getBlockStateInternal(CommonStairShapeState commonShapeState, BlockState currentState)
-	{
-		if (!connectionsType.allowFlipped && commonShapeState.isComplexFlipped) return getBlockState(commonShapeState.flipped(), currentState);
+	public BlockState additionalplacements$getBlockStateInternal(CommonStairShapeState commonShapeState, BlockState currentState) {
+		if (!connectionsType.allowFlipped && commonShapeState.isComplexFlipped) return additionalplacements$getBlockState(commonShapeState.flipped(), currentState);
 		else {
-			if (!connectionsType.isValid(commonShapeState)) return getBlockState(commonShapeState.closestVanillaShape, currentState);
-			return getDefaultAdditionalState(currentState).setValue(connectionsType, commonShapeState);
+			if (!connectionsType.isValid(commonShapeState)) return additionalplacements$getBlockState(commonShapeState.closestVanillaShape, currentState);
+			return additionalplacements$getDefaultAdditionalState(currentState).setValue(connectionsType, commonShapeState);
 		}
 	}
 
 	@Override
-	public CommonStairShapeState getShapeState(BlockState blockState) {
+	public CommonStairShapeState additionalplacements$getShapeState(BlockState blockState) {
 		return blockState.getValue(connectionsType);
 	}
 
 	@Override
-	public StairConnectionsType connectionsType() {
+	public StairConnectionsType additionalplacements$connectionsType() {
 		return connectionsType;
 	}
 }

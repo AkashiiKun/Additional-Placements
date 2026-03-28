@@ -31,8 +31,7 @@ import net.minecraftforge.registries.NewRegistryEvent;
 import net.minecraftforge.registries.RegisterEvent;
 
 @Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
-public class CommonModEventHandler
-{
+public class CommonModEventHandler {
     private static boolean init = false;
 
     @SubscribeEvent

@@ -16,45 +16,38 @@ import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends AdditionalPlacementBlock<T> implements BucketPickup, LiquidBlockContainer
-{
+public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends AdditionalPlacementBlock<T> implements BucketPickup, LiquidBlockContainer {
 	public AdditionalPlacementLiquidBlock(T parentBlock)
 	{
 		super(parentBlock);
 	}
 
 	@Override
-	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState blockState)
-	{
-		ItemStack ret = this.getOtherBlock().pickupBlock(level, pos, this.getModelState(blockState));
+	public @NotNull ItemStack pickupBlock(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState) {
+		ItemStack ret = this.additionalplacements$getOtherBlock().pickupBlock(level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
 
 	@Override
-	public Optional<SoundEvent> getPickupSound()
-	{
-		return this.getOtherBlock().getPickupSound();
+	public @NotNull Optional<SoundEvent> getPickupSound() {
+		return this.additionalplacements$getOtherBlock().getPickupSound();
 	}
 
 	@Override
-	public boolean canPlaceLiquid(BlockGetter level, BlockPos pos, BlockState blockState, Fluid fluid)
-	{
-		return this.getOtherBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
+	public boolean canPlaceLiquid(@NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Fluid fluid) {
+		return this.additionalplacements$getOtherBlock().canPlaceLiquid(level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override
-	public boolean placeLiquid(LevelAccessor level, BlockPos pos, BlockState blockState, FluidState fluidState)
-	{
-		boolean flag = this.getOtherBlock().placeLiquid(level, pos, getModelState(blockState), fluidState);
+	public boolean placeLiquid(@NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull FluidState fluidState) {
+		boolean flag = this.additionalplacements$getOtherBlock().placeLiquid(level, pos, getModelState(blockState), fluidState);
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return flag;
 	}
 
 	@Override
-	@Deprecated
-	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos otherPos)
-	{
+	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
 		FluidState fluid = level.getFluidState(pos);
 		if (!fluid.isEmpty()) level.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(level));
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);

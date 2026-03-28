@@ -5,6 +5,7 @@ import com.llamalad7.mixinextras.sugar.Local;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -26,78 +27,80 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(StairBlock.class)
 public abstract class MixinStairBlock implements IVanillaStairBlock {
-	private AdditionalStairBlock stairs;
+	@Unique
+    private AdditionalStairBlock additionalplacements$stairs;
 	@Final
 	@Shadow
 	private BlockState baseState;
 
-	private StairBlock asStair() {
+	@Unique
+    private StairBlock additionalplacements$asStair() {
 		return (StairBlock) (Object) this;
 	}
 
 	@Override
-	public void setOtherBlock(AdditionalStairBlock stairs) {
-		this.stairs = stairs;
+	public void additionalplacements$setOtherBlock(AdditionalStairBlock stairs) {
+		this.additionalplacements$stairs = stairs;
 	}
 
 	@Override
-	public AdditionalStairBlock getOtherBlock() {
-		return stairs;
+	public AdditionalStairBlock additionalplacements$getOtherBlock() {
+		return additionalplacements$stairs;
 	}
 
 	@Override
-	public boolean hasAdditionalStates() {
-		return stairs != null;
+	public boolean additionalplacements$hasAdditionalStates() {
+		return additionalplacements$stairs != null;
 	}
 
 	@Override
-	public boolean isThis(BlockState blockState) {
-		return blockState.is(asStair()) || blockState.is(stairs);
+	public boolean additionalplacements$isThis(BlockState blockState) {
+		return blockState.is(additionalplacements$asStair()) || blockState.is(additionalplacements$stairs);
 	}
 
 	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState) {
-		return currentState.is(asStair()) ? currentState : stairs.copyProperties(currentState, asStair().defaultBlockState());
+	public BlockState additionalplacements$getDefaultVanillaState(BlockState currentState) {
+		return currentState.is(additionalplacements$asStair()) ? currentState : additionalplacements$stairs.copyProperties(currentState, additionalplacements$asStair().defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState) {
-		return currentState.is(stairs) ? currentState : stairs.copyProperties(currentState, stairs.defaultBlockState());
+	public BlockState additionalplacements$getDefaultAdditionalState(BlockState currentState) {
+		return currentState.is(additionalplacements$stairs) ? currentState : additionalplacements$stairs.copyProperties(currentState, additionalplacements$stairs.defaultBlockState());
 	}
 
 	@ModifyReturnValue(method = BlockMethods.GET_STATE_FOR_PLACEMENT_NAME, at = @At("RETURN"))
 	private BlockState getStateForPlacement(BlockState original, @Local(argsOnly = true) BlockPlaceContext context) {
-		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return getStateForPlacementImpl(context, original);
+		if (this.additionalplacements$hasAdditionalStates() && additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return additionalplacements$getStateForPlacementImpl(context, original);
 		else return original;
 	}
 
 	@Inject(method = BlockMethods.ROTATE_NAME, at = @At("HEAD"), cancellable = true)
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) {
-		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
+		if (this.additionalplacements$hasAdditionalStates()) ci.setReturnValue(additionalplacements$rotateImpl(blockState, rotation));
 	}
 
 	@Inject(method = BlockMethods.MIRROR_NAME, at = @At("HEAD"), cancellable = true)
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci) {
-		if (this.hasAdditionalStates()) ci.setReturnValue(mirrorImpl(blockState, mirror));
+		if (this.additionalplacements$hasAdditionalStates()) ci.setReturnValue(additionalplacements$mirrorImpl(blockState, mirror));
 	}
 
 	@Inject(method = BlockMethods.UPDATE_SHAPE_NAME, at = @At("HEAD"), cancellable = true)
 	private void updateShape(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos, CallbackInfoReturnable<BlockState> ci) {
-		if (this.hasAdditionalStates()) ci.setReturnValue(updateShapeImpl(state, direction, otherState, level, pos, otherPos));
+		if (this.additionalplacements$hasAdditionalStates()) ci.setReturnValue(additionalplacements$updateShapeImpl(state, direction, otherState, level, pos, otherPos));
 	}
 
 	@Override
-	public BlockState getModelStateImpl() {
+	public BlockState additionalplacements$getModelStateImpl() {
 		return baseState;
 	}
 
 	@Override
-	public BlockState getBlockStateInternal(CommonStairShapeState shapeState, BlockState currentState) {
-		return stairs.getBlockStateInternal(shapeState, currentState);
+	public BlockState additionalplacements$getBlockStateInternal(CommonStairShapeState shapeState, BlockState currentState) {
+		return additionalplacements$stairs.additionalplacements$getBlockStateInternal(shapeState, currentState);
 	}
 
 	@Override
-	public CommonStairShapeState getShapeState(BlockState blockState) {
+	public CommonStairShapeState additionalplacements$getShapeState(BlockState blockState) {
 		return VanillaStairShapeState.toCommon(
 				blockState.getValue(StairBlock.FACING),
 				blockState.getValue(StairBlock.HALF),
@@ -105,7 +108,7 @@ public abstract class MixinStairBlock implements IVanillaStairBlock {
 	}
 
     @Override
-	public StairConnectionsType connectionsType() {
-		return stairs.connectionsType();
+	public StairConnectionsType additionalplacements$connectionsType() {
+		return additionalplacements$stairs.additionalplacements$connectionsType();
 	}
 }

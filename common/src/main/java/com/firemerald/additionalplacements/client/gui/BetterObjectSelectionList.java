@@ -9,6 +9,7 @@ import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.narration.NarrationSupplier;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
 import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry<E>> extends AbstractBetterSelectionList<E> {
@@ -28,7 +29,7 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 	 */
 	@Override
 	@Nullable
-	public ComponentPath nextFocusPath(FocusNavigationEvent event) {
+	public ComponentPath nextFocusPath(@NotNull FocusNavigationEvent event) {
 		if (this.getItemCount() == 0) {
 			return null;
 		} else if (this.isFocused() && event instanceof FocusNavigationEvent.ArrowNavigation focusnavigationevent$arrownavigation) {
@@ -47,7 +48,7 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 	}
 
 	@Override
-	public void updateNarration(NarrationElementOutput narrationElementOutput) {
+	public void updateNarration(@NotNull NarrationElementOutput narrationElementOutput) {
 		E e = this.getHovered();
 		if (e != null) {
 			this.narrateListElementPosition(narrationElementOutput.nest(), e);

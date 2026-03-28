@@ -21,7 +21,7 @@ public class MixinVertexFormat implements IVertexFormatExtensions {
     private IntList offsets;
 
     @Override
-    public int getIntOffset(VertexFormatElement element) {
+    public int additionalplacements$getIntOffset(VertexFormatElement element) {
         return offsets.getInt(elements.indexOf(element)) / 4;
     }
 }

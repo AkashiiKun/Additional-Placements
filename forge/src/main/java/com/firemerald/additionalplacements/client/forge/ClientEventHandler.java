@@ -19,8 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
 @OnlyIn(Dist.CLIENT)
-public class ClientEventHandler
-{
+public class ClientEventHandler {
     @SubscribeEvent
     public static void onHighlightBlock(RenderHighlightEvent.Block event) {
         ClientModEvents.onHighlightBlock(event.getLevelRenderer(), event.getCamera(), event.getTarget(), event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource());
@@ -32,14 +31,12 @@ public class ClientEventHandler
     }
 
     @SubscribeEvent
-    public static void onPlayerLoggingIn(ClientPlayerNetworkEvent.LoggingIn event)
-    {
+    public static void onPlayerLoggingIn(ClientPlayerNetworkEvent.LoggingIn event) {
         APClientData.setPlacementEnabledAndSynchronize(APConfigs.client().defaultPlacementLogicState.get(), APConfigs.client().loginPlacementLogicStateMessage.get());
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event)
-    {
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) ClientModEvents.onClientPostTick();
     }
 

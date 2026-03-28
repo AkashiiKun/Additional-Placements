@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.network.forge;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import net.minecraftforge.network.HandshakeHandler;
 import net.minecraftforge.network.NetworkEvent;
 

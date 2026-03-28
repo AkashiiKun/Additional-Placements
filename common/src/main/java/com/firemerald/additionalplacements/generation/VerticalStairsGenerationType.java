@@ -71,9 +71,9 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 		CompoundTag noMixed = new CompoundTag();
 		CompoundTag noVertical = new CompoundTag();
 		this.forEachCreated(entry -> {
-			if (!entry.newBlock().connectionsType().allowVertical) { //simple
+			if (!entry.newBlock().additionalplacements$connectionsType().allowVertical) { //simple
 				addBlockEntry(noVertical, entry.originalId());
-			} else if (!entry.newBlock().connectionsType().allowMixed) { //simple + vertical
+			} else if (!entry.newBlock().additionalplacements$connectionsType().allowMixed) { //simple + vertical
 				addBlockEntry(noMixed, entry.originalId());
 			} //common
 		});
@@ -98,11 +98,11 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 			Map<String, List<ResourceLocation>> mismatched = new HashMap<>();
 			this.forEachCreated(entry -> {
 				ResourceLocation id = entry.originalId();
-				if (!entry.newBlock().connectionsType().allowVertical) { //simple
+				if (!entry.newBlock().additionalplacements$connectionsType().allowVertical) { //simple
 					if (!noVertical.contains(id)) {
 						mismatched.computeIfAbsent("no_vertical_connections", u -> new ArrayList<>()).add(id);
 					}
-				} else if (!entry.newBlock().connectionsType().allowMixed) { //simple + vertical
+				} else if (!entry.newBlock().additionalplacements$connectionsType().allowMixed) { //simple + vertical
 					if (!noMixed.contains(id)) {
 						mismatched.computeIfAbsent("no_mixed_connections", u -> new ArrayList<>()).add(id);
 					}

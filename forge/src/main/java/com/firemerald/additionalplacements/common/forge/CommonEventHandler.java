@@ -1,13 +1,10 @@
 package com.firemerald.additionalplacements.common.forge;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
-import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
 import com.firemerald.additionalplacements.forge.AdditionalPlacementsForge;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -45,24 +42,19 @@ public class CommonEventHandler {
     }
 
     @SubscribeEvent
-    public static void onMissingBlockMappings(MissingMappingsEvent event)
-    {
+    public static void onMissingBlockMappings(MissingMappingsEvent event) {
         event.getMappings(ForgeRegistries.BLOCKS.getRegistryKey(), AdditionalPlacementsForge.OLD_ID).forEach(mapping -> {
             String oldPath = mapping.getKey().getPath();
-            if (oldPath.indexOf('.') < 0) //remap original format
-            {
+            if (oldPath.indexOf('.') < 0) { //remap original format
                 String newPath = "minecraft." + oldPath;
                 Block block = ForgeRegistries.BLOCKS.getValue(AdditionalPlacementsMod.rl(newPath));
-                if (block != Blocks.AIR)
-                {
+                if (block != Blocks.AIR) {
                     mapping.remap(block);
                 }
             }
-            else //remap old mod ID
-            {
+            else { //remap old mod ID
                 Block block = ForgeRegistries.BLOCKS.getValue(AdditionalPlacementsMod.rl(oldPath));
-                if (block != Blocks.AIR)
-                {
+                if (block != Blocks.AIR) {
                     mapping.remap(block);
                 }
             }

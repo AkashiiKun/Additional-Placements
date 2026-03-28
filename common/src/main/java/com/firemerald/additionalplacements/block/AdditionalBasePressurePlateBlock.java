@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.block;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlockExtensions;
 import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
@@ -29,8 +28,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePlateBlock> extends AdditionalFloorBlock<T> implements IBasePressurePlateBlock<T>
-{
+public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePlateBlock> extends AdditionalFloorBlock<T> implements IBasePressurePlateBlock<T> {
 	public static final VoxelShape[] AABBS = {
 			Block.box(1, 15, 1, 15, 16, 15),
 			Block.box(1, 1, 0, 15, 15, 1),
@@ -59,13 +57,13 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	public AdditionalBasePressurePlateBlock(T plate) {
 		super(plate);
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
-		((IVanillaBasePressurePlateBlock<AdditionalBasePressurePlateBlock<T>>) plate).setOtherBlock(this);
+		((IVanillaBasePressurePlateBlock<AdditionalBasePressurePlateBlock<T>>) plate).additionalplacements$setOtherBlock(this);
 		plateMethods = (IBasePressurePlateBlockExtensions) plate;
 	}
 
 	@Override
 	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext collisionContext) {
-		return plateMethods.getSignalForStatePublic(state) > 0 ? PRESSED_AABBS[state.getValue(PLACING).ordinal() - 1] : AABBS[state.getValue(PLACING).ordinal() - 1];
+		return plateMethods.additionalplacements$getSignalForStatePublic(state) > 0 ? PRESSED_AABBS[state.getValue(PLACING).ordinal() - 1] : AABBS[state.getValue(PLACING).ordinal() - 1];
 	}
 
 	@Override
@@ -79,13 +77,13 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public BlockState updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos) {
+	public BlockState additionalplacements$updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos) {
 		return !thisState.canSurvive(level, thisPos) ? Blocks.AIR.defaultBlockState() : thisState;
 	}
 
 	@Override
-	@Deprecated
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+	@SuppressWarnings("deprecation")
+	public boolean canSurvive(BlockState state, @NotNull LevelReader level, BlockPos pos) {
 		Direction dir = state.getValue(PLACING);
 		BlockPos blockpos = pos.relative(dir);
 		return canSupportRigidBlock(level, blockpos, dir.getOpposite()) || canSupportCenter(level, blockpos, dir.getOpposite());
@@ -98,79 +96,69 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	protected abstract int getSignalStrength(Level level, BlockPos pos);
 
 	@Override
-	public boolean isPossibleToRespawnInThis(BlockState state)
-	{
-		return parentBlock.isPossibleToRespawnInThis(this.getDefaultVanillaState(state));
+	public boolean isPossibleToRespawnInThis(@NotNull BlockState state) {
+		return parentBlock.isPossibleToRespawnInThis(this.additionalplacements$getDefaultVanillaState(state));
 	}
 
 	@Override
-	public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand)
-	{
-		int strength = plateMethods.getSignalForStatePublic(state);
+	public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
+		int strength = plateMethods.additionalplacements$getSignalForStatePublic(state);
 		if (strength > 0) this.checkPressed(null, level, pos, state, strength);
 	}
 
 	@Override
-	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity)
-	{
-		if (!level.isClientSide)
-		{
-			int strength = plateMethods.getSignalForStatePublic(state);
+	@SuppressWarnings("deprecation")
+	public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity) {
+		if (!level.isClientSide) {
+			int strength = plateMethods.additionalplacements$getSignalForStatePublic(state);
 			if (strength == 0) this.checkPressed(entity, level, pos, state, strength);
 		}
 	}
 
-	protected void checkPressed(@Nullable Entity entity, Level level, BlockPos pos, BlockState state, int oldStrength)
-	{
+	protected void checkPressed(@Nullable Entity entity, Level level, BlockPos pos, BlockState state, int oldStrength) {
 		int strength = this.getSignalStrength(level, pos);
 		boolean prevPowered = oldStrength > 0;
 		boolean powered = strength > 0;
-		if (oldStrength != strength)
-		{
-			BlockState blockstate = plateMethods.setSignalForStatePublic(state, strength);
+		if (oldStrength != strength) {
+			BlockState blockstate = plateMethods.additionalplacements$setSignalForStatePublic(state, strength);
 			level.setBlock(pos, blockstate, 2);
 			this.updateNeighbours(level, pos, state);
 			level.setBlocksDirty(pos, state, blockstate);
 		}
-		if (!powered && prevPowered)
-		{
-			plateMethods.playOffSoundPublic(level, pos);
+		if (!powered && prevPowered) {
+			plateMethods.additionalplacements$playOffSoundPublic(level, pos);
 			level.gameEvent(entity, GameEvent.BLOCK_DEACTIVATE, pos);
 		}
-		else if (powered && !prevPowered)
-		{
-			plateMethods.playOnSoundPublic(level, pos);
+		else if (powered && !prevPowered) {
+			plateMethods.additionalplacements$playOnSoundPublic(level, pos);
 			level.gameEvent(entity, GameEvent.BLOCK_ACTIVATE, pos);
 		}
-		if (powered) level.scheduleTick(new BlockPos(pos), this, plateMethods.getPressedTimePublic());
+		if (powered) level.scheduleTick(new BlockPos(pos), this, plateMethods.additionalplacements$getPressedTimePublic());
 	}
 
 	@Override
-	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving)
-	{
-		if (!isMoving && !state.is(newState.getBlock()))
-		{
-			if (plateMethods.getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
+	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
+		if (!isMoving && !state.is(newState.getBlock())) {
+			if (plateMethods.additionalplacements$getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
 			super.onRemove(state, level, pos, newState, isMoving);
 		}
 	}
 
-	protected void updateNeighbours(Level level, BlockPos pos, BlockState state)
-	{
+	protected void updateNeighbours(Level level, BlockPos pos, BlockState state) {
 		level.updateNeighborsAt(pos, this);
 		level.updateNeighborsAt(pos.relative(state.getValue(PLACING)), this);
 	}
 
 	@Override
-	public int getSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
-	{
-		return this.plateMethods.getSignalForStatePublic(state);
+	@SuppressWarnings("deprecation")
+	public int getSignal(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
+		return this.plateMethods.additionalplacements$getSignalForStatePublic(state);
 	}
 
 	@Override
-	public int getDirectSignal(BlockState state, BlockGetter level, BlockPos pos, Direction dir)
-	{
-		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.getSignalForStatePublic(state) : 0;
+	@SuppressWarnings("deprecation")
+	public int getDirectSignal(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
+		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.additionalplacements$getSignalForStatePublic(state) : 0;
 	}
 
 	@Override

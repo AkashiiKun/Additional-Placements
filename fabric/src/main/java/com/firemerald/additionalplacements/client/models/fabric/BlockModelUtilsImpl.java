@@ -19,6 +19,6 @@ public class BlockModelUtilsImpl {
     }
 
     public static int getIntOffset(VertexFormat format, VertexFormatElement element) {
-        return ((IVertexFormatExtensions) format).getIntOffset(element);
+        return ((IVertexFormatExtensions) format).additionalplacements$getIntOffset(element);
     }
 }

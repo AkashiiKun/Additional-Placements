@@ -8,15 +8,13 @@ import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
 import net.minecraftforge.common.ForgeConfigSpec.LongValue;
 
-public class ClientConfig
-{
+public class ClientConfig {
 	public final BooleanValue defaultPlacementLogicState, loginPlacementLogicStateMessage, togglePlacementLogicStateMessage, enablePlacementHighlight;
 	public final LongValue toggleQuickpressTime;
 	public final ConfigValue<String> gridColor, previewColor;
 	private float[] gridColorVal = {.4f, 0, 0, 0}, previewColorVal = {.4f, 1, 1, 1};
 
-	public ClientConfig(ForgeConfigSpec.Builder builder)
-	{
+	public ClientConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Client settings").push("client");
         defaultPlacementLogicState = builder
         		.comment("Default enabled state for Additional Placement placement logic. Please note that this value takes effect any time you load a world or log in to a server.")

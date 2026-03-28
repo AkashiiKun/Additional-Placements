@@ -37,8 +37,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock> implements ISlabBlock<SlabBlock>, ISimpleRotationBlock, IStateFixer
-{
+public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock> implements ISlabBlock<SlabBlock>, ISimpleRotationBlock, IStateFixer {
 	public static final EnumProperty<Axis> AXIS = AdditionalBlockStateProperties.HORIZONTAL_AXIS;
 
 	public static VerticalSlabBlock of(SlabBlock slab) {
@@ -59,23 +58,20 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 
 	public boolean rotateLogic = true, rotateModel = true, rotateTex = true;
 
-	protected VerticalSlabBlock(SlabBlock slab)
-	{
+	protected VerticalSlabBlock(SlabBlock slab) {
 		super(slab);
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(AXIS, Axis.Z));
-		((IVanillaSlabBlock) slab).setOtherBlock(this);
+		((IVanillaSlabBlock) slab).additionalplacements$setOtherBlock(this);
 	}
 
 	@Override
-	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder)
-	{
+	protected void createBlockStateDefinition(StateDefinition.@NotNull Builder<Block, BlockState> builder) {
 		builder.add(AXIS);
 		super.createBlockStateDefinition(builder);
 	}
 
 	@Override
-	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context)
-	{
+	public VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return switch (state.getValue(SlabBlock.TYPE)) {
             case DOUBLE -> VoxelShapes.BLOCK;
             case TOP -> state.getValue(AXIS) == Axis.Z ? VoxelShapes.SLAB_SOUTH : VoxelShapes.SLAB_EAST;
@@ -84,44 +80,39 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	public boolean canBeReplaced(BlockState state, BlockPlaceContext context) {
-		return enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer()) && canBeReplacedImpl(state, context);
+	@SuppressWarnings("deprecation")
+	public boolean canBeReplaced(@NotNull BlockState state, BlockPlaceContext context) {
+		return additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer()) && additionalplacements$canBeReplacedImpl(state, context);
 	}
 
 	@Override
-	public Direction getPlacing(BlockState blockState)
-	{
+	public Direction additionalplacements$getPlacing(BlockState blockState) {
 		SlabType type = blockState.getValue(SlabBlock.TYPE);
 		return type == SlabType.DOUBLE ? null : Direction.fromAxisAndDirection(blockState.getValue(VerticalSlabBlock.AXIS), type == SlabType.TOP ? AxisDirection.POSITIVE : AxisDirection.NEGATIVE);
 	}
 
 	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState)
-	{
+	public BlockState additionalplacements$getDefaultVanillaState(BlockState currentState) {
 		return currentState.is(parentBlock) ? currentState : copyProperties(currentState, parentBlock.defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState)
-	{
+	public BlockState additionalplacements$getDefaultAdditionalState(BlockState currentState) {
 		return currentState.is(this) ? currentState : copyProperties(currentState, this.defaultBlockState());
 	}
 
 	@Override
-	public String getTagTypeName()
-	{
+	public String getTagTypeName() {
 		return "slab";
 	}
 
 	@Override
-	public String getTagTypeNamePlural()
-	{
+	public String getTagTypeNamePlural() {
 		return "slabs";
 	}
 
 	@Override
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
-	{
+	public BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
 		return state;
 	}
 
@@ -199,7 +190,7 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	public Axis getAxis(BlockState state) {
+	public Axis additionalplacements$getAxis(BlockState state) {
 		return state.getValue(AXIS);
 	}
 }

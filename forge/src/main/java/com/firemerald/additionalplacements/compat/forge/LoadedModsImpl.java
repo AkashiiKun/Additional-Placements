@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.compat.forge;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.client.models.Unwrapper;
-import dev.architectury.platform.Platform;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.loading.FMLEnvironment;

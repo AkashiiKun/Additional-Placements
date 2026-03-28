@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
@@ -67,8 +66,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public T getOtherBlock()
-	{
+	public T additionalplacements$getOtherBlock() {
 		return parentBlock;
 	}
 
@@ -77,13 +75,11 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return Properties.copy(parentBlock);
 	}
 
-	public boolean hasCustomColors()
-	{
+	public boolean hasCustomColors() {
 		return false;
 	}
 
-	public Property<?>[] getCopyProps()
-	{
+	public Property<?>[] getCopyProps() {
 		return copyProps;
 	}
 
@@ -119,7 +115,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	public BlockState getOtherBlockState() {
-		return getOtherBlock().defaultBlockState();
+		return additionalplacements$getOtherBlock().defaultBlockState();
 	}
 
 	public BlockState getModelState(BlockState worldState) {
@@ -130,6 +126,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
+	@SuppressWarnings("deprecation")
 	public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder params) {
 		return parentBlock.getDrops(this.getModelState(state), params);
 	}
@@ -154,7 +151,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	public void updateEntityAfterFallOn(@NotNull BlockGetter level, @NotNull Entity entity) {
-		getOtherBlock().updateEntityAfterFallOn(level, entity);
+		additionalplacements$getOtherBlock().updateEntityAfterFallOn(level, entity);
 	}
 
 	@Override
@@ -170,11 +167,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean useShapeForLightOcclusion(@NotNull BlockState state) {
 		return true;
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void attack(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player) {
 		getModelState(state).attack(level, pos, player);
 	}
@@ -188,11 +187,12 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	@Override
 	@Deprecated
 	public float getExplosionResistance() {
-		return getOtherBlock().getExplosionResistance();
+		return additionalplacements$getOtherBlock().getExplosionResistance();
 	}
 
 	@Override
 	@Deprecated
+	@SuppressWarnings("deprecation")
 	public void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
 		BlockState modelState = getModelState(state);
 		modelState.onPlace(level, pos, getModelStateSafe(oldState), movedByPiston);
@@ -200,6 +200,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
 		getModelState(state).onRemove(level, pos, getModelStateSafe(newState), movedByPiston);
 	}
@@ -210,6 +211,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
 		BlockState modelState = getModelState(state);
 		modelState.randomTick(level, pos, rand);
@@ -217,6 +219,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
 		BlockState modelState = getModelState(state);
 		modelState.tick(level, pos, rand);
@@ -224,6 +227,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
 		BlockState modelState = getModelState(state);
 		InteractionResult res = modelState.use(level, player, hand, hitResult);
@@ -252,8 +256,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 				}
 			}
 			return newState;
-		} else if (newModelState.getBlock() instanceof IPlacementBlock<?> placement && placement.hasAdditionalStates()) { //new placement block
-			BlockState newState = placement.getDefaultAdditionalState(newModelState);
+		} else if (newModelState.getBlock() instanceof IPlacementBlock<?> placement && placement.additionalplacements$hasAdditionalStates()) { //new placement block
+			BlockState newState = placement.additionalplacements$getDefaultAdditionalState(newModelState);
 			for (Property<?> property : newState.getProperties()) {
 				if (newModelState.hasProperty(property)) newState = copy(property, newModelState, newState);
 				else if (ourLastState.hasProperty(property)) newState = copy(property, ourLastState, newState);
@@ -269,10 +273,11 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	public void wasExploded(@NotNull Level level, @NotNull BlockPos pos, @NotNull Explosion explosion) {
-		getOtherBlock().wasExploded(level, pos, explosion);
+		additionalplacements$getOtherBlock().wasExploded(level, pos, explosion);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull PathComputationType pathType) {
 		return false;
 	}
@@ -303,48 +308,52 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return AdditionalPlacementsBlockTags.remap(tags, getTagTypeName(), getTagTypeNamePlural());
 	}
 
-
 	@Override
-	public boolean hasAdditionalStates() {
+	public boolean additionalplacements$hasAdditionalStates() {
 		return true;
 	}
 
 	@Override
-	public boolean isThis(BlockState blockState) {
+	public boolean additionalplacements$isThis(BlockState blockState) {
 		return blockState.is(this) || blockState.is(parentBlock);
 	}
 
 	@Override
 	public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
-		return getStateForPlacementImpl(context, this.defaultBlockState());
+		return additionalplacements$getStateForPlacementImpl(context, this.defaultBlockState());
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @NotNull BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
-		return rotateImpl(blockState, rotation);
+		return additionalplacements$rotateImpl(blockState, rotation);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @NotNull BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
-		return mirrorImpl(blockState, mirror);
+		return additionalplacements$mirrorImpl(blockState, mirror);
 	}
 
 	@Override
 	public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-		appendHoverTextImpl(stack, level, tooltip, flag);
+		additionalplacements$appendHoverTextImpl(stack, level, tooltip, flag);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
-		return updateShapeImpl(state, direction, otherState, level, pos, otherPos);
+		return additionalplacements$updateShapeImpl(state, direction, otherState, level, pos, otherPos);
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public @NotNull FluidState getFluidState(@NotNull BlockState state) {
 		return this.getModelState(state).getFluidState();
 	}
 
 	@Override
+    @SuppressWarnings("deprecation")
 	public boolean skipRendering(@NotNull BlockState thisState, @NotNull BlockState adjacentState, @NotNull Direction dir) {
 		return this.getModelState(thisState).skipRendering(adjacentState, dir);
 	}
@@ -355,12 +364,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
+	@SuppressWarnings("deprecation")
 	public float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
 		return this.getModelState(state).getShadeBrightness(level, pos);
 	}
 
 	@Override
-	@Deprecated
+	@SuppressWarnings("deprecation")
 	public boolean isSignalSource(@NotNull BlockState state) {
 		return getModelState(state).isSignalSource();
 	}
@@ -373,11 +383,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	public abstract BlockRotation getRotation(BlockState state);
 
-
 	@Override
-	@Deprecated
-	public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context)
-	{
+	@SuppressWarnings("deprecation")
+	public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
 		if (rotatesModel(state))
 			return getRotation(state).applyBlockSpace(getModelState(state).getShape(level, pos, context));
 		else
@@ -387,7 +395,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public abstract VoxelShape getShapeInternal(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context);
 
 	@Override
-	public boolean canGenerateAdditionalStates() {
+	public boolean additionalplacements$canGenerateAdditionalStates() {
 		return false;
 	}
 

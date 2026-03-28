@@ -12,6 +12,7 @@ import com.firemerald.additionalplacements.util.ComplexFacing;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 public class CommonStairShapeState extends StairShapeStateBase implements StringRepresentable, Comparable<CommonStairShapeState> {
 	public static final int COUNT = 24 * 15;
@@ -101,7 +102,7 @@ public class CommonStairShapeState extends StairShapeStateBase implements String
 	}
 
 	@Override
-	public String getSerializedName() {
+	public @NotNull String getSerializedName() {
 		return name;
 	}
 

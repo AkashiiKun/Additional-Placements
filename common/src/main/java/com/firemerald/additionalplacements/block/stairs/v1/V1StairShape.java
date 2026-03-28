@@ -52,8 +52,7 @@ public enum V1StairShape implements StringRepresentable {
     public final V1StairPlacingType placingType;
     public final CommonStairShape equivalent;
 
-    V1StairShape(String name, V1StairPlacingType placingType, CommonStairShape equivalent)
-    {
+    V1StairShape(String name, V1StairPlacingType placingType, CommonStairShape equivalent) {
         this.name = name;
         this.placingType = placingType;
         this.equivalent = equivalent;

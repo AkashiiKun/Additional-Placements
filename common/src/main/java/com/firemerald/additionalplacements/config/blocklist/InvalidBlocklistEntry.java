@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.config.blocklist;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.NotNull;
 
 public record InvalidBlocklistEntry(String key) implements IBlocklistEntry {
 
@@ -11,7 +12,7 @@ public record InvalidBlocklistEntry(String key) implements IBlocklistEntry {
     }
 
     @Override
-    public String toString() {
+    public @NotNull String toString() {
         return key;
     }
 }

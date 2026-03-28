@@ -18,8 +18,7 @@ public class CarpetModels {
 
 	public static final StateModelDefinition[] MODEL_DEFINITIONS = new StateModelDefinition[5];
 
-	static
-	{
+	static {
 		MODEL_DEFINITIONS[Direction.UP.ordinal() - 1] = new StateModelDefinition("/carpet", 180, 0);
 		MODEL_DEFINITIONS[Direction.SOUTH.ordinal() - 1] = new StateModelDefinition("/carpet", 270, 180);
 		MODEL_DEFINITIONS[Direction.WEST.ordinal() - 1] = new StateModelDefinition("/carpet", 270, 270);

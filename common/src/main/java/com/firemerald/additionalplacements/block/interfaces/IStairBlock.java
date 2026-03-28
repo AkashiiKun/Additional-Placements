@@ -37,64 +37,58 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable
-{
-	interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock>
-	{
-		BlockState getModelStateImpl();
+public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable {
+	interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock> {
+		BlockState additionalplacements$getModelStateImpl();
 	}
 
-	default BlockState getBlockState(ComplexFacing facing, CommonStairShape shape, BlockState currentState) {
-		return getBlockState(CommonStairShapeState.of(facing, shape), currentState);
+	default BlockState additionalplacements$getBlockState(ComplexFacing facing, CommonStairShape shape, BlockState currentState) {
+		return additionalplacements$getBlockState(CommonStairShapeState.of(facing, shape), currentState);
 	}
 
-	default BlockState getBlockState(CommonStairShapeState shapeState, BlockState currentState)
-	{
+	default BlockState additionalplacements$getBlockState(CommonStairShapeState shapeState, BlockState currentState) {
 		VanillaStairShapeState vanillaShapeState = shapeState.vanilla();
 		if (vanillaShapeState != null)
-			return getDefaultVanillaState(currentState)
+			return additionalplacements$getDefaultVanillaState(currentState)
 					.setValue(StairBlock.FACING, vanillaShapeState.facing)
 					.setValue(StairBlock.HALF, vanillaShapeState.half)
 					.setValue(StairBlock.SHAPE, vanillaShapeState.shape);
 		else
-			return getBlockStateInternal(shapeState, currentState);
+			return additionalplacements$getBlockStateInternal(shapeState, currentState);
 	}
 
-	BlockState getBlockStateInternal(CommonStairShapeState shapeState, BlockState currentState);
+	BlockState additionalplacements$getBlockStateInternal(CommonStairShapeState shapeState, BlockState currentState);
 
 	@Override
-    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
-	{
-		CommonStairShapeState state = this.getShapeState(blockState);
+    default BlockState additionalplacements$transform(BlockState blockState, Function<Direction, Direction> transform) {
+		CommonStairShapeState state = this.additionalplacements$getShapeState(blockState);
 		ComplexFacing oldFacing = state.facing;
 		ComplexFacing newFacing = ComplexFacing.forFacing(transform.apply(oldFacing.forward), transform.apply(oldFacing.up));
-		return getBlockState(newFacing, state.shape, blockState);
+		return additionalplacements$getBlockState(newFacing, state.shape, blockState);
 	}
 
 	static ComplexFacing getFacingOrNull(BlockState blockState) {
-		return (blockState.getBlock() instanceof IStairBlock<?> stairs) ? stairs.getShapeState(blockState).facing : null;
+		return (blockState.getBlock() instanceof IStairBlock<?> stairs) ? stairs.additionalplacements$getShapeState(blockState).facing : null;
 	}
 
-	CommonStairShapeState getShapeState(BlockState blockState);
+	CommonStairShapeState additionalplacements$getShapeState(BlockState blockState);
 
-	StairConnectionsType connectionsType();
+	StairConnectionsType additionalplacements$connectionsType();
 
 	@Override
-    default BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos)
-	{
-		ComplexFacing facing = getShapeState(state).facing;
-		return getBlockState(facing, getShape(facing, level, pos), state);
+    default BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+		ComplexFacing facing = additionalplacements$getShapeState(state).facing;
+		return additionalplacements$getBlockState(facing, additionalplacements$getShape(facing, level, pos), state);
 	}
 
 	@Override
-    default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState blockState)
-	{
-		ComplexFacing facing = getFacing(context);
-		return getBlockState(facing, getShape(facing, context.getLevel(), context.getClickedPos()), blockState);
+    default BlockState additionalplacements$getStateForPlacementImpl(BlockPlaceContext context, BlockState blockState) {
+		ComplexFacing facing = additionalplacements$getFacing(context);
+		return additionalplacements$getBlockState(facing, additionalplacements$getShape(facing, context.getLevel(), context.getClickedPos()), blockState);
 	}
 
-	default CommonStairShape getShape(ComplexFacing facing, BlockGetter level, BlockPos pos) {
-		StairConnectionsType connectionsType = connectionsType();
+	default CommonStairShape additionalplacements$getShape(ComplexFacing facing, BlockGetter level, BlockPos pos) {
+		StairConnectionsType connectionsType = additionalplacements$connectionsType();
 		boolean allowVertical = connectionsType.allowVertical;
 		boolean allowMixed = connectionsType.allowMixed;
 		//prioritize left, right and back, bottom, front, top
@@ -206,9 +200,9 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
-		if (!this.connectionsType().allowFlipped) return;
-		ComplexFacing facing = getFacing(result.getDirection(),
+    default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
+		if (!this.additionalplacements$connectionsType().allowFlipped) return;
+		ComplexFacing facing = additionalplacements$getFacing(result.getDirection(),
 				(float) (result.getLocation().x - result.getBlockPos().getX() - .5),
 				(float) (result.getLocation().y - result.getBlockPos().getY() - .5),
 				(float) (result.getLocation().z - result.getBlockPos().getZ() - .5));
@@ -240,8 +234,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a)
-	{
+    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
 		Matrix4f poseMat = pose.last().pose();
 		Matrix3f normMat = pose.last().normal();
 
@@ -249,7 +242,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
 				OUTER_EDGE);
 
-		if (this.connectionsType().allowFlipped) {
+		if (this.additionalplacements$connectionsType().allowFlipped) {
 			//inner edges
 			BlockHighlightHelper.lineCenteredGrid(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
 					INNER_EDGE, OUTER_EDGE);
@@ -270,54 +263,50 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	}
 
 	@Override
-    default GenerationType<?, ?> getGenerationType() {
+    default GenerationType<?, ?> additionalplacements$getGenerationType() {
 		return APGenerationTypes.stairs();
 	}
 
-	default ComplexFacing getFacing(BlockHitResult hitResult)
-	{
-		return getFacing(hitResult.getDirection(), hitResult.getLocation(), hitResult.getBlockPos());
+	default ComplexFacing additionalplacements$getFacing(BlockHitResult hitResult) {
+		return additionalplacements$getFacing(hitResult.getDirection(), hitResult.getLocation(), hitResult.getBlockPos());
 	}
 
-	default ComplexFacing getFacing(BlockPlaceContext context)
-	{
-		return getFacing(context.getClickedFace(), context.getClickLocation(), context.getClickedPos());
+	default ComplexFacing additionalplacements$getFacing(BlockPlaceContext context) {
+		return additionalplacements$getFacing(context.getClickedFace(), context.getClickLocation(), context.getClickedPos());
 	}
 
-	default ComplexFacing getFacing(Direction out, Vec3 hitPos, Vec3i blockPos)
-	{
-		return getFacing(out,
+	default ComplexFacing additionalplacements$getFacing(Direction out, Vec3 hitPos, Vec3i blockPos) {
+		return additionalplacements$getFacing(out,
 				(float) (hitPos.x - blockPos.getX() - .5),
 				(float) (hitPos.y - blockPos.getY() - .5),
 				(float) (hitPos.z - blockPos.getZ() - .5));
 	}
 
-	default ComplexFacing getFacing(Direction out, float hitX, float hitY, float hitZ)
-	{
+	default ComplexFacing additionalplacements$getFacing(Direction out, float hitX, float hitY, float hitZ) {
         return switch (out.getAxis()) {
-            case X -> getFacingFromSide(hitZ, hitY, Direction.SOUTH, Direction.UP, out);
-            case Y -> getFacingFromSide(hitX, hitZ, Direction.EAST, Direction.SOUTH, out);
-            case Z -> getFacingFromSide(hitX, hitY, Direction.EAST, Direction.UP, out);
+            case X -> additionalplacements$getFacingFromSide(hitZ, hitY, Direction.SOUTH, Direction.UP, out);
+            case Y -> additionalplacements$getFacingFromSide(hitX, hitZ, Direction.EAST, Direction.SOUTH, out);
+            case Z -> additionalplacements$getFacingFromSide(hitX, hitY, Direction.EAST, Direction.UP, out);
         };
 	}
 
-	default ComplexFacing getFacingFromSide(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
+	default ComplexFacing additionalplacements$getFacingFromSide(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
 		if (localY > localX) { //top-left half
 			if (localY > -localX) { //top quarter
-				return getFacingFromQuarter(localX, localY, localRight, localUp, localOut);
+				return additionalplacements$getFacingFromQuarter(localX, localY, localRight, localUp, localOut);
 			} else { //left quarter
-				return getFacingFromQuarter(localY, -localX, localUp, localRight.getOpposite(), localOut);
+				return additionalplacements$getFacingFromQuarter(localY, -localX, localUp, localRight.getOpposite(), localOut);
 			}
 		} else { //bottom-right half
 			if (localY > -localX) { //right quarter
-				return getFacingFromQuarter(-localY, localX, localUp.getOpposite(), localRight, localOut);
+				return additionalplacements$getFacingFromQuarter(-localY, localX, localUp.getOpposite(), localRight, localOut);
 			} else { //bottom quarter
-				return getFacingFromQuarter(-localX, -localY, localRight.getOpposite(), localUp.getOpposite(), localOut);
+				return additionalplacements$getFacingFromQuarter(-localX, -localY, localRight.getOpposite(), localUp.getOpposite(), localOut);
 			}
 		}
 	}
 
-	default ComplexFacing getFacingFromQuarter(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
+	default ComplexFacing additionalplacements$getFacingFromQuarter(float localX, float localY, Direction localRight, Direction localUp, Direction localOut) {
 		Direction forward, up;
 		if (localY > INNER_EDGE) { //top half
 			up = localUp.getOpposite();
@@ -336,15 +325,14 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	}
 
     @Override
-    default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
-	{
+    default void additionalplacements$addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
-		tooltip.add(Component.translatable(connectionsType().tooltip));
+		tooltip.add(Component.translatable(additionalplacements$connectionsType().tooltip));
 	}
 
 	@Override
-	public default boolean paneConnectOverride(BlockState ourState, Direction.Axis paneAxis, Direction connectDir) {
-		CommonStairShapeState shapeState = getShapeState(ourState);
+	default boolean additionalplacements$paneConnectOverride(BlockState ourState, Direction.Axis paneAxis, Direction connectDir) {
+		CommonStairShapeState shapeState = additionalplacements$getShapeState(ourState);
 		if (connectDir == shapeState.facing.backward) { //connects front
 			return switch (shapeState.shape.paneFront) {
 				case NONE -> false;

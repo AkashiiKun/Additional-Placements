@@ -6,12 +6,10 @@ import com.firemerald.additionalplacements.generation.Registration;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 
-public class ServerConfig
-{
+public class ServerConfig {
 	public final BooleanValue checkTags, autoRebuildTags, fakePlayerPlacement;
 
-	public ServerConfig(ForgeConfigSpec.Builder builder)
-	{
+	public ServerConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("World settings").push("server");
         checkTags = builder
         		.comment("Check for and notify of mismatching tags. Only works when the same option in the common config is true.")

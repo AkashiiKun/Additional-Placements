@@ -50,7 +50,7 @@ public class ClientModEvents {
         if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
-                if (verticalBlock.hasAdditionalStates()) verticalBlock.renderHighlight(poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, partialTick);
+                if (verticalBlock.additionalplacements$hasAdditionalStates()) verticalBlock.additionalplacements$renderHighlight(poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, partialTick);
             }
         }
     }

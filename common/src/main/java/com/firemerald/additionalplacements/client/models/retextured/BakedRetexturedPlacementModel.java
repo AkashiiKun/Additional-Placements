@@ -6,7 +6,6 @@ import com.firemerald.additionalplacements.client.models.Unwrapper;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
@@ -46,7 +45,7 @@ public class BakedRetexturedPlacementModel implements PlacementModelWrapper {
 	}
 
 	@Override
-	public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, RandomSource rand) {
+	public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand) {
 		BlockState modelState = BlockModelUtils.getModeledState(state);
 		return BlockModelUtils.retexturedQuads(side, dir -> ourModel.getQuads(state, dir, rand), dir -> theirModel().getQuads(modelState, dir, rand), null);
 	}

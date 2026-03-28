@@ -15,8 +15,8 @@ public class MixinStructureTransform {
     @Inject(method = "apply(Lnet/minecraft/world/level/block/state/BlockState;)Lnet/minecraft/world/level/block/state/BlockState;", at = @At("HEAD"), cancellable = true, remap = false)
     public void apply(BlockState state, CallbackInfoReturnable<BlockState> ci) {
         if (state.getBlock() instanceof IPlacementBlock<?> block) {
-            if (block.hasAdditionalStates()) {
-                ci.setReturnValue(block.transform(state, dir -> ((StructureTransform) (Object) this).rotateFacing(((StructureTransform) (Object) this).mirrorFacing(dir))));
+            if (block.additionalplacements$hasAdditionalStates()) {
+                ci.setReturnValue(block.additionalplacements$transform(state, dir -> ((StructureTransform) (Object) this).rotateFacing(((StructureTransform) (Object) this).mirrorFacing(dir))));
             }
         }
     }

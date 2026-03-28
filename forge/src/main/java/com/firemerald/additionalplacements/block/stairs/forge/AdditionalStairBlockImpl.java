@@ -5,8 +5,6 @@ import com.firemerald.additionalplacements.block.interfaces.forge.IForgeAddition
 import com.firemerald.additionalplacements.block.interfaces.forge.IForgeAdditionalPlacementLiquidBlock;
 import com.firemerald.additionalplacements.block.stairs.AdditionalStairBlock;
 import com.firemerald.additionalplacements.block.stairs.StairConnectionsType;
-import net.minecraft.world.level.block.CarpetBlock;
-import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 
 public class AdditionalStairBlockImpl extends AdditionalStairBlock implements IForgeAdditionalPlacementBlock<StairBlock>, IForgeAdditionalPlacementLiquidBlock<StairBlock> {    private AdditionalStairBlockImpl(StairBlock block, StairConnectionsType connectionsType) {

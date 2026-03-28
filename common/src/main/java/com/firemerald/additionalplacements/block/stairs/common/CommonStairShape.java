@@ -7,6 +7,7 @@ import com.firemerald.additionalplacements.util.VoxelShapes;
 
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 
 public enum CommonStairShape implements StringRepresentable {
@@ -94,7 +95,7 @@ public enum CommonStairShape implements StringRepresentable {
 	}
 
 	@Override
-	public String getSerializedName() {
+	public @NotNull String getSerializedName() {
 		return name;
 	}
 }

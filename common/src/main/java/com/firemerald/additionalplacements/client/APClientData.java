@@ -12,8 +12,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
 @Environment(EnvType.CLIENT)
-public class APClientData
-{
+public class APClientData {
 	public static final KeyMapping AP_PLACEMENT_KEY = new KeyMapping("key.additionalplacements.placement_toggle", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), "key.categories.additionalplacements");
 
 	private static boolean placementEnabled = true;
@@ -30,24 +29,20 @@ public class APClientData
 		if (state != placementEnabled) togglePlacementEnabled();
 	}
 
-	public static void togglePlacementEnabled()
-	{
+	public static void togglePlacementEnabled() {
 		setPlacementEnabledAndSynchronize(!placementEnabled, APConfigs.client().togglePlacementLogicStateMessage.get());
 	}
 
-	public static void setPlacementEnabledAndSynchronize(boolean state, boolean showMessage)
-	{
+	public static void setPlacementEnabledAndSynchronize(boolean state, boolean showMessage) {
 		placementEnabled = state;
 		LocalPlayer player = Minecraft.getInstance().player;
-		if (player != null)
-		{
+		if (player != null) {
 			synchronizePlacementEnabled();
 			if (showMessage) player.displayClientMessage(Component.translatable(placementEnabled ? "msg.additionalplacements.placement_enable" : "msg.additionalplacements.placement_disable"), true);
 		}
 	}
 
-	public static void synchronizePlacementEnabled()
-	{
+	public static void synchronizePlacementEnabled() {
 		SetPlacementTogglePacket.of(placementEnabled).sendToServer();
 	}
 }

@@ -36,8 +36,7 @@ public class StairModels {
 
 	public static final StateModelDefinition[][] MODEL_DEFINITIONS = new StateModelDefinition[24][15];
 
-	static
-	{
+	static {
 		/*
 		setUpStairModelDefs(ComplexFacing.SOUTH_UP, ComplexFacing.UP_SOUTH, 0);
 		setUpStairModelDefs(ComplexFacing.WEST_UP, ComplexFacing.UP_WEST, 90);

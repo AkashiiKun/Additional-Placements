@@ -64,8 +64,7 @@ public class APDynamicResources implements PackResources {
     }
 
     @Override
-    public IoSupplier<InputStream> getResource(@NotNull PackType packType, @NotNull ResourceLocation resourceLocation)
-    {
+    public IoSupplier<InputStream> getResource(@NotNull PackType packType, @NotNull ResourceLocation resourceLocation) {
         if (packType != PackType.CLIENT_RESOURCES) return null;
         else if (!resourceLocation.getNamespace().equals(AdditionalPlacementsMod.MOD_ID)) return null;
         else if (!resourceLocation.getPath().endsWith(".json")) return null;
@@ -110,23 +109,19 @@ public class APDynamicResources implements PackResources {
     public void listResources(@NotNull PackType packType, @NotNull String domain, @NotNull String path, @NotNull ResourceOutput resourceOutput) {
         if (packType == PackType.CLIENT_RESOURCES && AdditionalPlacementsMod.MOD_ID.equals(domain)) {
             if ("blockstates".equals(path)) {
-                Registration.forEach(type -> {
-                    type.forEachCreated(entry -> {
-                        ResourceLocation id = entry.newId();
-                        resourceOutput.accept(
-                                new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "blockstates/" + id.getPath() + ".json"),
-                                new BlockStateJsonSupplier(entry.newBlock(), id.getPath()));
-                    });
-                });
+                Registration.forEach(type -> type.forEachCreated(entry -> {
+                    ResourceLocation id = entry.newId();
+                    resourceOutput.accept(
+                            new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "blockstates/" + id.getPath() + ".json"),
+                            new BlockStateJsonSupplier(entry.newBlock(), id.getPath()));
+                }));
             } else if ("models".equals(path)) {
                 Registration.types().flatMap(GenerationType::created).forEach(entry -> {
                     AdditionalPlacementBlock<?> block = entry.newBlock();
                     BlockState state = block.defaultBlockState();
-                    parseBlockstates(state, new ArrayList<>(state.getProperties()), 0, "models/block/" + entry.newId().getPath() + "/", (modelPath, newState) -> {
-                        resourceOutput.accept(
-                                new ResourceLocation(AdditionalPlacementsMod.MOD_ID, modelPath + ".json"),
-                                getBlockModelSupplier(entry.newBlock(), newState));
-                    });
+                    parseBlockstates(state, new ArrayList<>(state.getProperties()), 0, "models/block/" + entry.newId().getPath() + "/", (modelPath, newState) -> resourceOutput.accept(
+                            new ResourceLocation(AdditionalPlacementsMod.MOD_ID, modelPath + ".json"),
+                            getBlockModelSupplier(entry.newBlock(), newState)));
                 });
             }
         }

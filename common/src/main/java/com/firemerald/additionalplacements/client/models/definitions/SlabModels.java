@@ -22,8 +22,7 @@ public class SlabModels {
 
 	public static final StateModelDefinition[][] MODEL_DEFINITIONS = new StateModelDefinition[2][3];
 
-	static
-	{
+	static {
 		MODEL_DEFINITIONS[0][SlabType.BOTTOM.ordinal()] = new StateModelDefinition("/negative", 270);
 		MODEL_DEFINITIONS[0][SlabType.TOP.ordinal()] = new StateModelDefinition("/positive", 270);
 		MODEL_DEFINITIONS[0][SlabType.DOUBLE.ordinal()] = new StateModelDefinition("/double", 270);

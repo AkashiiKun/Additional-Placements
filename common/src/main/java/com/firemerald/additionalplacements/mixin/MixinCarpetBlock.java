@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,45 +28,47 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 		super(properties);
 	}
 
-	private AdditionalCarpetBlock carpet;
+	@Unique
+    private AdditionalCarpetBlock additionalplacements$carpet;
 
-	private CarpetBlock asCarpet() {
+	@Unique
+    private CarpetBlock additionalplacements$asCarpet() {
 		return (CarpetBlock) (Object) this;
 	}
 
 	@Override
-	public void setOtherBlock(AdditionalCarpetBlock carpet) {
-		this.carpet = carpet;
+	public void additionalplacements$setOtherBlock(AdditionalCarpetBlock carpet) {
+		this.additionalplacements$carpet = carpet;
 	}
 
 	@Override
-	public AdditionalCarpetBlock getOtherBlock() {
-		return carpet;
+	public AdditionalCarpetBlock additionalplacements$getOtherBlock() {
+		return additionalplacements$carpet;
 	}
 
 	@Override
-	public boolean hasAdditionalStates() {
-		return carpet != null;
+	public boolean additionalplacements$hasAdditionalStates() {
+		return additionalplacements$carpet != null;
 	}
 
 	@Override
-	public Direction getPlacing(BlockState blockState) {
+	public Direction additionalplacements$getPlacing(BlockState blockState) {
 		return Direction.DOWN;
 	}
 
 	@Override
-	public boolean isThis(BlockState blockState) {
-		return blockState.is(asCarpet()) || blockState.is(carpet);
+	public boolean additionalplacements$isThis(BlockState blockState) {
+		return blockState.is(additionalplacements$asCarpet()) || blockState.is(additionalplacements$carpet);
 	}
 
 	@Override
-	public BlockState getDefaultVanillaState(BlockState currentState) {
-		return currentState.is(asCarpet()) ? currentState : carpet.copyProperties(currentState, asCarpet().defaultBlockState());
+	public BlockState additionalplacements$getDefaultVanillaState(BlockState currentState) {
+		return currentState.is(additionalplacements$asCarpet()) ? currentState : additionalplacements$carpet.copyProperties(currentState, additionalplacements$asCarpet().defaultBlockState());
 	}
 
 	@Override
-	public BlockState getDefaultAdditionalState(BlockState currentState) {
-		return currentState.is(carpet) ? currentState : carpet.copyProperties(currentState, carpet.defaultBlockState());
+	public BlockState additionalplacements$getDefaultAdditionalState(BlockState currentState) {
+		return currentState.is(additionalplacements$carpet) ? currentState : additionalplacements$carpet.copyProperties(currentState, additionalplacements$carpet.defaultBlockState());
 	}
 
 	@ModifyReturnValue(at = @At("RETURN"), remap = false, require = 0, method = {
@@ -73,15 +76,15 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 			BlockMethods.GET_STATE_FOR_PLACEMENT_OBF_NAME
 	})
 	private BlockState getStateForPlacement(BlockState original, @Local(argsOnly = true) BlockPlaceContext context) {
-		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return getStateForPlacementImpl(context, original);
+		if (this.additionalplacements$hasAdditionalStates() && additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return additionalplacements$getStateForPlacementImpl(context, original);
 		else return original;
 	}
 
 	@Override
 	@Unique(silent = true)
-	public BlockState getStateForPlacement(BlockPlaceContext context) {
+	public BlockState getStateForPlacement(@NotNull BlockPlaceContext context) {
 		BlockState superRet = super.getStateForPlacement(context);
-		if (this.hasAdditionalStates() && enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return getStateForPlacementImpl(context, superRet);
+		if (this.additionalplacements$hasAdditionalStates() && additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) return additionalplacements$getStateForPlacementImpl(context, superRet);
 		else return superRet;
 	}
 
@@ -90,14 +93,14 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 			BlockMethods.ROTATE_OBF_NAME
 	})
 	private void rotate(BlockState blockState, Rotation rotation, CallbackInfoReturnable<BlockState> ci) {
-		if (this.hasAdditionalStates()) ci.setReturnValue(rotateImpl(blockState, rotation));
+		if (this.additionalplacements$hasAdditionalStates()) ci.setReturnValue(additionalplacements$rotateImpl(blockState, rotation));
 	}
 
 	@Override
 	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
-	public BlockState rotate(BlockState blockState, Rotation rotation) {
-		if (this.hasAdditionalStates()) return rotateImpl(blockState, rotation);
+	public @NotNull BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
+		if (this.additionalplacements$hasAdditionalStates()) return additionalplacements$rotateImpl(blockState, rotation);
 		else return super.rotate(blockState, rotation);
 	}
 
@@ -106,20 +109,20 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 			BlockMethods.MIRROR_OBF_NAME
 	})
 	private void mirror(BlockState blockState, Mirror mirror, CallbackInfoReturnable<BlockState> ci) {
-		if (this.hasAdditionalStates()) ci.setReturnValue(mirrorImpl(blockState, mirror));
+		if (this.additionalplacements$hasAdditionalStates()) ci.setReturnValue(additionalplacements$mirrorImpl(blockState, mirror));
 	}
 
 	@Override
 	@Unique(silent = true)
 	@SuppressWarnings("deprecation")
-	public BlockState mirror(BlockState blockState, Mirror mirror) {
-		if (this.hasAdditionalStates()) return mirrorImpl(blockState, mirror);
+	public @NotNull BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
+		if (this.additionalplacements$hasAdditionalStates()) return additionalplacements$mirrorImpl(blockState, mirror);
 		else return super.mirror(blockState, mirror);
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public BlockState updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+	public BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);
 	}
 }

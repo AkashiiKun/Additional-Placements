@@ -35,12 +35,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 import net.minecraft.world.phys.BlockHitResult;
 
-public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable
-{
+public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable {
 	interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock> {
 		@Override
-		default boolean enablePlacement(BlockPos pos, Level level, Direction direction, @Nullable Player player) {
-			if (ISlabBlock.super.enablePlacement(pos, level, direction, player)) {
+		default boolean additionalplacements$enablePlacement(BlockPos pos, Level level, Direction direction, @Nullable Player player) {
+			if (ISlabBlock.super.additionalplacements$enablePlacement(pos, level, direction, player)) {
 				if (LoadedMods.DOUBLESLABS.isPresent) {
 					BlockState blockState = level.getBlockState(pos);
 					if (blockState.getBlock() instanceof SlabBlock) {
@@ -55,30 +54,25 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 		}
 
 		@Override
-        default Direction getPlacing(BlockState blockState) {
+        default Direction additionalplacements$getPlacing(BlockState blockState) {
 			SlabType type = blockState.getValue(SlabBlock.TYPE);
 			return type == SlabType.DOUBLE ? null : type == SlabType.TOP ? Direction.UP : Direction.DOWN;
 		}
 	}
 
 	@Override
-    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
-	{
-		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
+    default BlockState additionalplacements$transform(BlockState blockState, Function<Direction, Direction> transform) {
+		Direction placing = additionalplacements$getPlacing(blockState);
+		return placing == null ? blockState : additionalplacements$forPlacing(transform.apply(placing), blockState);
 	}
 
-	default boolean canBeReplacedImpl(BlockState state, BlockPlaceContext context)
-	{
+	default boolean additionalplacements$canBeReplacedImpl(BlockState state, BlockPlaceContext context) {
 		ItemStack itemstack = context.getItemInHand();
-		if (itemstack.is(this.asItem()))
-		{
-			if (context.replacingClickedOnBlock())
-			{
-				Direction placing = getPlacing(state);
-				if (placing != null)
-				{
-					Direction direction = getPlacingDirection(context);
+		if (itemstack.is(this.asItem())) {
+			if (context.replacingClickedOnBlock()) {
+				Direction placing = additionalplacements$getPlacing(state);
+				if (placing != null) {
+					Direction direction = additionalplacements$getPlacingDirection(context);
 					return direction.getAxis() == placing.getAxis() && context.getClickedFace().getOpposite() == placing;
 				}
 				else return false;
@@ -89,106 +83,60 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 	}
 
 	@Override
-    default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
-	{
+    default BlockState additionalplacements$getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState) {
 		BlockPos blockPos = context.getClickedPos();
 		BlockState blockState = context.getLevel().getBlockState(blockPos);
-        if (isThis(blockState)) return blockState.setValue(SlabBlock.TYPE, SlabType.DOUBLE);
-        else return forPlacing(getPlacingDirection(context), currentState);
+        if (additionalplacements$isThis(blockState)) return blockState.setValue(SlabBlock.TYPE, SlabType.DOUBLE);
+        else return additionalplacements$forPlacing(additionalplacements$getPlacingDirection(context), currentState);
 	}
 
-	default BlockState forPlacing(Direction dir, BlockState blockState)
-	{
+	default BlockState additionalplacements$forPlacing(Direction dir, BlockState blockState) {
 		return (dir.getAxis() == Axis.Y ?
-				getDefaultVanillaState(blockState) :
-				(getDefaultAdditionalState(blockState).setValue(VerticalSlabBlock.AXIS, dir.getAxis())))
+				additionalplacements$getDefaultVanillaState(blockState) :
+				(additionalplacements$getDefaultAdditionalState(blockState).setValue(VerticalSlabBlock.AXIS, dir.getAxis())))
 				.setValue(SlabBlock.TYPE, dir.getAxisDirection() == AxisDirection.POSITIVE ? SlabType.TOP : SlabType.BOTTOM);
 	}
 
 	@Nullable
-    Direction getPlacing(BlockState blockState);
+    Direction additionalplacements$getPlacing(BlockState blockState);
 
-	default Direction getPlacingDirection(BlockPlaceContext context)
-	{
+	default Direction additionalplacements$getPlacingDirection(BlockPlaceContext context) {
 		double hitX = context.getClickLocation().x - context.getClickedPos().getX() - .5;
 		double hitY = context.getClickLocation().y - context.getClickedPos().getY() - .5;
 		double hitZ = context.getClickLocation().z - context.getClickedPos().getZ() - .5;
-        switch (context.getClickedFace())
-        {
-		case DOWN:
-			if (Math.abs(hitX) <= .25f && Math.abs(hitZ) <= .25f) return Direction.UP;
-			else if (hitX > hitZ)
-			{
-				if (hitX > -hitZ) return Direction.EAST;
-				else return Direction.NORTH;
-			}
-			else
-			{
-				if (hitZ > -hitX) return Direction.SOUTH;
-				else return Direction.WEST;
-			}
-		case UP:
-			if (Math.abs(hitX) <= .25f && Math.abs(hitZ) <= .25f) return Direction.DOWN;
-			else if (hitX > hitZ)
-			{
-				if (hitX > -hitZ) return Direction.EAST;
-				else return Direction.NORTH;
-			}
-			else
-			{
-				if (hitZ > -hitX) return Direction.SOUTH;
-				else return Direction.WEST;
-			}
-		case NORTH:
-			if (Math.abs(hitX) <= .25f && Math.abs(hitY) <= .25f) return Direction.SOUTH;
-			else if (hitX > hitY)
-			{
-				if (hitX > -hitY) return Direction.EAST;
-				else return Direction.DOWN;
-			}
-			else
-			{
-				if (hitY > -hitX) return Direction.UP;
-				else return Direction.WEST;
-			}
-		case SOUTH:
-			if (Math.abs(hitX) <= .25f && Math.abs(hitY) <= .25f) return Direction.NORTH;
-			else if (hitX > hitY)
-			{
-				if (hitX > -hitY) return Direction.EAST;
-				else return Direction.DOWN;
-			}
-			else
-			{
-				if (hitY > -hitX) return Direction.UP;
-				else return Direction.WEST;
-			}
-		case WEST:
-			if (Math.abs(hitY) <= .25f && Math.abs(hitZ) <= .25f) return Direction.EAST;
-			else if (hitZ > hitY)
-			{
-				if (hitZ > -hitY) return Direction.SOUTH;
-				else return Direction.DOWN;
-			}
-			else
-			{
-				if (hitY > -hitZ) return Direction.UP;
-				else return Direction.NORTH;
-			}
-		case EAST:
-			if (Math.abs(hitY) <= .25f && Math.abs(hitZ) <= .25f) return Direction.WEST;
-			else if (hitZ > hitY)
-			{
-				if (hitZ > -hitY) return Direction.SOUTH;
-				else return Direction.DOWN;
-			}
-			else
-			{
-				if (hitY > -hitZ) return Direction.UP;
-				else return Direction.NORTH;
-			}
-		default:
-			return null;
+        switch (context.getClickedFace().getAxis()) {
+			case X:
+				if (Math.abs(hitY) <= .25f && Math.abs(hitZ) <= .25f) return context.getClickedFace().getOpposite();
+				else if (hitZ > hitY) {
+					if (hitZ > -hitY) return Direction.SOUTH;
+					else return Direction.DOWN;
+				}
+				else {
+					if (hitY > -hitZ) return Direction.UP;
+					else return Direction.NORTH;
+				}
+			case Y:
+				if (Math.abs(hitX) <= .25f && Math.abs(hitZ) <= .25f) return context.getClickedFace().getOpposite();
+				else if (hitX > hitZ) {
+					if (hitX > -hitZ) return Direction.EAST;
+					else return Direction.NORTH;
+				}
+				else {
+					if (hitZ > -hitX) return Direction.SOUTH;
+					else return Direction.WEST;
+				}
+			case Z:
+				if (Math.abs(hitX) <= .25f && Math.abs(hitY) <= .25f) return context.getClickedFace().getOpposite();
+				else if (hitX > hitY) {
+					if (hitX > -hitY) return Direction.EAST;
+					else return Direction.DOWN;
+				}
+				else {
+					if (hitY > -hitX) return Direction.UP;
+					else return Direction.WEST;
+				}
+			default:
+				return null;
         }
 	}
 
@@ -197,8 +145,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a)
-	{
+    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
 		Matrix4f poseMat = pose.last().pose();
 		Matrix3f normMat = pose.last().normal();
 
@@ -216,24 +163,23 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 	}
 
 	@Override
-    default GenerationType<?, ?> getGenerationType() {
+    default GenerationType<?, ?> additionalplacements$getGenerationType() {
 		return APGenerationTypes.slab();
 	}
 
     @Override
-    default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag)
-	{
+    default void additionalplacements$addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}
 
-	public Axis getAxis(BlockState state);
+	Axis additionalplacements$getAxis(BlockState state);
 
 	@Override
-	public default boolean paneConnectOverride(BlockState ourState, Axis paneAxis, Direction connectDir) {
+	default boolean additionalplacements$paneConnectOverride(BlockState ourState, Axis paneAxis, Direction connectDir) {
 		SlabType type = ourState.getValue(BlockStateProperties.SLAB_TYPE);
 		if (type == SlabType.DOUBLE) return true;
 		else {
-			Axis axis = getAxis(ourState);
+			Axis axis = additionalplacements$getAxis(ourState);
 			if (axis == paneAxis) return false;
 			else if (axis != connectDir.getAxis()) return true; //connect from sides
 			else return (connectDir.getAxisDirection() == AxisDirection.POSITIVE) ^ (type == SlabType.TOP); //connect from back

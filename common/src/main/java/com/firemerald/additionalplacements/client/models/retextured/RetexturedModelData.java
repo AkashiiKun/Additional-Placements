@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.client.models.retextured;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.client.resources.IJsonInputSupplier;
-import com.firemerald.additionalplacements.util.BlockRotation;
 import com.firemerald.additionalplacements.util.GeneralUtils;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonElement;

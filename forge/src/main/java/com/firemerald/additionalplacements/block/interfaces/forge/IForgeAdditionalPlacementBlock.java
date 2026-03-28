@@ -8,7 +8,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -130,7 +129,7 @@ public interface IForgeAdditionalPlacementBlock<T extends Block> extends IPlacem
 
     @Override
     default void onBlockStateChange(LevelReader level, BlockPos pos, BlockState oldState, BlockState newState) {
-        getOtherBlock().onBlockStateChange(level, pos, AdditionalPlacementBlock.getModelStateSafe(oldState), getModelState(newState));
+        additionalplacements$getOtherBlock().onBlockStateChange(level, pos, AdditionalPlacementBlock.getModelStateSafe(oldState), getModelState(newState));
     }
 
     @Override

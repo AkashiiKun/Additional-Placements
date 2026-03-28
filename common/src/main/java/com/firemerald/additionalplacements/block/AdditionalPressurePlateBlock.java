@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.List;
 
-import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
 import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
@@ -15,14 +14,12 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeaconBeamBlock;
-import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.ApiStatus;
 
-public abstract class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock>
-{
+public abstract class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock> {
 	public static AdditionalPressurePlateBlock of(PressurePlateBlock plate) {
 		return plate instanceof BeaconBeamBlock ? ofBeaconBeam(plate) : ofNonBeaconBeam(plate);
 	}
@@ -39,14 +36,12 @@ public abstract class AdditionalPressurePlateBlock extends AdditionalBasePressur
 		throw new AssertionError();
 	}
 
-	protected AdditionalPressurePlateBlock(PressurePlateBlock plate)
-	{
+	protected AdditionalPressurePlateBlock(PressurePlateBlock plate) {
 		super(plate);
 	}
 
 	@Override
-	protected int getSignalStrength(Level level, BlockPos pos)
-	{
+	protected int getSignalStrength(Level level, BlockPos pos) {
 		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalFloorBlock.PLACING).ordinal() - 1].move(pos);
 		List<? extends Entity> list = switch (this.parentBlock.sensitivity) {
             case EVERYTHING -> level.getEntities(null, aabb);

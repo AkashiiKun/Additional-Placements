@@ -11,6 +11,6 @@ import java.util.Optional;
 public interface IForgeAdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends IForgeAdditionalPlacementBlock<T>, BucketPickup, LiquidBlockContainer {
     @Override
     default Optional<SoundEvent> getPickupSound(BlockState blockState) {
-        return this.getOtherBlock().getPickupSound(this.getModelState(blockState));
+        return this.additionalplacements$getOtherBlock().getPickupSound(this.getModelState(blockState));
     }
 }

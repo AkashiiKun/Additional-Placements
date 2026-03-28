@@ -9,16 +9,13 @@ import net.minecraft.data.PackOutput;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
-public class ModelGenerator extends BlockStateProvider
-{
-	public ModelGenerator(PackOutput output, String modid, ExistingFileHelper exFileHelper)
-	{
+public class ModelGenerator extends BlockStateProvider {
+	public ModelGenerator(PackOutput output, String modid, ExistingFileHelper exFileHelper) {
 		super(output, modid, exFileHelper);
 	}
 
 	@Override
-	protected void registerStatesAndModels()
-	{
+	protected void registerStatesAndModels() {
 		new SlabModelsBuilder(this)
 		.set(SlabModels.SIDE_ALL_MODEL_FOLDER, SlabModels.BASE_MODEL_FOLDER).addAction((builder, model) -> builder.texture("side", "#all").texture("top", "#all").texture("bottom", "#all")).compile() //build side_all
 		.set(SlabModels.COLUMN_MODEL_FOLDER, SlabModels.BASE_MODEL_FOLDER).addAction((builder, model) -> builder.texture("top", "#end").texture("bottom", "#end")).compile(); //build pillar

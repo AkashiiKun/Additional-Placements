@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.network.server.forge;
 
-import com.firemerald.additionalplacements.network.APNetwork;
 import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.forge.APNetworkImpl;
 import com.firemerald.additionalplacements.network.forge.APPacketImpl;

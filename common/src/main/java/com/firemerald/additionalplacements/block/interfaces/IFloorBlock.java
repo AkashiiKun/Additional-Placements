@@ -20,42 +20,38 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.Nullable;
 
-public interface IFloorBlock<T extends Block> extends IPlacementBlock<T>
-{
+public interface IFloorBlock<T extends Block> extends IPlacementBlock<T> {
 	@Override
-    default BlockState transform(BlockState blockState, Function<Direction, Direction> transform)
-	{
-		Direction placing = getPlacing(blockState);
-		return placing == null ? blockState : forPlacing(transform.apply(placing), blockState);
+    default BlockState additionalplacements$transform(BlockState blockState, Function<Direction, Direction> transform) {
+		Direction placing = additionalplacements$getPlacing(blockState);
+		return placing == null ? blockState : additionalplacements$forPlacing(transform.apply(placing), blockState);
 	}
 
 	@Override
-    default BlockState getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState)
-	{
-		return forPlacing(getPlacingDirection(context), currentState);
+    default BlockState additionalplacements$getStateForPlacementImpl(BlockPlaceContext context, BlockState currentState) {
+		return additionalplacements$forPlacing(additionalplacements$getPlacingDirection(context), currentState);
 	}
 
-	BlockState forPlacing(Direction dir, BlockState blockState);
+	BlockState additionalplacements$forPlacing(Direction dir, BlockState blockState);
 
-	Direction getPlacing(BlockState blockState);
+	Direction additionalplacements$getPlacing(BlockState blockState);
 
-	default Direction getPlacingDirection(BlockPlaceContext context)
-	{
+	default Direction additionalplacements$getPlacingDirection(BlockPlaceContext context) {
 		return context.getClickedFace().getOpposite();
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
+    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
 
     @Override
-    default void addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    default void additionalplacements$addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(Component.translatable("tooltip.additionalplacements.ceiling_placement"));
 	}
 
 	@Environment(EnvType.CLIENT)
-    default Direction transformModelDirection(Direction from) {
+    default Direction additionalplacements$transformModelDirection(Direction from) {
 		return from;
 	}
 }

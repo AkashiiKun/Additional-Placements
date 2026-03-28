@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.block.forge;
 import com.firemerald.additionalplacements.block.AdditionalPressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.forge.IForgeAdditionalPlacementBlock;
-import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
 
 public class AdditionalPressurePlateBlockImpl extends AdditionalPressurePlateBlock implements IForgeAdditionalPlacementBlock<PressurePlateBlock> {

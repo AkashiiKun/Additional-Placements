@@ -5,7 +5,6 @@ import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.network.APPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.network.Connection;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;

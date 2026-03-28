@@ -4,7 +4,6 @@ import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IAdditionalBeaconBeamBlock;
 import com.firemerald.additionalplacements.block.interfaces.forge.IForgeAdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.forge.IForgeAdditionalPlacementLiquidBlock;
-import net.minecraft.world.level.block.CarpetBlock;
 import net.minecraft.world.level.block.SlabBlock;
 
 public class VerticalSlabBlockImpl extends VerticalSlabBlock implements IForgeAdditionalPlacementBlock<SlabBlock>, IForgeAdditionalPlacementLiquidBlock<SlabBlock> {

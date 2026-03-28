@@ -34,14 +34,12 @@ public abstract class AdditionalWeightedPressurePlateBlock extends AdditionalBas
 		throw new AssertionError();
 	}
 
-	protected AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate)
-	{
+	protected AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate) {
 		super(plate);
 	}
 
 	@Override
-	protected int getSignalStrength(Level level, BlockPos pos)
-	{
+	protected int getSignalStrength(Level level, BlockPos pos) {
 		AABB aabb = TOUCH_AABBS[level.getBlockState(pos).getValue(AdditionalFloorBlock.PLACING).ordinal() - 1].move(pos);
 		int i = Math.min(level.getEntitiesOfClass(Entity.class, aabb).size(), parentBlock.maxWeight);
 		if (i > 0) return Mth.ceil(15 * (float) Math.min(parentBlock.maxWeight, i) / parentBlock.maxWeight);

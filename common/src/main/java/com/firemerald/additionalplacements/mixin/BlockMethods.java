@@ -16,7 +16,6 @@ public class BlockMethods {
 
             UPDATE_SHAPE_DESC = "(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/Direction;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelAccessor;Lnet/minecraft/core/BlockPos;Lnet/minecraft/core/BlockPos;)Lnet/minecraft/world/level/block/state/BlockState;",
             UPDATE_SHAPE_NAME = "updateShape" + UPDATE_SHAPE_DESC;
-    ;
 
 
 }

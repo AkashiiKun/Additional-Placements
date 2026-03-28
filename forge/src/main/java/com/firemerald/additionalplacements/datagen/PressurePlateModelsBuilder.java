@@ -7,15 +7,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 
-public class PressurePlateModelsBuilder<T extends BasePressurePlateBlock, U extends AdditionalBasePressurePlateBlock<T>> extends ModelBuilder<T, U, PressurePlateModelsBuilder<T, U>>
-{
-	public PressurePlateModelsBuilder(BlockStateProvider stateProvider)
-	{
+public class PressurePlateModelsBuilder<T extends BasePressurePlateBlock, U extends AdditionalBasePressurePlateBlock<T>> extends ModelBuilder<T, U, PressurePlateModelsBuilder<T, U>> {
+	public PressurePlateModelsBuilder(BlockStateProvider stateProvider) {
 		super(stateProvider, PressurePlateModels.MODELS);
 	}
 
-	public PressurePlateModelsBuilder<T, U> setPillar(ResourceLocation side, ResourceLocation top, ResourceLocation bottom)
-	{
+	public PressurePlateModelsBuilder<T, U> setPillar(ResourceLocation side, ResourceLocation top, ResourceLocation bottom) {
 		return setBase(PressurePlateModels.BASE_MODEL_FOLDER).addAction((builder, model) ->
 		builder
 		.texture("side", side)
@@ -23,16 +20,14 @@ public class PressurePlateModelsBuilder<T extends BasePressurePlateBlock, U exte
 		.texture("bottom", bottom));
 	}
 
-	public PressurePlateModelsBuilder<T, U> setColumn(ResourceLocation side, ResourceLocation end)
-	{
+	public PressurePlateModelsBuilder<T, U> setColumn(ResourceLocation side, ResourceLocation end) {
 		return setBase(PressurePlateModels.COLUMN_MODEL_FOLDER).addAction((builder, model) ->
 		builder
 		.texture("side", side)
 		.texture("end", end));
 	}
 
-	public PressurePlateModelsBuilder<T, U> setAllSides(ResourceLocation all)
-	{
+	public PressurePlateModelsBuilder<T, U> setAllSides(ResourceLocation all) {
 		return setBase(PressurePlateModels.SIDE_ALL_MODEL_FOLDER).addAction((builder, model) ->
 		builder
 		.texture("all", all));

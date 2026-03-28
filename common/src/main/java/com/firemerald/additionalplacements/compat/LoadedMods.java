@@ -18,9 +18,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
 public enum LoadedMods {
-    DOUBLESLABS("doubleslabs", () -> {
-        AdditionalPlacementsMod.LOGGER.info("DoubleSlabs detected, disabling vertical slab placement under certain conditions");
-    }),
+    DOUBLESLABS("doubleslabs", () -> AdditionalPlacementsMod.LOGGER.info("DoubleSlabs detected, disabling vertical slab placement under certain conditions")),
     CONTINUITY("continuity", () -> {
         if (Platform.getEnv() == EnvType.CLIENT) {
             AdditionalPlacementsMod.LOGGER.info("Continuity detected, registering continuity BakedModel unwrappers");

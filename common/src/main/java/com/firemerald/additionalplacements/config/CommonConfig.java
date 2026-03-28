@@ -7,15 +7,13 @@ import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
 import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
-public class CommonConfig
-{
+public class CommonConfig {
 	public final BooleanValue showTooltip;
 	public final BooleanValue checkTags, autoRebuildTags, logTagMismatch;
 	public final IntValue checkerPriority;
 	public final BooleanValue fixStates, fixOldStates;
 
-	public CommonConfig(ForgeConfigSpec.Builder builder)
-	{
+	public CommonConfig(ForgeConfigSpec.Builder builder) {
         builder.comment("Common settings").push("common");
         showTooltip = builder
         		.comment("Show tooltip when a block has additional placements")

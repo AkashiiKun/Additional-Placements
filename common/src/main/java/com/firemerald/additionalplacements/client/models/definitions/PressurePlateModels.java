@@ -21,8 +21,7 @@ public class PressurePlateModels {
 
 	public static final StateModelDefinition[][] MODEL_DEFINITIONS = new StateModelDefinition[5][2];
 
-	static
-	{
+	static {
 		setStateModelDefinitions(Direction.UP, 180, 0);
 		setStateModelDefinitions(Direction.SOUTH, 270, 180);
 		setStateModelDefinitions(Direction.EAST, 270, 270);
@@ -30,8 +29,7 @@ public class PressurePlateModels {
 		setStateModelDefinitions(Direction.WEST, 270, 90);
 	}
 
-	static void setStateModelDefinitions(Direction dir, int rotX, int rotY)
-	{
+	static void setStateModelDefinitions(Direction dir, int rotX, int rotY) {
 		StateModelDefinition[] array = MODEL_DEFINITIONS[dir.ordinal() - 1];
 		array[0] = new StateModelDefinition("/unpressed", rotX, rotY);
 		array[1] = new StateModelDefinition("/pressed", rotX, rotY);

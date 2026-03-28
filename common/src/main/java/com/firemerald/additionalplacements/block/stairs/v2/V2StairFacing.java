@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.stairs.v2;
 import com.firemerald.additionalplacements.util.ComplexFacing;
 
 import net.minecraft.util.StringRepresentable;
+import org.jetbrains.annotations.NotNull;
 
 public enum V2StairFacing implements StringRepresentable {
 	SOUTH_UP_EAST("south_up_east", ComplexFacing.SOUTH_UP, ComplexFacing.UP_SOUTH, ComplexFacing.SOUTH_EAST),
@@ -30,7 +31,7 @@ public enum V2StairFacing implements StringRepresentable {
 	}
 
 	@Override
-	public String getSerializedName() {
+	public @NotNull String getSerializedName() {
 		return name;
 	}
 }

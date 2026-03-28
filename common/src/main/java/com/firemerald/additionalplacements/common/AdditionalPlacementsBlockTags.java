@@ -14,19 +14,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
-public class AdditionalPlacementsBlockTags
-{
-	private static final IntPredicate SEPERATOR = c -> c == '_' || c == ' ' || c == '/' || c == '.';
+public class AdditionalPlacementsBlockTags {
+	private static final IntPredicate SEPARATOR = c -> c == '_' || c == ' ' || c == '/' || c == '.';
 	private static final Map<String, Map<TagKey<Block>, TagKey<Block>>> remappedTags = new HashMap<>();
 
-	public static Set<TagKey<Block>> remap(Stream<TagKey<Block>> tags, String typeName, String typeNamePlural)
-	{
+	public static Set<TagKey<Block>> remap(Stream<TagKey<Block>> tags, String typeName, String typeNamePlural) {
 		Map<TagKey<Block>, TagKey<Block>> mapped = remappedTags.computeIfAbsent(typeName, key -> new HashMap<>());
 		return tags.map(tag -> mapped.computeIfAbsent(tag, name -> {
 			ResourceLocation loc = tag.location();
 			int beginPlural = loc.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeNamePlural.toLowerCase(Locale.ENGLISH));
-			if (beginPlural < 0)
-			{
+			if (beginPlural < 0) {
 				int begin = loc.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeName.toLowerCase(Locale.ENGLISH));
 				if (begin < 0) return tag;
 				else return remap(begin, tag, typeName);
@@ -35,13 +32,12 @@ public class AdditionalPlacementsBlockTags
 		})).collect(Collectors.toSet());
 	}
 
-	private static TagKey<Block> remap(int begin, TagKey<Block> tag, String typeName)
-	{
+	private static TagKey<Block> remap(int begin, TagKey<Block> tag, String typeName) {
 		ResourceLocation loc = tag.location();
 		String path = loc.getPath();
 		if ((begin > 0 //check char before
-				&& !SEPERATOR.test(path.charAt(begin - 1))) || (begin + typeName.length() < path.length() //check char after
-				&& !SEPERATOR.test(path.charAt(begin + typeName.length())))) return tag;
+				&& !SEPARATOR.test(path.charAt(begin - 1))) || (begin + typeName.length() < path.length() //check char after
+				&& !SEPARATOR.test(path.charAt(begin + typeName.length())))) return tag;
 		return create(AdditionalPlacementsMod.MOD_ID + ":" + loc.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin));
 	}
 
