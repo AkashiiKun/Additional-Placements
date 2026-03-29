@@ -20,8 +20,8 @@ public class UnbakedRetexturedPlacementModel<T extends UnbakedRetexturedPlacemen
     }
 
 	@Override
-	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
-		return BakedRetexturedPlacementModel.of(ourModel.bake(baker, spriteGetter, modelState, modelLocation), theirModelState);
+	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
+		return BakedRetexturedPlacementModel.of(ourModel.bake(baker, spriteGetter, modelState), theirModelState);
 	}
 
 	@Override

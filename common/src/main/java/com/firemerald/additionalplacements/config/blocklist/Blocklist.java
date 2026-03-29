@@ -38,7 +38,7 @@ public class Blocklist {
     public void addToConfig(ModConfigSpec.Builder builder, String key, String comment) {
         blocklistConfig = builder
                 .comment(comment + "\nSee https://github.com/FirEmerald/AdditionalPlacements/wiki/Blocklist-Format for blocklist format")
-                .defineListAllowEmpty(Collections.singletonList(key), () -> defaultBlocklistConfig, o -> o instanceof String);
+                .defineListAllowEmpty(Collections.singletonList(key), () -> defaultBlocklistConfig, () -> "<blocklist entry>", o -> o instanceof String);
     }
 
     public void loadListsFromConfig() {
@@ -72,7 +72,7 @@ public class Blocklist {
                     return new InvalidBlocklistEntry(key);
                 }
                 try {
-                    ResourceLocation tag = new ResourceLocation(key.substring(2));
+                    ResourceLocation tag = ResourceLocation.parse(key.substring(2));
                     return new TagBlocklistEntry(value, TagKey.create(Registries.BLOCK, tag));
                 } catch (ResourceLocationException e) {
                     AdditionalPlacementsMod.LOGGER.warn("Invalid blocklist key {}: invalid tag", key, e);
@@ -91,7 +91,7 @@ public class Blocklist {
                     }
                 }
                 try {
-                    ResourceLocation id = new ResourceLocation(key.substring(1));
+                    ResourceLocation id = ResourceLocation.parse(key.substring(1));
                     return new IDBlocklistEntry(value, id);
                 } catch (ResourceLocationException e) {
                     AdditionalPlacementsMod.LOGGER.warn("Invalid blocklist key {}: invalid id", key, e);

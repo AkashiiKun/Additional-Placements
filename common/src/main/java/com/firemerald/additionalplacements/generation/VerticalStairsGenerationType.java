@@ -129,7 +129,7 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 			Set<ResourceLocation> set = new HashSet<>();
 			entries.getAllKeys().forEach(modId -> {
 				ListTag modList = entries.getList(modId, Tag.TAG_STRING);
-				modList.forEach(nameTag -> set.add(new ResourceLocation(modId, nameTag.getAsString())));
+				modList.forEach(nameTag -> set.add(ResourceLocation.fromNamespaceAndPath(modId, nameTag.getAsString())));
 			});
 			return set;
 		} else return Collections.emptySet();

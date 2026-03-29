@@ -7,6 +7,7 @@ import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
@@ -14,18 +15,17 @@ import net.minecraft.world.item.*;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.common.IPlantable;
-import net.neoforged.neoforge.common.ToolAction;
+import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
+import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -93,7 +93,7 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default Optional<Vec3> getRespawnPosition(BlockState state, EntityType<?> type, LevelReader levelReader, BlockPos pos, float orientation) {
+    default Optional<ServerPlayer.RespawnPosAngle> getRespawnPosition(BlockState state, EntityType<?> type, LevelReader levelReader, BlockPos pos, float orientation) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().getRespawnPosition(modelState, type, levelReader, pos, orientation);
     }
@@ -124,10 +124,10 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction facing, IPlantable plantable) {
+    default TriState canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction facing, BlockState plant) {
         BlockState modelState = getModelState(state);
         Direction newFacing = getRotation(state).unapply(facing);
-        return modelState.getBlock().canSustainPlant(modelState, level, pos, newFacing, plantable);
+        return modelState.getBlock().canSustainPlant(modelState, level, pos, newFacing, plant);
     }
 
     @Override
@@ -159,9 +159,9 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default int getExpDrop(BlockState state, LevelReader level, RandomSource randomSource, BlockPos pos, int fortuneLevel, int silkTouchLevel) {
+    default int getExpDrop(BlockState state, LevelAccessor level, BlockPos pos, @Nullable BlockEntity blockEntity, @Nullable Entity breaker, ItemStack tool) {
         BlockState modelState = getModelState(state);
-        return modelState.getBlock().getExpDrop(modelState, level, randomSource, pos, fortuneLevel, silkTouchLevel);
+        return modelState.getBlock().getExpDrop(modelState, level, pos, blockEntity, breaker, tool);
     }
 
     @Override
@@ -200,7 +200,7 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default float[] getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos) {
+    default @Nullable Integer getBeaconColorMultiplier(BlockState state, LevelReader level, BlockPos pos, BlockPos beaconPos) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().getBeaconColorMultiplier(modelState, level, pos, beaconPos);
     }
@@ -299,10 +299,10 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
 
     @Override
     @Nullable
-    default BlockState getToolModifiedState(BlockState state, UseOnContext context, ToolAction toolAction, boolean simulate) {
+    default BlockState getToolModifiedState(BlockState state, UseOnContext context, ItemAbility itemAbility, boolean simulate) {
         //TODO transform context
         BlockState modelState = getModelState(state);
-        BlockState modifiedState = modelState.getToolModifiedState(context, toolAction, simulate);
+        BlockState modifiedState = modelState.getToolModifiedState(context, itemAbility, simulate);
         return modifiedState == null ? null : AdditionalPlacementBlock.applyChanges(modelState, modelState, modifiedState);
     }
 

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import java.util.function.Function;
 
 public interface IAPUnbakedModel<T extends IAPUnbakedModel<T>> {
-    BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation);
+    BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides);
 
     void resolveParents(Function<ResourceLocation, UnbakedModel> modelGetter);
 }

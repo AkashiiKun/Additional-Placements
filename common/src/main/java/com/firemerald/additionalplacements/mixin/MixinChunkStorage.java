@@ -36,7 +36,7 @@ public class MixinChunkStorage {
 					CompoundTag block = (CompoundTag) blockTag;
 					if (block.contains("Name", Tag.TAG_STRING)) {
 						String name = block.getString("Name");
-						if (BuiltInRegistries.BLOCK.get(new ResourceLocation(name)) instanceof IStateFixer fixer) {
+						if (BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name)) instanceof IStateFixer fixer) {
 							CompoundTag original = block.getCompound("Properties");
 							CompoundTag fixed = fixer.fix(original, newBlock -> block.put("Name", StringTag.valueOf(BuiltInRegistries.BLOCK.getKey(newBlock).toString())));
 							if (original != fixed) {

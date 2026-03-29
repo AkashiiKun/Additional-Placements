@@ -46,12 +46,12 @@ public class APDynamicResources implements PackResources {
             LOCATION,
             new Pack.ResourcesSupplier() {
                 @Override
-                public PackResources openPrimary(PackLocationInfo location) {
+                public @NotNull PackResources openPrimary(PackLocationInfo location) {
                     return new APDynamicResources();
                 }
 
                 @Override
-                public PackResources openFull(PackLocationInfo location, Pack.Metadata metadata) {
+                public @NotNull PackResources openFull(PackLocationInfo location, Pack.Metadata metadata) {
                     return new APDynamicResources();
                 }
             },
@@ -91,7 +91,7 @@ public class APDynamicResources implements PackResources {
         else if (!resourceLocation.getPath().endsWith(".json")) return null;
         else if (resourceLocation.getPath().startsWith("blockstates/")) { //blockstate json
             String blockName = resourceLocation.getPath().substring(12, resourceLocation.getPath().length() - 5);
-            Block block = BuiltInRegistries.BLOCK.get(new ResourceLocation(AdditionalPlacementsMod.MOD_ID, blockName));
+            Block block = BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName));
             if (block instanceof AdditionalPlacementBlock<?> placement) return new BlockStateJsonSupplier(placement, blockName);
             else return null;
         }
@@ -133,7 +133,7 @@ public class APDynamicResources implements PackResources {
                 Registration.forEach(type -> type.forEachCreated(entry -> {
                     ResourceLocation id = entry.newId();
                     resourceOutput.accept(
-                            new ResourceLocation(AdditionalPlacementsMod.MOD_ID, "blockstates/" + id.getPath() + ".json"),
+                            AdditionalPlacementsMod.rl("blockstates/" + id.getPath() + ".json"),
                             new BlockStateJsonSupplier(entry.newBlock(), id.getPath()));
                 }));
             } else if ("models".equals(path)) {
@@ -141,7 +141,7 @@ public class APDynamicResources implements PackResources {
                     AdditionalPlacementBlock<?> block = entry.newBlock();
                     BlockState state = block.defaultBlockState();
                     parseBlockstates(state, new ArrayList<>(state.getProperties()), 0, "models/block/" + entry.newId().getPath() + "/", (modelPath, newState) -> resourceOutput.accept(
-                            new ResourceLocation(AdditionalPlacementsMod.MOD_ID, modelPath + ".json"),
+                            AdditionalPlacementsMod.rl(modelPath + ".json"),
                             getBlockModelSupplier(entry.newBlock(), newState)));
                 });
             }

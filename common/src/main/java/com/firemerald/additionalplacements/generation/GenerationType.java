@@ -186,7 +186,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 
 	public final void apply(T block, ResourceLocation blockId, BiConsumer<ResourceLocation, U> action) {
 		if (enabledForBlock(block, blockId)) {
-			ResourceLocation newId = new ResourceLocation(name.getNamespace(), blockId.getNamespace() + "." + blockId.getPath());
+			ResourceLocation newId = ResourceLocation.fromNamespaceAndPath(name.getNamespace(), blockId.getNamespace() + "." + blockId.getPath());
 			U created = construct(block, blockId);
 			this.created.add(new CreatedBlockEntry<>(blockId, block, newId, created));
 			action.accept(newId, created);

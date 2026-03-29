@@ -56,11 +56,11 @@ dependencies {
     //modCompileOnly "maven.modrinth:continuity:$continuity_version"
     modCompileOnly "curse.maven:ctm-267602:$ctm_file"
 
-    //modCompileOnly("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
-    //modCompileOnly "net.createmod.ponder:Ponder-Forge-$create_mc_version:$ponder_version"
-    //modCompileOnly "dev.engine-room.flywheel:flywheel-forge-api-$create_mc_version:$flywheel_version"
-    //modRuntimeOnly "dev.engine-room.flywheel:flywheel-forge-$create_mc_version:$flywheel_version"
-    //modCompileOnly "com.tterrag.registrate:Registrate:$registrate_version"
+    //modImplementation("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
+    //modImplementation "net.createmod.ponder:ponder-neoforge:$ponder_version+mc$create_mc_version"
+    //modCompileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-$create_mc_version:$flywheel_version"
+    //modRuntimeOnly "dev.engine-room.flywheel:flywheel-neoforge-$create_mc_version:$flywheel_version"
+    //modImplementation "com.tterrag.registrate:Registrate:$registrate_version"
 }
 
 processResources {

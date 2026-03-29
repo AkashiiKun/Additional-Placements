@@ -28,7 +28,7 @@ import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelectionList.Entry<E>> extends AbstractContainerWidget {
 	protected static final int SCROLLBAR_WIDTH = 6;
-	private static final ResourceLocation SCROLLER_SPRITE = new ResourceLocation("widget/scroller");
+	private static final ResourceLocation SCROLLER_SPRITE = ResourceLocation.withDefaultNamespace("widget/scroller");
 	protected final Minecraft minecraft;
 	protected final int normalItemHeight;
 	private final List<E> children = new TrackedList();

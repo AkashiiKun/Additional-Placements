@@ -25,11 +25,11 @@ public abstract class MixinBlockModel implements IBlockModelExtensions {
     @Shadow
     public abstract ItemOverrides getItemOverrides(ModelBaker baker, BlockModel model);
 
-    @Inject(method = "bake(Lnet/minecraft/client/resources/model/ModelBaker;Lnet/minecraft/client/renderer/block/model/BlockModel;Ljava/util/function/Function;Lnet/minecraft/client/resources/model/ModelState;Lnet/minecraft/resources/ResourceLocation;Z)Lnet/minecraft/client/resources/model/BakedModel;",
+    @Inject(method = "bake(Lnet/minecraft/client/resources/model/ModelBaker;Lnet/minecraft/client/renderer/block/model/BlockModel;Ljava/util/function/Function;Lnet/minecraft/client/resources/model/ModelState;Z)Lnet/minecraft/client/resources/model/BakedModel;",
             at = @At("HEAD"), cancellable = true)
-    private void bake(ModelBaker baker, BlockModel model, Function<Material, TextureAtlasSprite> spriteGetter, ModelState state, ResourceLocation location, boolean guiLight3d, CallbackInfoReturnable<BakedModel> cli) {
+    private void bake(ModelBaker baker, BlockModel model, Function<Material, TextureAtlasSprite> spriteGetter, ModelState state, boolean bl, CallbackInfoReturnable<BakedModel> cli) {
         if (additionalplacements$model != null)
-            cli.setReturnValue(additionalplacements$model.bake(baker, spriteGetter, state, getItemOverrides(baker, model), location));
+            cli.setReturnValue(additionalplacements$model.bake(baker, spriteGetter, state, getItemOverrides(baker, model)));
     }
 
     @Inject(method = "resolveParents", at = @At("HEAD"))

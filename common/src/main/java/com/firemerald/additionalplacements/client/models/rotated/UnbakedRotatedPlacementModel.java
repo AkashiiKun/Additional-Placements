@@ -22,7 +22,7 @@ public class UnbakedRotatedPlacementModel<T extends UnbakedRotatedPlacementModel
 	}
 
 	@Override
-	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
+	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
 		return BakedRotatedPlacementModel.of(this.modelState, modelRotation, rotatesTexture);
 	}
 

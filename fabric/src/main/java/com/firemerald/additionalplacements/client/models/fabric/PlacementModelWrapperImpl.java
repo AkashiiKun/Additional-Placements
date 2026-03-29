@@ -12,10 +12,11 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.function.Supplier;
 
+@SuppressWarnings("UnstableApiUsage")
 public interface PlacementModelWrapperImpl extends PlacementModelWrapper, WrapperBakedModel {
     @Override
     default void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-        VanillaModelEncoder.emitBlockQuads(this, state, randomSupplier, context, context.getEmitter());
+        VanillaModelEncoder.emitBlockQuads(this, state, randomSupplier, context);
     }
 
     @Override

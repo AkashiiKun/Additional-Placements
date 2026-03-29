@@ -19,7 +19,7 @@ public class APConfigs {
     private static ClientConfig client;
     private static ModConfigSpec clientSpec;
 
-    public static void init(BiConsumer<ModConfig.Type, IConfigSpec<?>> registerConfig) {
+    public static void init(BiConsumer<ModConfig.Type, IConfigSpec> registerConfig) {
         final Pair<StartupConfig, ModConfigSpec> startupSpecPair = new ModConfigSpec.Builder().configure(StartupConfig::new);
         startup = startupSpecPair.getLeft();
         registerConfig.accept(ModConfig.Type.STARTUP, startupSpec = startupSpecPair.getRight());
@@ -67,13 +67,13 @@ public class APConfigs {
     }
 
     @ApiStatus.Internal
-    public static void onConfigLoaded(IConfigSpec<?> configSpec) {
+    public static void onConfigLoaded(IConfigSpec configSpec) {
         if (configSpec == startupSpec) startup.onConfigLoaded();
         else onConfigReloaded(configSpec);
     }
 
     @ApiStatus.Internal
-    public static void onConfigReloaded(IConfigSpec<?> configSpec) {
+    public static void onConfigReloaded(IConfigSpec configSpec) {
     	if (configSpec == commonSpec) common.onConfigLoaded();
     	else if (configSpec == serverSpec) server.onConfigLoaded();
     	else if (configSpec == clientSpec) client.onConfigLoaded();

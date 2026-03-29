@@ -5,6 +5,7 @@ import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.LevelRenderer;
@@ -42,7 +43,7 @@ public class ClientModEvents {
         }
     }
 
-    public static void onHighlightBlock(LevelRenderer levelRenderer, Camera camera, BlockHitResult target, float partialTick, PoseStack poseStack, MultiBufferSource multiBufferSource) {
+    public static void onHighlightBlock(LevelRenderer levelRenderer, Camera camera, BlockHitResult target, DeltaTracker delta, PoseStack poseStack, MultiBufferSource multiBufferSource) {
         if (!APConfigs.client().enablePlacementHighlight.get()) return;
         Player player = Minecraft.getInstance().player;
         ItemStack stack = player.getMainHandItem();
@@ -50,7 +51,7 @@ public class ClientModEvents {
         if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
-                if (verticalBlock.additionalplacements$hasAdditionalStates()) verticalBlock.additionalplacements$renderHighlight(poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, partialTick);
+                if (verticalBlock.additionalplacements$hasAdditionalStates()) verticalBlock.additionalplacements$renderHighlight(poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, delta);
             }
         }
     }

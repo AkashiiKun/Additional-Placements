@@ -6,8 +6,8 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 
 public class BlockHighlightHelper {
 	public static void line(VertexConsumer vertexConsumer, PoseStack.Pose pose, float z, float r, float g, float b, float a, float x1, float y1, float x2, float y2) {
-		vertexConsumer.vertex(pose, x1, y1, z).color(r, g, b, a).normal(pose, 0, 0, 1).endVertex();
-		vertexConsumer.vertex(pose, x2, y2, z).color(r, g, b, a).normal(pose, 0, 0, 1).endVertex();
+		vertexConsumer.addVertex(pose, x1, y1, z).setColor(r, g, b, a).setNormal(pose, 0, 0, 1);
+		vertexConsumer.addVertex(pose, x2, y2, z).setColor(r, g, b, a).setNormal(pose, 0, 0, 1);
 	}
 
 	public static void lineAxis(VertexConsumer vertexConsumer, PoseStack.Pose pose, float z, float r, float g, float b, float a, float offset1, float offset2) {

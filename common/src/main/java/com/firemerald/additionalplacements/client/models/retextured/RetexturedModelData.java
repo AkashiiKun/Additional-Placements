@@ -14,7 +14,7 @@ public record RetexturedModelData(ResourceLocation ourModel, BlockState theirSta
     public static final ResourceLocation ID = AdditionalPlacementsMod.rl("retextured");
 
     public static RetexturedModelData fromJson(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
-        ResourceLocation ourModel = new ResourceLocation(jsonObject.get("model").getAsString());
+        ResourceLocation ourModel = ResourceLocation.parse(jsonObject.get("model").getAsString());
         BlockState theirState;
         try {
             theirState = GeneralUtils.parseStateString(jsonObject.get("state").getAsString());

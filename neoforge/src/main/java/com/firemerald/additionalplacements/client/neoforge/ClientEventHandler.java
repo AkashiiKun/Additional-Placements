@@ -18,7 +18,7 @@ import net.neoforged.neoforge.client.event.*;
 public class ClientEventHandler {
     @SubscribeEvent
     public static void onHighlightBlock(RenderHighlightEvent.Block event) {
-        ClientModEvents.onHighlightBlock(event.getLevelRenderer(), event.getCamera(), event.getTarget(), event.getPartialTick(), event.getPoseStack(), event.getMultiBufferSource());
+        ClientModEvents.onHighlightBlock(event.getLevelRenderer(), event.getCamera(), event.getTarget(), event.getDeltaTracker(), event.getPoseStack(), event.getMultiBufferSource());
     }
 
     @SubscribeEvent

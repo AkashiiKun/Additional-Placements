@@ -38,10 +38,10 @@ public class AdditionalPlacementsBlockTags {
 		if ((begin > 0 //check char before
 				&& !SEPARATOR.test(path.charAt(begin - 1))) || (begin + typeName.length() < path.length() //check char after
 				&& !SEPARATOR.test(path.charAt(begin + typeName.length())))) return tag;
-		return create(AdditionalPlacementsMod.MOD_ID + ":" + loc.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin));
+		return create(loc.getNamespace() + "/" + path.substring(0, begin) + "vertical_" + path.substring(begin));
 	}
 
 	public static TagKey<Block> create(String string) {
-		return TagKey.create(Registries.BLOCK, new ResourceLocation(string));
+		return TagKey.create(Registries.BLOCK, AdditionalPlacementsMod.rl(string));
 	}
 }

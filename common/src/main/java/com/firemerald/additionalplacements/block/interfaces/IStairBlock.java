@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.world.item.Item;
 import org.joml.Matrix4f;
 
@@ -199,7 +200,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
+    default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
 		if (!this.additionalplacements$connectionsType().allowFlipped) return;
 		ComplexFacing facing = additionalplacements$getFacing(result.getDirection(),
 				(float) (result.getLocation().x - result.getBlockPos().getX() - .5),
@@ -232,7 +233,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
+    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
 		PoseStack.Pose lastPose = pose.last();
 
 		//outer box

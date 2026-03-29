@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
@@ -76,7 +77,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 	};
 
 	@Environment(EnvType.CLIENT)
-    default void additionalplacements$renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, float partial) {
+    default void additionalplacements$renderHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, Camera camera, DeltaTracker delta) {
 		BlockPos hit = result.getBlockPos();
 		if (additionalplacements$enablePlacement(hit, player.level(), result.getDirection(), player)) {
 			pose.pushPose();
@@ -107,19 +108,19 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 			Vec3 pos = camera.getPosition();
 			pose.translate(hitX - pos.x + .5, hitY - pos.y + .5, hitZ - pos.z + .5);
 			float[] previewColor = APConfigs.client().previewColor();
-			if (previewColor[3] > 0) additionalplacements$renderPlacementPreview(pose, vertexConsumer, player, result, partial, previewColor[0], previewColor[1], previewColor[2], previewColor[3]);
+			if (previewColor[3] > 0) additionalplacements$renderPlacementPreview(pose, vertexConsumer, player, result, delta, previewColor[0], previewColor[1], previewColor[2], previewColor[3]);
 			pose.mulPose(DIRECTION_TRANSFORMS[result.getDirection().ordinal()]);
 			float[] gridColor = APConfigs.client().gridColor();
-			if (gridColor[3] > 0) additionalplacements$renderPlacementHighlight(pose, vertexConsumer, player, result, partial, gridColor[0], gridColor[1], gridColor[2], gridColor[3]);
+			if (gridColor[3] > 0) additionalplacements$renderPlacementHighlight(pose, vertexConsumer, player, result, delta, gridColor[0], gridColor[1], gridColor[2], gridColor[3]);
 			pose.popPose();
 		}
 	}
 
 	@Environment(EnvType.CLIENT)
-    default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {}
+    default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {}
 
 	@Environment(EnvType.CLIENT)
-    void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a);
+    void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a);
 
 	default boolean additionalplacements$enablePlacement(@Nullable Player player) {
 		return additionalplacements$getGenerationType().placementEnabled() && (!(player instanceof IAPPlayer apPlayer) || apPlayer.additionalplacements$isPlacementEnabled());

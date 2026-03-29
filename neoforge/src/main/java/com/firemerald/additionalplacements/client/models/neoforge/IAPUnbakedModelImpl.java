@@ -16,8 +16,8 @@ import java.util.function.Function;
 @MethodsReturnNonnullByDefault
 public interface IAPUnbakedModelImpl<T extends IAPUnbakedModelImpl<T>> extends IAPUnbakedModel<T>, IUnbakedGeometry<T> {
     @Override
-    default BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides, ResourceLocation modelLocation) {
-        return bake(baker, spriteGetter, modelState, overrides, modelLocation);
+    default BakedModel bake(IGeometryBakingContext context, ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, ItemOverrides overrides) {
+        return bake(baker, spriteGetter, modelState, overrides);
     }
 
     @Override

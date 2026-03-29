@@ -11,13 +11,14 @@ dependencies {
     // which get remapped to the correct annotations on each platform.
     // Do NOT use other classes from Fabric Loader.
     modImplementation "net.fabricmc:fabric-loader:$rootProject.fabric_loader_version"
+    modImplementation "net.fabricmc.fabric-api:fabric-renderer-api-v1:3.4.0+c705a49cd1" //needed for continuity compat
 
     modCompileOnly "maven.modrinth:double-slabs:$doubleslabs_version"
     modCompileOnly "maven.modrinth:balm:$balm_version"
     modCompileOnly "maven.modrinth:kleeslabs:$kleeslabs_version"
     modCompileOnly "maven.modrinth:continuity:$continuity_version"
 
-    modCompileOnly "com.simibubi.create:create-fabric-$create_mc_version:$create_version"
+    modCompileOnly("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
 
     compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$rootProject.forge_config_api_port_version" //we use fabric instead of common-neoforgeapi so we have access to more neoforge config classes
 }

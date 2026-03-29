@@ -25,7 +25,7 @@ public record BlockStateJsonSupplier(AdditionalPlacementBlock<?> block, String b
         if (index >= props.length) {
             JsonObject variant = new JsonObject();
             variants.add(currentStateDef.substring(0, currentStateDef.length() - 1), variant);
-            variant.addProperty("model", new ResourceLocation(AdditionalPlacementsMod.MOD_ID, currentStateDir + "model").toString());
+            variant.addProperty("model", AdditionalPlacementsMod.rl(currentStateDir + "model").toString());
             StateModelDefinition modelDef = block.getModelDefinition(state);
             if (modelDef.xRotation() != 0) variant.addProperty("x", modelDef.xRotation());
             if (modelDef.yRotation() != 0) variant.addProperty("y", modelDef.yRotation());

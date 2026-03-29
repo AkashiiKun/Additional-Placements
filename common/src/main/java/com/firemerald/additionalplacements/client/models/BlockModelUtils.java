@@ -159,16 +159,11 @@ public class BlockModelUtils {
 		else return Pair.of(Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(MissingTextureAtlasSprite.getLocation()), -1);
 	}
 
-	@ExpectPlatform
-	public static int getIntOffset(VertexFormat format, VertexFormatElement element) {
-		throw new AssertionError();
-	}
-
 	public static List<BakedQuad> retexturedQuads(Direction side, Function<Direction, List<BakedQuad>> getOurQuads, Function<Direction, List<BakedQuad>> getTheirQuads, RenderType renderType) {
 		VertexFormat format = renderType == null ? DefaultVertexFormat.BLOCK : renderType.format();
-		int vertexSize = format.getIntegerSize();
-		int posOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_POSITION);
-		int uvOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_UV);
+		int vertexSize = format.getVertexSize() / 4;
+		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
+		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
 		@SuppressWarnings("unchecked")
 		Pair<TextureAtlasSprite, Integer>[] textures = new Pair[6];
 		List<BakedQuad> originalQuads = getOurQuads.apply(side);
@@ -185,10 +180,10 @@ public class BlockModelUtils {
 
 	public static List<BakedQuad> rotatedQuads(BlockRotation rotation, boolean rotateTex, Direction side, Function<Direction, List<BakedQuad>> getQuads, RenderType renderType) {
 		VertexFormat format = renderType == null ? DefaultVertexFormat.BLOCK : renderType.format();
-		int vertexSize = format.getIntegerSize();
-		int posOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_POSITION);
-		int uvOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_UV);
-		int normOffset = getIntOffset(format, DefaultVertexFormat.ELEMENT_NORMAL);
+		int vertexSize = format.getVertexSize() / 4;
+		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
+		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
+		int normOffset = format.getOffset(VertexFormatElement.NORMAL) / 4;
 		List<BakedQuad> originalQuads =  getQuads.apply(rotation.unapply(side));
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
 		for (BakedQuad originalQuad : originalQuads) {

@@ -7,8 +7,7 @@ public class APMixinPluginImpl {
         return List.of(
                 "fabric.MixinBlockModel",
                 "fabric.MixinBlockModelDeserializer",
-                "fabric.MixinModResourcePackCreator",
-                "fabric.MixinVertexFormat"
+                "fabric.MixinModResourcePackCreator"
         );
     }
 }

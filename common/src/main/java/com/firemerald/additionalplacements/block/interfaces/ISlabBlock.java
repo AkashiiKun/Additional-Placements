@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.firemerald.additionalplacements.compat.LoadedMods;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
@@ -143,7 +144,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 
 	@Override
 	@Environment(EnvType.CLIENT)
-    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
+    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
 		PoseStack.Pose lastPose = pose.last();
 
 		//outer box

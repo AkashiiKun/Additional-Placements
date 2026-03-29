@@ -58,7 +58,7 @@ public class FabricModEvents implements ClientModInitializer {
 
     public static boolean onHighlightBlock(WorldRenderContext context, @Nullable HitResult hitResult) {
         if (hitResult != null && hitResult.getType() == HitResult.Type.BLOCK && hitResult instanceof BlockHitResult blockHitResult) {
-            ClientModEvents.onHighlightBlock(context.worldRenderer(), context.camera(), blockHitResult, context.tickDelta(), context.matrixStack(), context.consumers());
+            ClientModEvents.onHighlightBlock(context.worldRenderer(), context.camera(), blockHitResult, context.tickCounter(), context.matrixStack(), context.consumers());
         }
         return true;
     }

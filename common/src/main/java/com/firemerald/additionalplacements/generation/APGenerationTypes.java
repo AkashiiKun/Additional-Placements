@@ -25,19 +25,19 @@ public class APGenerationTypes implements RegistrationInitializer {
 		slab                    = get(register, SlabBlock.class                 , "slab"                   , "Slabs"                   ,
 				new SimpleRotatableGenerationType.Builder<SlabBlock, VerticalSlabBlock>()
 						.modelRotationEnabled(new Blocklist(true, true,
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "sandstone_slab")),
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "cut_sandstone_slab")),
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "red_sandstone_slab")),
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "cut_red_sandstone_slab"))))
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("sandstone_slab")),
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("cut_sandstone_slab")),
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("red_sandstone_slab")),
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("cut_red_sandstone_slab"))))
 						.textureRotationEnabled(new Blocklist(true, true,
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "smooth_stone_slab"))))
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("smooth_stone_slab"))))
 				.constructor(VerticalSlabBlock::of)
 				.addsProperties("ap_axis"));
 		stairs                  = get(register, StairBlock.class                , "stairs"                 , "Stairs"                  ,
 				new VerticalStairsGenerationType.Builder<StairBlock, AdditionalStairBlock>()
 						.modelRotationEnabled(new Blocklist(true, true,
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "sandstone_stairs")),
-								new IDBlocklistEntry(false, new ResourceLocation("minecraft", "red_sandstone_stairs"))))
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("sandstone_stairs")),
+								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("red_sandstone_stairs"))))
 				.addsProperties("front_top_shape"));
 		carpet                  = get(register, CarpetBlock.class               , "carpet"                 , "Carpets"                 , AdditionalCarpetBlock::of,                "ap_placing");
 		pressurePlate           = get(register, PressurePlateBlock.class        , "pressure_plate"         , "Regular pressure plates" , AdditionalPressurePlateBlock::of,         "ap_placing");

@@ -50,7 +50,7 @@ public class ModelType<T extends AdditionalPlacementBlock<?>> {
 			BlockModelProvider modelProvider = stateProvider.models();
 			Function<String, BlockModelBuilder> startModel;
 			if (parentFolder == null) startModel = model -> modelProvider.getBuilder(folder + model);
-			else startModel = model -> modelProvider.withExistingParent(folder + model, new ResourceLocation(parentFolder.getNamespace(), parentFolder.getPath() + model));
+			else startModel = model -> modelProvider.withExistingParent(folder + model, ResourceLocation.fromNamespaceAndPath(parentFolder.getNamespace(), parentFolder.getPath() + model));
 			if (actions == null) actions = (builder, model) -> {};
 			for (String model : models) actions.accept(startModel.apply(model), model);
 			if (block != null) {
