@@ -20,7 +20,7 @@ public interface ClientLoginPacketImpl extends APPacketImpl, ClientLoginPacket {
     @Environment(EnvType.CLIENT)
     default CompletableFuture<@Nullable FriendlyByteBuf> handleClient(Minecraft client, ClientHandshakePacketListenerImpl handler, Consumer<GenericFutureListener<? extends Future<? super Void>>> listenerAdder) {
         return CompletableFuture.supplyAsync(() -> {
-            APPacket reply = handleClient(Minecraft.getInstance()::execute, reason -> handler.handleDisconnect(new ClientboundLoginDisconnectPacket(reason)));
+            APPacket reply = handleClient(client::execute, reason -> handler.handleDisconnect(new ClientboundLoginDisconnectPacket(reason)));
             if (reply instanceof APPacketImpl apPacket) return apPacket.getBuf();
             else return null;
         });
