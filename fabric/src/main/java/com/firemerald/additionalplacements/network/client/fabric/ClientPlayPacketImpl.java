@@ -12,7 +12,7 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 public interface ClientPlayPacketImpl extends APPacketImpl, ClientPlayPacket {
     @Environment(EnvType.CLIENT)
     default void handleClient(Minecraft client, ClientPacketListener handler, PacketSender responseSender) {
-        APPacket reply = handleClient(handler.getConnection(), Minecraft.getInstance()::execute);
+        APPacket reply = handleClient(handler.getConnection(), client::execute);
         if (reply instanceof APPacketImpl apPacket) apPacket.send(responseSender);
     }
 }
