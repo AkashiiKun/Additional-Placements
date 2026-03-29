@@ -8,34 +8,36 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.BeaconBeamBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
 
 public abstract class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock> {
-	public static AdditionalPressurePlateBlock of(PressurePlateBlock plate) {
-		return plate instanceof BeaconBeamBlock ? ofBeaconBeam(plate) : ofNonBeaconBeam(plate);
+	public static AdditionalPressurePlateBlock of(PressurePlateBlock plate, ResourceKey<Block> id) {
+		return plate instanceof BeaconBeamBlock ? ofBeaconBeam(plate, id) : ofNonBeaconBeam(plate, id);
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalPressurePlateBlock ofNonBeaconBeam(PressurePlateBlock block) {
+	public static AdditionalPressurePlateBlock ofNonBeaconBeam(PressurePlateBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalPressurePlateBlock ofBeaconBeam(PressurePlateBlock block) {
+	public static AdditionalPressurePlateBlock ofBeaconBeam(PressurePlateBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
-	protected AdditionalPressurePlateBlock(PressurePlateBlock plate) {
-		super(plate);
+	protected AdditionalPressurePlateBlock(PressurePlateBlock plate, ResourceKey<Block> id) {
+		super(plate, id);
 	}
 
 	@Override

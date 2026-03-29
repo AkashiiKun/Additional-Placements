@@ -8,14 +8,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -54,8 +52,8 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	public final IBasePressurePlateBlockExtensions plateMethods;
 
 	@SuppressWarnings("unchecked")
-	public AdditionalBasePressurePlateBlock(T plate) {
-		super(plate);
+	public AdditionalBasePressurePlateBlock(T plate, ResourceKey<Block> id) {
+		super(plate, id);
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
 		((IVanillaBasePressurePlateBlock<AdditionalBasePressurePlateBlock<T>>) plate).additionalplacements$setOtherBlock(this);
 		plateMethods = (IBasePressurePlateBlockExtensions) plate;
@@ -77,12 +75,11 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public BlockState additionalplacements$updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos) {
-		return !thisState.canSurvive(level, thisPos) ? Blocks.AIR.defaultBlockState() : thisState;
+	public BlockState additionalplacements$updateShapeImpl(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos otherPos, BlockState otherState, RandomSource rand) {
+		return !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : state;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean canSurvive(BlockState state, @NotNull LevelReader level, BlockPos pos) {
 		Direction dir = state.getValue(PLACING);
 		BlockPos blockpos = pos.relative(dir);
@@ -107,7 +104,6 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity) {
 		if (!level.isClientSide) {
 			int strength = plateMethods.additionalplacements$getSignalForStatePublic(state);
@@ -150,13 +146,11 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public int getSignal(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
 		return this.plateMethods.additionalplacements$getSignalForStatePublic(state);
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public int getDirectSignal(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
 		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.additionalplacements$getSignalForStatePublic(state) : 0;
 	}

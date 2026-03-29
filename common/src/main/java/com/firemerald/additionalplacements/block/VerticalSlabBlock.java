@@ -20,10 +20,13 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
@@ -40,26 +43,26 @@ import org.jetbrains.annotations.NotNull;
 public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<SlabBlock> implements ISlabBlock<SlabBlock>, ISimpleRotationBlock, IStateFixer {
 	public static final EnumProperty<Axis> AXIS = AdditionalBlockStateProperties.HORIZONTAL_AXIS;
 
-	public static VerticalSlabBlock of(SlabBlock slab) {
-		return slab instanceof BeaconBeamBlock ? ofBeaconBeam(slab) : ofNonBeaconBeam(slab);
+	public static VerticalSlabBlock of(SlabBlock slab, ResourceKey<Block> id) {
+		return slab instanceof BeaconBeamBlock ? ofBeaconBeam(slab, id) : ofNonBeaconBeam(slab, id);
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static VerticalSlabBlock ofNonBeaconBeam(SlabBlock block) {
+	public static VerticalSlabBlock ofNonBeaconBeam(SlabBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static VerticalSlabBlock ofBeaconBeam(SlabBlock block) {
+	public static VerticalSlabBlock ofBeaconBeam(SlabBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
 	public boolean rotateLogic = true, rotateModel = true, rotateTex = true;
 
-	protected VerticalSlabBlock(SlabBlock slab) {
-		super(slab);
+	protected VerticalSlabBlock(SlabBlock slab, ResourceKey<Block> id) {
+		super(slab, id);
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(AXIS, Axis.Z));
 		((IVanillaSlabBlock) slab).additionalplacements$setOtherBlock(this);
 	}
@@ -80,7 +83,6 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean canBeReplaced(@NotNull BlockState state, BlockPlaceContext context) {
 		return additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer()) && additionalplacements$canBeReplacedImpl(state, context);
 	}
@@ -112,7 +114,7 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	public BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+	public BlockState additionalplacements$updateShapeImpl(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos otherPos, BlockState otherState, RandomSource rand) {
 		return state;
 	}
 

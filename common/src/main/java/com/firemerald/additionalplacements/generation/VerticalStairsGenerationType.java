@@ -1,6 +1,7 @@
 package com.firemerald.additionalplacements.generation;
 
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -17,7 +18,9 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -28,8 +31,8 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 				mixedConnectionsEnabled = new Blocklist(false, true);
 
 		@Override
-		public W constructor(Function<? super T, ? extends U> constructor) {
-			throw new IllegalStateException("Function<? super T, ? extends U> constructor not supported");
+		public W constructor(BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor) {
+			throw new IllegalStateException("BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor not supported");
 		}
 
 		public W verticalConnectionsEnabled(Blocklist enabled) {
@@ -144,8 +147,8 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public U construct(T block, ResourceLocation blockId) {
-		return (U) AdditionalStairBlock.of(block,
+	public U construct(T block, ResourceKey<Block> key, ResourceLocation blockId) {
+		return (U) AdditionalStairBlock.of(block, key,
 				!verticalConnectionsEnabled.test(block, blockId) ? StairConnectionsType.SIMPLE :
 					!mixedConnectionsEnabled.test(block, blockId) ? StairConnectionsType.EXTENDED :
 						StairConnectionsType.COMPLEX);

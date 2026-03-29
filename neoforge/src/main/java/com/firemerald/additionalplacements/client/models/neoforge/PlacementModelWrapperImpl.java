@@ -56,12 +56,12 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
     }
 
     @Override
-    default List<RenderType> getRenderTypes(ItemStack itemStack, boolean fabulous) {
-        return getWrappedModel().getRenderTypes(itemStack, fabulous);
+    default List<RenderType> getRenderTypes(ItemStack itemStack) {
+        return getWrappedModel().getRenderTypes(itemStack);
     }
 
     @Override
-    default List<BakedModel> getRenderPasses(ItemStack itemStack, boolean fabulous) {
-        return getWrappedModel().getRenderPasses(itemStack, fabulous);
+    default List<BakedModel> getRenderPasses(ItemStack itemStack) {
+        return getWrappedModel().getRenderPasses(itemStack);
     }
 }

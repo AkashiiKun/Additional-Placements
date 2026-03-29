@@ -280,7 +280,7 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
+    default void onBlockExploded(BlockState state, ServerLevel level, BlockPos pos, Explosion explosion) {
         BlockState modelState = getModelState(state);
         modelState.getBlock().onBlockExploded(modelState, level, pos, explosion);
     }

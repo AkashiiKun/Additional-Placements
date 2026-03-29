@@ -11,7 +11,9 @@ import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import com.firemerald.additionalplacements.util.MessageTree;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -184,17 +186,18 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 		} else return false;
 	}
 
-	public final void apply(T block, ResourceLocation blockId, BiConsumer<ResourceLocation, U> action) {
+	public final void apply(T block, ResourceLocation blockId, BiConsumer<ResourceKey<Block>, U> action) {
 		if (enabledForBlock(block, blockId)) {
 			ResourceLocation newId = ResourceLocation.fromNamespaceAndPath(name.getNamespace(), blockId.getNamespace() + "." + blockId.getPath());
-			U created = construct(block, blockId);
+			ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), newId);
+			U created = construct(block, key, blockId);
 			this.created.add(new CreatedBlockEntry<>(blockId, block, newId, created));
-			action.accept(newId, created);
+			action.accept(key, created);
 			applyConfig(created, blockId);
 		}
 	}
 
-	public abstract U construct(T block, ResourceLocation blockId);
+	public abstract U construct(T block, ResourceKey<Block> key, ResourceLocation blockId);
 
 	public void applyConfig(U block, ResourceLocation blockId) {}
 

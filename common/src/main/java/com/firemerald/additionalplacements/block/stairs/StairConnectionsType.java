@@ -20,6 +20,7 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 	public final CommonStairShapeState defaultShapeState;
 	private final List<CommonStairShapeState> values;
 	private final Map<String, CommonStairShapeState> valueMap;
+	private final int[] ordinalToIndex;
 
 	public StairConnectionsType(String tooltip, boolean allowVertical, boolean allowMixed, boolean allowFlipped) {
 		this("tooltip.additionalplacements.stair_connections." + tooltip, allowVertical, allowMixed, allowFlipped, Stream.of(CommonStairShapeState.values())
@@ -51,11 +52,18 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 		this.defaultShapeState = values.getFirst();
 		this.values = values;
 		this.valueMap = values.stream().collect(Collectors.toMap(CommonStairShapeState::getSerializedName, state -> state));
+		this.ordinalToIndex = new int[CommonStairShapeState.COUNT];
+		for (CommonStairShapeState shapeState : CommonStairShapeState.values()) ordinalToIndex[shapeState.ordinal] = values.indexOf(shapeState);
 	}
 
 	@Override
-	public @NotNull Collection<CommonStairShapeState> getPossibleValues() {
+	public @NotNull List<CommonStairShapeState> getPossibleValues() {
 		return values;
+	}
+
+	@Override
+	public int getInternalIndex(CommonStairShapeState value) {
+		return ordinalToIndex[value.ordinal];
 	}
 
 	@Override

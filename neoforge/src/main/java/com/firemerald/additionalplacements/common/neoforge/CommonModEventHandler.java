@@ -12,6 +12,7 @@ import com.firemerald.additionalplacements.network.neoforge.APNetworkImpl;
 import com.firemerald.additionalplacements.network.neoforge.CheckDataConfigurationTaskImpl;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -33,7 +34,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber
 public class CommonModEventHandler {
     private static boolean init = false;
 
@@ -60,11 +61,11 @@ public class CommonModEventHandler {
     @SubscribeEvent
     public static void onBlockRegistry(RegisterEvent event) {
         if (event.getRegistry() == BuiltInRegistries.BLOCK) {
-            List<Pair<ResourceLocation, Block>> created = new ArrayList<>();
+            List<Pair<ResourceKey<Block>, Block>> created = new ArrayList<>();
             BuiltInRegistries.BLOCK.entrySet().forEach(entry -> {
                 ResourceLocation name = entry.getKey().location();
                 Block block = entry.getValue();
-                Registration.tryApply(block, name, (id, obj) -> created.add(Pair.of(id, obj)));
+                Registration.tryApply(block, name, (key, obj) -> created.add(Pair.of(key, obj)));
             });
             created.forEach(pair -> Registry.register(BuiltInRegistries.BLOCK, pair.getLeft(), pair.getRight()));
             AdditionalPlacementsNeoForge.dynamicRegistration = true;

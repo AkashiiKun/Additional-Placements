@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import org.joml.Matrix4f;
 
 import com.firemerald.additionalplacements.block.stairs.AdditionalStairBlock;
@@ -76,7 +79,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	StairConnectionsType additionalplacements$connectionsType();
 
 	@Override
-    default BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
+    default BlockState additionalplacements$updateShapeImpl(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos otherPos, BlockState otherState, RandomSource rand) {
 		ComplexFacing facing = additionalplacements$getShapeState(state).facing;
 		return additionalplacements$getBlockState(facing, additionalplacements$getShape(facing, level, pos), state);
 	}

@@ -47,7 +47,7 @@ public class CommonModEvents {
         CommandGenerateStairsDebugger.register(dispatcher, registryAccess);
     }
 
-    public static void onTagsUpdated(RegistryAccess registries, boolean client) {
+    public static void onTagsUpdated(boolean client) {
         if (!client) {
             Registration.forEach(type -> type.onTagsUpdated(false));
             boolean fromAutoGenerate;

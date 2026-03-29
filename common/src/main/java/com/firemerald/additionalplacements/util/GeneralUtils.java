@@ -22,7 +22,7 @@ public class GeneralUtils {
 
     public static BlockState parseStateString(String blockStateString) {
         try {
-            return BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK.asLookup(), blockStateString, false).blockState();
+            return BlockStateParser.parseForBlock(BuiltInRegistries.BLOCK, blockStateString, false).blockState();
         } catch (CommandSyntaxException e) {
             throw new IllegalArgumentException(e);
         }

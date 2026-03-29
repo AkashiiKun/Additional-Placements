@@ -25,6 +25,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BeaconBeamBlock;
@@ -41,30 +42,30 @@ import org.jetbrains.annotations.NotNull;
 public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBlock<StairBlock> implements IStairBlock<StairBlock>, ISimpleRotationBlock, IStateFixer {
 	private static StairConnectionsType connectionsTypeStatic;
 
-	public static AdditionalStairBlock of(StairBlock stairs, StairConnectionsType connectionsType) {
+	public static AdditionalStairBlock of(StairBlock stairs, ResourceKey<Block> id, StairConnectionsType connectionsType) {
 		connectionsTypeStatic = connectionsType;
-		AdditionalStairBlock ret = stairs instanceof BeaconBeamBlock ? ofBeaconBeam(stairs, connectionsType) : ofNonBeaconBeam(stairs, connectionsType);
+		AdditionalStairBlock ret = stairs instanceof BeaconBeamBlock ? ofBeaconBeam(stairs, id, connectionsType) : ofNonBeaconBeam(stairs, id, connectionsType);
 		connectionsTypeStatic = null;
 		return ret;
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalStairBlock ofNonBeaconBeam(StairBlock block, StairConnectionsType connectionsType) {
+	public static AdditionalStairBlock ofNonBeaconBeam(StairBlock block, ResourceKey<Block> id, StairConnectionsType connectionsType) {
 		throw new AssertionError();
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalStairBlock ofBeaconBeam(StairBlock block, StairConnectionsType connectionsType) {
+	public static AdditionalStairBlock ofBeaconBeam(StairBlock block, ResourceKey<Block> id, StairConnectionsType connectionsType) {
 		throw new AssertionError();
 	}
 
 	public final StairConnectionsType connectionsType;
 	public boolean rotateLogic = false, rotateModel = false, rotateTex = false;
 
-	protected AdditionalStairBlock(StairBlock stairs, StairConnectionsType connectionsType) {
-		super(stairs);
+	protected AdditionalStairBlock(StairBlock stairs, ResourceKey<Block> id, StairConnectionsType connectionsType) {
+		super(stairs, id);
 		this.connectionsType = connectionsType;
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(connectionsType, connectionsType.defaultShapeState));
 		((IVanillaStairBlock) stairs).additionalplacements$setOtherBlock(this);

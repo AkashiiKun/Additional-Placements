@@ -12,6 +12,7 @@ public class BlockModelUtilsImpl {
                 direction,
                 sprite,
                 originalQuad.isShade(),
+                originalQuad.getLightEmission(),
                 originalQuad.hasAmbientOcclusion()
         );
     }

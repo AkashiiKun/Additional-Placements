@@ -10,6 +10,8 @@ import com.firemerald.additionalplacements.compat.LoadedMods;
 import com.firemerald.additionalplacements.network.fabric.APNetworkImpl;
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
 import net.neoforged.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -38,7 +40,7 @@ public class FabricModEvents implements ModInitializer {
         APNetworkImpl.register();
         loadRegistry();
         CommandRegistrationCallback.EVENT.register(CommonModEvents::onRegisterCommands);
-        CommonLifecycleEvents.TAGS_LOADED.register(CommonModEvents::onTagsUpdated);
+        CommonLifecycleEvents.TAGS_LOADED.register((registries, client) -> CommonModEvents.onTagsUpdated(client));
         ServerLifecycleEvents.SERVER_STARTED.register(FabricModEvents::onServerStarted);
         ServerLifecycleEvents.SERVER_STOPPING.register(CommonModEvents::onServerStopping);
         ServerPlayConnectionEvents.JOIN.register(FabricModEvents::onPlayerLogin);
@@ -47,8 +49,8 @@ public class FabricModEvents implements ModInitializer {
     private static void loadRegistry() {
         Registration.gatherTypes();
         APConfigs.init((type, spec) -> NeoForgeConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, type, spec));
-        List<Pair<ResourceLocation, Block>> created = new ArrayList<>();
-        BuiltInRegistries.BLOCK.entrySet().forEach(entry -> Registration.tryApply(entry.getValue(), entry.getKey().location(), (id, obj) -> created.add(Pair.of(id, obj))));
+        List<Pair<ResourceKey<Block>, Block>> created = new ArrayList<>();
+        BuiltInRegistries.BLOCK.entrySet().forEach(entry -> Registration.tryApply(entry.getValue(), entry.getKey().location(), (key, obj) -> created.add(Pair.of(key, obj))));
         created.forEach(pair -> Registry.register(BuiltInRegistries.BLOCK, pair.getLeft(), pair.getRight()));
         RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK).register((rawId, id, block) -> Registration.tryApply(block, id, (blockId, obj) -> Registry.register(BuiltInRegistries.BLOCK, blockId, obj)));
     }

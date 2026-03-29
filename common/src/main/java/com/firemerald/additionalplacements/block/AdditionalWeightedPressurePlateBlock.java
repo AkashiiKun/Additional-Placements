@@ -8,34 +8,36 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BeaconBeamBlock;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import org.jetbrains.annotations.ApiStatus;
 
 public abstract class AdditionalWeightedPressurePlateBlock extends AdditionalBasePressurePlateBlock<WeightedPressurePlateBlock> implements IWeightedPressurePlateBlock<WeightedPressurePlateBlock> {
-	public static AdditionalWeightedPressurePlateBlock of(WeightedPressurePlateBlock plate) {
-		return plate instanceof BeaconBeamBlock ? ofBeaconBeam(plate) : ofNonBeaconBeam(plate);
+	public static AdditionalWeightedPressurePlateBlock of(WeightedPressurePlateBlock plate, ResourceKey<Block> id) {
+		return plate instanceof BeaconBeamBlock ? ofBeaconBeam(plate, id) : ofNonBeaconBeam(plate, id);
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalWeightedPressurePlateBlock ofNonBeaconBeam(WeightedPressurePlateBlock block) {
+	public static AdditionalWeightedPressurePlateBlock ofNonBeaconBeam(WeightedPressurePlateBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalWeightedPressurePlateBlock ofBeaconBeam(WeightedPressurePlateBlock block) {
+	public static AdditionalWeightedPressurePlateBlock ofBeaconBeam(WeightedPressurePlateBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
-	protected AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate) {
-		super(plate);
+	protected AdditionalWeightedPressurePlateBlock(WeightedPressurePlateBlock plate, ResourceKey<Block> id) {
+		super(plate, id);
 	}
 
 	@Override

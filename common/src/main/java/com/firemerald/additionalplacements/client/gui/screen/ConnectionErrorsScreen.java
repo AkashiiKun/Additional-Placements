@@ -35,7 +35,8 @@ public class ConnectionErrorsScreen extends Screen {
         setFocused(errorList);
     }
 
-    public Font getFont() {
+    @Override
+    public @NotNull Font getFont() {
         return font;
     }
 

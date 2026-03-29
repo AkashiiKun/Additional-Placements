@@ -2,6 +2,9 @@ package com.firemerald.additionalplacements.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -117,8 +120,8 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock 
 	}
 
 	@Override
-	public BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
-		return super.updateShape(state, direction, otherState, level, pos, otherPos);
+	public BlockState additionalplacements$updateShapeImpl(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos otherPos, BlockState otherState, RandomSource rand) {
+		return super.updateShape(state, level, tickAccess, pos, direction, otherPos, otherState, rand);
 	}
 
 	@Override

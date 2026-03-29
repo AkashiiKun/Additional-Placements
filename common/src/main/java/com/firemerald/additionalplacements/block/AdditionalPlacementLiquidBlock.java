@@ -4,11 +4,15 @@ import java.util.Optional;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BucketPickup;
 import net.minecraft.world.level.block.LiquidBlockContainer;
@@ -19,8 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPickup & LiquidBlockContainer> extends AdditionalPlacementBlock<T> implements BucketPickup, LiquidBlockContainer {
-	public AdditionalPlacementLiquidBlock(T parentBlock) {
-		super(parentBlock);
+	public AdditionalPlacementLiquidBlock(T parentBlock, ResourceKey<Block> id) {
+		super(parentBlock, id);
 	}
 
 	@Override
@@ -48,9 +52,9 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
+	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull LevelReader level, @NotNull ScheduledTickAccess tickAccess, @NotNull BlockPos pos, @NotNull Direction direction, @NotNull BlockPos otherPos, @NotNull BlockState otherState, @NotNull RandomSource rand) {
 		FluidState fluid = level.getFluidState(pos);
-		if (!fluid.isEmpty()) level.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(level));
-		return super.updateShape(state, direction, otherState, level, pos, otherPos);
+		if (!fluid.isEmpty()) tickAccess.scheduleTick(pos, fluid.getType(), fluid.getType().getTickDelay(level));
+		return super.updateShape(state, level, tickAccess, pos, direction, otherPos, otherState, rand);
 	}
 }

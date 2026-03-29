@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.generation;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
@@ -10,6 +10,7 @@ import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import com.firemerald.additionalplacements.config.blocklist.IDBlocklistEntry;
 import com.firemerald.additionalplacements.generation.GenerationType.BuilderBase;
 
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.*;
 
@@ -44,7 +45,7 @@ public class APGenerationTypes implements RegistrationInitializer {
 		weightedPressurePlate   = get(register, WeightedPressurePlateBlock.class, "weighted_pressure_plate", "Weighted pressure plates", AdditionalWeightedPressurePlateBlock::of, "ap_placing");
 	}
 
-	private static <T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock> SimpleRotatableGenerationType<T, U> get(IRegistration register, Class<T> clazz, String name, String description, Function<? super T, ? extends U> constructor, String... addsProperties) {
+	private static <T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock> SimpleRotatableGenerationType<T, U> get(IRegistration register, Class<T> clazz, String name, String description, BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor, String... addsProperties) {
 		return register.registerType(clazz, AdditionalPlacementsMod.rl(name), description, new SimpleRotatableGenerationType.Builder<T, U>().constructor(constructor).addsProperties(addsProperties));
 	}
 

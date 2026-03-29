@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.*;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -44,6 +46,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+@MethodsReturnNonnullByDefault
 public abstract class AdditionalPlacementBlock<T extends Block> extends Block implements IPlacementBlock<T> {
 	public static BlockState getModelStateSafe(BlockState worldState) {
 		if (worldState.getBlock() instanceof AdditionalPlacementBlock<?> block) return block.getModelState(worldState);
@@ -54,8 +57,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public final T parentBlock;
 	private final Property<?>[] copyProps;
 
-	public AdditionalPlacementBlock(T parentBlock) {
-		super(theHack(parentBlock));
+	public AdditionalPlacementBlock(T parentBlock, ResourceKey<Block> id) {
+		super(theHack(parentBlock, id));
 		this.copyProps = copyPropsStatic.toArray(Property[]::new);
 		copyPropsStatic.clear();
 		this.parentBlock = parentBlock;
@@ -66,9 +69,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return parentBlock;
 	}
 
-	public static Properties theHack(Block parentBlock) {
+	public static Properties theHack(Block parentBlock, ResourceKey<Block> id) {
 		copyPropsStatic.addAll(parentBlock.defaultBlockState().getProperties());
-		return Properties.ofFullCopy(parentBlock);
+		return Properties.ofFullCopy(parentBlock).setId(id);
 	}
 
 	public boolean hasCustomColors() {
@@ -101,13 +104,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public @NotNull Item asItem() {
+	public Item asItem() {
 		return parentBlock.asItem();
-	}
-
-	@Override
-	public @NotNull String getDescriptionId() {
-		return parentBlock.getDescriptionId();
 	}
 
 	public BlockState getOtherBlockState() {
@@ -122,13 +120,13 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder params) {
+	public List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder params) {
 		return parentBlock.getDrops(this.getModelState(state), params);
 	}
 
 	@Override
 	@Deprecated
-	public @NotNull ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
+	public ItemStack getCloneItemStack(@NotNull LevelReader level, @NotNull BlockPos pos, @NotNull BlockState state) {
 		return parentBlock.getCloneItemStack(level, pos, state);
 	}
 
@@ -145,8 +143,8 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void updateEntityAfterFallOn(@NotNull BlockGetter level, @NotNull Entity entity) {
-		additionalplacements$getOtherBlock().updateEntityAfterFallOn(level, entity);
+	public void updateEntityMovementAfterFallOn(@NotNull BlockGetter level, @NotNull Entity entity) {
+		additionalplacements$getOtherBlock().updateEntityMovementAfterFallOn(level, entity);
 	}
 
 	@Override
@@ -212,7 +210,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
+	public InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
 		BlockState modelState = getModelState(state);
 		InteractionResult res = modelState.getBlock().useWithoutItem(modelState, level, pos, player, hitResult);
 		applyChanges(state, modelState, level, pos);
@@ -256,7 +254,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void wasExploded(@NotNull Level level, @NotNull BlockPos pos, @NotNull Explosion explosion) {
+	public void wasExploded(@NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull Explosion explosion) {
 		additionalplacements$getOtherBlock().wasExploded(level, pos, explosion);
 	}
 
@@ -307,12 +305,12 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public @NotNull BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
+	public BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
 		return additionalplacements$rotateImpl(blockState, rotation);
 	}
 
 	@Override
-	public @NotNull BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
+	public BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
 		return additionalplacements$mirrorImpl(blockState, mirror);
 	}
 
@@ -322,12 +320,12 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
-		return additionalplacements$updateShapeImpl(state, direction, otherState, level, pos, otherPos);
+	public BlockState updateShape(@NotNull BlockState state, @NotNull LevelReader level, @NotNull ScheduledTickAccess tickAccess, @NotNull BlockPos pos, @NotNull Direction direction, @NotNull BlockPos otherPos, @NotNull BlockState otherState, @NotNull RandomSource rand) {
+		return additionalplacements$updateShapeImpl(state, level, tickAccess, pos, direction, otherPos, otherState, rand);
 	}
 
 	@Override
-	public @NotNull FluidState getFluidState(@NotNull BlockState state) {
+	public FluidState getFluidState(@NotNull BlockState state) {
 		BlockState modelState = getModelState(state);
 		return modelState.getBlock().getFluidState(modelState);
 	}
@@ -339,9 +337,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public boolean propagatesSkylightDown(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
+	public boolean propagatesSkylightDown(@NotNull BlockState state) {
 		BlockState modelState = getModelState(state);
-		return modelState.getBlock().propagatesSkylightDown(modelState, level, pos);
+		return modelState.getBlock().propagatesSkylightDown(modelState);
 	}
 
 	@Override
@@ -365,7 +363,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public abstract BlockRotation getRotation(BlockState state);
 
 	@Override
-	public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
+	public VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
 		if (rotatesModel(state))
 			return getRotation(state).applyBlockSpace(getModelState(state).getShape(level, pos, context));
 		else

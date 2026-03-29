@@ -91,7 +91,7 @@ public class APDynamicResources implements PackResources {
         else if (!resourceLocation.getPath().endsWith(".json")) return null;
         else if (resourceLocation.getPath().startsWith("blockstates/")) { //blockstate json
             String blockName = resourceLocation.getPath().substring(12, resourceLocation.getPath().length() - 5);
-            Block block = BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName));
+            Block block = BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName)).get().value();
             if (block instanceof AdditionalPlacementBlock<?> placement) return new BlockStateJsonSupplier(placement, blockName);
             else return null;
         }

@@ -9,10 +9,12 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.ScheduledTickAccess;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -28,24 +30,24 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 			Block.box(15, 0, 0, 16, 16, 16)
 	};
 
-	public static AdditionalCarpetBlock of(CarpetBlock carpet) {
-		return carpet instanceof BeaconBeamBlock ? ofBeaconBeam(carpet) : ofNonBeaconBeam(carpet);
+	public static AdditionalCarpetBlock of(CarpetBlock carpet, ResourceKey<Block> id) {
+		return carpet instanceof BeaconBeamBlock ? ofBeaconBeam(carpet, id) : ofNonBeaconBeam(carpet, id);
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalCarpetBlock ofNonBeaconBeam(CarpetBlock block) {
+	public static AdditionalCarpetBlock ofNonBeaconBeam(CarpetBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
 	@ApiStatus.Internal
 	@ExpectPlatform
-	public static AdditionalCarpetBlock ofBeaconBeam(CarpetBlock block) {
+	public static AdditionalCarpetBlock ofBeaconBeam(CarpetBlock block, ResourceKey<Block> id) {
 		throw new AssertionError();
 	}
 
-	protected AdditionalCarpetBlock(CarpetBlock carpet) {
-		super(carpet);
+	protected AdditionalCarpetBlock(CarpetBlock carpet, ResourceKey<Block> id) {
+		super(carpet, id);
 		this.registerDefaultState(copyProperties(getOtherBlockState(), this.stateDefinition.any()).setValue(PLACING, Direction.NORTH));
 		((IVanillaCarpetBlock) carpet).additionalplacements$setOtherBlock(this);
 	}
@@ -66,12 +68,11 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 	}
 
 	@Override
-	public BlockState additionalplacements$updateShapeImpl(BlockState thisState, Direction updatedDirection, BlockState otherState, LevelAccessor level, BlockPos thisPos, BlockPos otherPos) {
-		return !thisState.canSurvive(level, thisPos) ? Blocks.AIR.defaultBlockState() : thisState;
+	public BlockState additionalplacements$updateShapeImpl(BlockState state, LevelReader level, ScheduledTickAccess tickAccess, BlockPos pos, Direction direction, BlockPos otherPos, BlockState otherState, RandomSource rand) {
+		return !state.canSurvive(level, pos) ? Blocks.AIR.defaultBlockState() : state;
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		return !level.isEmptyBlock(pos.relative(state.getValue(PLACING)));
 	}

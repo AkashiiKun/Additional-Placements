@@ -3,6 +3,8 @@ package com.firemerald.additionalplacements.mixin;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import net.minecraft.core.Holder;
+import net.minecraft.world.level.block.Block;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -36,14 +38,17 @@ public class MixinChunkStorage {
 					CompoundTag block = (CompoundTag) blockTag;
 					if (block.contains("Name", Tag.TAG_STRING)) {
 						String name = block.getString("Name");
-						if (BuiltInRegistries.BLOCK.get(ResourceLocation.parse(name)) instanceof IStateFixer fixer) {
-							CompoundTag original = block.getCompound("Properties");
-							CompoundTag fixed = fixer.fix(original, newBlock -> block.put("Name", StringTag.valueOf(BuiltInRegistries.BLOCK.getKey(newBlock).toString())));
-							if (original != fixed) {
-								if (fixed == null) block.remove("Properties");
-								else block.put("Properties", fixed);
+						Optional<Holder.Reference<Block>> optionalBlock = BuiltInRegistries.BLOCK.get(ResourceLocation.tryParse(name));
+						optionalBlock.ifPresent(blockRef -> {
+							if (blockRef.value() instanceof IStateFixer fixer) {
+								CompoundTag original = block.getCompound("Properties");
+								CompoundTag fixed = fixer.fix(original, newBlock -> block.put("Name", StringTag.valueOf(BuiltInRegistries.BLOCK.getKey(newBlock).toString())));
+								if (original != fixed) {
+									if (fixed == null) block.remove("Properties");
+									else block.put("Properties", fixed);
+								}
 							}
-						}
+						});
 					}
 				})))));
 			}
