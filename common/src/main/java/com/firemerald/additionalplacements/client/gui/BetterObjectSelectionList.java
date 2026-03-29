@@ -8,6 +8,7 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.narration.NarrationSupplier;
 import net.minecraft.client.gui.navigation.FocusNavigationEvent;
+import net.minecraft.client.gui.navigation.ScreenDirection;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,8 +33,8 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 	public ComponentPath nextFocusPath(@NotNull FocusNavigationEvent event) {
 		if (this.getItemCount() == 0) {
 			return null;
-		} else if (this.isFocused() && event instanceof FocusNavigationEvent.ArrowNavigation focusnavigationevent$arrownavigation) {
-            E e1 = this.nextEntry(focusnavigationevent$arrownavigation.direction());
+		} else if (this.isFocused() && event instanceof FocusNavigationEvent.ArrowNavigation(ScreenDirection direction)) {
+			E e1 = this.nextEntry(direction);
 			return e1 != null ? ComponentPath.path(this, ComponentPath.leaf(e1)) : null;
 		} else if (!this.isFocused()) {
 			E e = this.getSelected();

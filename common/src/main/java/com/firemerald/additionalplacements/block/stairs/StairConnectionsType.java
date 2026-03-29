@@ -48,7 +48,7 @@ public class StairConnectionsType extends Property<CommonStairShapeState> {
 		this.allowVertical = allowVertical;
 		this.allowMixed = allowMixed;
 		this.allowFlipped = allowFlipped;
-		this.defaultShapeState = values.get(0);
+		this.defaultShapeState = values.getFirst();
 		this.values = values;
 		this.valueMap = values.stream().collect(Collectors.toMap(CommonStairShapeState::getSerializedName, state -> state));
 	}

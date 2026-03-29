@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.network.APPacket;
+import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -35,17 +36,17 @@ public abstract class CheckDataClientPacket implements ClientConfigurationPacket
 	}
 
 	public CheckDataClientPacket(FriendlyByteBuf buf) {
-		data = buf.readMap(FriendlyByteBuf::readResourceLocation, FriendlyByteBuf::readNbt);
+		data = buf.readMap(FriendlyByteBuf::readResourceLocation, buffer -> buffer.readNbt());
 	}
 
 	@Override
 	public void write(FriendlyByteBuf buf) {
-		buf.writeMap(data, FriendlyByteBuf::writeResourceLocation, FriendlyByteBuf::writeNbt);
+		buf.writeMap(data, FriendlyByteBuf::writeResourceLocation, (buffer, tag) -> buffer.writeNbt(tag));
 	}
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public @Nullable APPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
+	public @Nullable ServerConfigurationPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
 		return CheckDataServerPacket.of(data);
 	}
 }

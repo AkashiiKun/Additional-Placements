@@ -98,7 +98,6 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 
 	@Override
 	@Unique(silent = true)
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
 		if (this.additionalplacements$hasAdditionalStates()) return additionalplacements$rotateImpl(blockState, rotation);
 		else return super.rotate(blockState, rotation);
@@ -114,13 +113,11 @@ public abstract class MixinCarpetBlock extends Block implements IVanillaCarpetBl
 
 	@Override
 	@Unique(silent = true)
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
 		if (this.additionalplacements$hasAdditionalStates()) return additionalplacements$mirrorImpl(blockState, mirror);
 		else return super.mirror(blockState, mirror);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);

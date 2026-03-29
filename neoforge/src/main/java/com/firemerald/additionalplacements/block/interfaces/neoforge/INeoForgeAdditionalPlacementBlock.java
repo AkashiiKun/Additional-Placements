@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces.neoforge;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.util.BlockRotation;
+import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -14,11 +15,12 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.configurations.TreeConfiguration;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.PathType;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.common.IPlantable;
@@ -26,9 +28,12 @@ import net.neoforged.neoforge.common.ToolAction;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
 public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPlacementBlock<T>, IBlockExtension {
     BlockState getModelState(BlockState thisBlockState);
 
@@ -77,20 +82,20 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default boolean isBed(BlockState state, BlockGetter level, BlockPos pos, @Nullable Entity player) {
+    default void onDestroyedByPushReaction(BlockState state, Level level, BlockPos pos, Direction pushDirection, FluidState fluid) {
+        BlockState modelState = getModelState(state);
+        modelState.getBlock().onDestroyedByPushReaction(modelState, level, pos, pushDirection, fluid);
+    }
+
+    @Override
+    default boolean isBed(BlockState state, BlockGetter level, BlockPos pos, LivingEntity sleeper) {
         return false;
     }
 
     @Override
-    default Optional<Vec3> getRespawnPosition(BlockState state, EntityType<?> type, LevelReader levelReader, BlockPos pos, float orientation, @Nullable LivingEntity entity) {
+    default Optional<Vec3> getRespawnPosition(BlockState state, EntityType<?> type, LevelReader levelReader, BlockPos pos, float orientation) {
         BlockState modelState = getModelState(state);
-        return modelState.getBlock().getRespawnPosition(modelState, type, levelReader, pos, orientation, entity);
-    }
-
-    @Override
-    default boolean isValidSpawn(BlockState state, BlockGetter level, BlockPos pos, SpawnPlacements.Type type, EntityType<?> entityType) {
-        BlockState modelState = getModelState(state);
-        return modelState.getBlock().isValidSpawn(modelState, level, pos, type, entityType);
+        return modelState.getBlock().getRespawnPosition(modelState, type, levelReader, pos, orientation);
     }
 
     @Override
@@ -202,14 +207,14 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
 
     @Override
     @Nullable
-    default BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+    default PathType getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().getBlockPathType(modelState, level, pos, mob);
     }
 
     @Override
     @Nullable
-    default BlockPathTypes getAdjacentBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob, BlockPathTypes originalType) {
+    default PathType getAdjacentBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob, PathType originalType) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().getAdjacentBlockPathType(modelState, level, pos, mob, originalType);
     }

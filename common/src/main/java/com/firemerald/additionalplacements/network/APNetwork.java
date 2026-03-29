@@ -10,13 +10,13 @@ import org.jetbrains.annotations.ApiStatus;
 public class APNetwork {
     @ExpectPlatform
     @ApiStatus.Internal
-    public static void sendToServer(ServerPacket packet) {
+    public static void sendToServer(ServerPacket<?> packet) {
         throw new AssertionError();
     }
 
     @ExpectPlatform
     @ApiStatus.Internal
-    public static void sendToClient(ClientPacket packet, ServerPlayer player) {
+    public static void sendToClient(ClientPacket<?> packet, ServerPlayer player) {
         throw new AssertionError();
     }
 }

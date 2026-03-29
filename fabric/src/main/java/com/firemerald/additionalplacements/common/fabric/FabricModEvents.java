@@ -46,11 +46,7 @@ public class FabricModEvents implements ModInitializer {
 
     private static void loadRegistry() {
         Registration.gatherTypes();
-        APConfigs.init((type, spec) -> NeoForgeConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, switch (type) {
-            case COMMON -> ModConfig.Type.COMMON;
-            case CLIENT -> ModConfig.Type.CLIENT;
-            case SERVER -> ModConfig.Type.SERVER;
-        }, spec));
+        APConfigs.init((type, spec) -> NeoForgeConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, type, spec));
         List<Pair<ResourceLocation, Block>> created = new ArrayList<>();
         BuiltInRegistries.BLOCK.entrySet().forEach(entry -> Registration.tryApply(entry.getValue(), entry.getKey().location(), (id, obj) -> created.add(Pair.of(id, obj))));
         created.forEach(pair -> Registry.register(BuiltInRegistries.BLOCK, pair.getLeft(), pair.getRight()));

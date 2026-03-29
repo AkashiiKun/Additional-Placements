@@ -30,20 +30,6 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
     List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType);
 
     @Override
-    @Deprecated(forRemoval = true, since = "1.20.4")
-    @SuppressWarnings("removal")
-    default boolean useAmbientOcclusion(BlockState state) {
-        return getWrappedModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state));
-    }
-
-    @Override
-    @Deprecated(forRemoval = true, since = "1.20.4")
-    @SuppressWarnings("removal")
-    default boolean useAmbientOcclusion(BlockState state, RenderType renderType) {
-        return getWrappedModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state), renderType);
-    }
-
-    @Override
     default TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType) {
         return getWrappedModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state), data, renderType);
     }

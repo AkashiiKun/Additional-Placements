@@ -19,7 +19,7 @@ dependencies {
 
     modCompileOnly "com.simibubi.create:create-fabric-$create_mc_version:$create_version"
 
-    compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-common-neoforgeapi:$rootProject.forge_config_api_port_version"
+    compileOnly "fuzs.forgeconfigapiport:forgeconfigapiport-fabric:$rootProject.forge_config_api_port_version" //we use fabric instead of common-neoforgeapi so we have access to more neoforge config classes
 }
 
 def generatedResources = file("src/generated")

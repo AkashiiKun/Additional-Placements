@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.CheckDataConfigurationTask;
+import com.firemerald.additionalplacements.network.client.ClientConfigurationPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.server.network.ConfigurationTask;
 import org.apache.commons.lang3.tuple.Pair;
@@ -56,7 +57,7 @@ public abstract class CheckDataServerPacket implements ServerConfigurationPacket
 	}
 
 	@Override
-	public @Nullable APPacket handleServer(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect, Consumer<ConfigurationTask.Type> finishTask) {
+	public @Nullable ClientConfigurationPacket handleServer(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect, Consumer<ConfigurationTask.Type> finishTask) {
 		List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors = new ArrayList<>();
 		Registration.forEach((id, type) -> {
 			Pair<CompoundTag, List<MessageTree>> clientData = this.serverData.get(id);
@@ -73,7 +74,7 @@ public abstract class CheckDataServerPacket implements ServerConfigurationPacket
 			type.checkClientData(clientTag, serverErrors::add);
 			if (!clientErrors.isEmpty() || !serverErrors.isEmpty()) compiledErrors.add(Triple.of(id, clientErrors, serverErrors));
 		});
-		APPacket rep;
+		ClientConfigurationPacket rep;
 		if (!compiledErrors.isEmpty()) {
 			//if it turns out this CAN prevent the above packet from being sent, move disconnect to client-side. It did not prevent it in testing.
 			disconnect.accept(Component.translatable("msg.additionalplacements.disconnected"));

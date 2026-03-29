@@ -1,12 +1,12 @@
 package com.firemerald.additionalplacements.network.server.neoforge;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.server.SetPlacementTogglePacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public class SetPlacementTogglePacketImpl extends SetPlacementTogglePacket implements ServerPlayPacketImpl {
-    public static final ResourceLocation ID = AdditionalPlacementsMod.rl("set_placement_toggle");
+    public static final CustomPacketPayload.Type<SetPlacementTogglePacketImpl> TYPE = APPacket.type("set_placement_toggle");
 
     public static SetPlacementTogglePacket of(boolean state) {
         return new SetPlacementTogglePacketImpl(state);
@@ -21,7 +21,7 @@ public class SetPlacementTogglePacketImpl extends SetPlacementTogglePacket imple
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<SetPlacementTogglePacketImpl> type() {
+        return TYPE;
     }
 }

@@ -91,7 +91,6 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock 
 
 	@Override
 	@Unique(silent = true)
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
 		if (this.additionalplacements$hasAdditionalStates()) return additionalplacements$rotateImpl(blockState, rotation);
 		else return super.rotate(blockState, rotation);
@@ -107,7 +106,6 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock 
 
 	@Override
 	@Unique(silent = true)
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
 		if (this.additionalplacements$hasAdditionalStates()) return additionalplacements$mirrorImpl(blockState, mirror);
 		else return super.mirror(blockState, mirror);
@@ -118,7 +116,6 @@ public abstract class MixinSlabBlock extends Block implements IVanillaSlabBlock 
 		if (this.additionalplacements$hasAdditionalStates() && additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer())) ci.setReturnValue(additionalplacements$canBeReplacedImpl(state, context));
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos) {
 		return super.updateShape(state, direction, otherState, level, pos, otherPos);

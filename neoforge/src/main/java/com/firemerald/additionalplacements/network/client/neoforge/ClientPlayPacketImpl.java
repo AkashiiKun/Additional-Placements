@@ -1,14 +1,15 @@
 package com.firemerald.additionalplacements.network.client.neoforge;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.ClientPlayPacket;
+import com.firemerald.additionalplacements.network.server.ServerPlayPacket;
 import com.firemerald.additionalplacements.network.server.neoforge.ServerPlayPacketImpl;
-import net.neoforged.neoforge.network.handling.PlayPayloadContext;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
 
-public interface ClientPlayPacketImpl extends ClientPacketImpl<PlayPayloadContext>, ClientPlayPacket {
+public interface ClientPlayPacketImpl extends ClientPacketImpl<RegistryFriendlyByteBuf>, ClientPlayPacket {
     @Override
-    default void handleImpl(PlayPayloadContext context) {
-        APPacket reply = handleClient(context.workHandler()::execute);
+    default void handleImpl(IPayloadContext context) {
+        ServerPlayPacket reply = handleClient(context::enqueueWork);
         if (reply instanceof ServerPlayPacketImpl packet) packet.reply(context);
     }
 }

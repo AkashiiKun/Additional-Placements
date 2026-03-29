@@ -4,11 +4,10 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.firemerald.additionalplacements.compat.LoadedMods;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.client.BlockHighlightHelper;
@@ -28,7 +27,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -146,19 +144,18 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 	@Override
 	@Environment(EnvType.CLIENT)
     default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
-		Matrix4f poseMat = pose.last().pose();
-		Matrix3f normMat = pose.last().normal();
+		PoseStack.Pose lastPose = pose.last();
 
 		//outer box
-		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 				OUTER_EDGE);
 
 		//inner box
-		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 				INNER_EDGE);
 
 		//diagonals
-		BlockHighlightHelper.lineAxisDiagonal(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+		BlockHighlightHelper.lineAxisDiagonal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 				INNER_EDGE, OUTER_EDGE);
 	}
 
@@ -168,7 +165,7 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
 	}
 
     @Override
-    default void additionalplacements$addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    default void additionalplacements$addPlacementTooltip(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 	}
 

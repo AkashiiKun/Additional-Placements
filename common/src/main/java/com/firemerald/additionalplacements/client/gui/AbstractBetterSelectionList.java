@@ -72,7 +72,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	public E getFirstElement() {
-		return this.children.get(0);
+		return this.children.getFirst();
 	}
 
 	public void setRenderBackground(boolean renderBackground) {
@@ -118,7 +118,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 	protected void addEntryToTop(E entry) {
 		double d0 = this.getMaxScroll() - this.getScrollAmount();
-		this.children.add(0, entry);
+		this.children.addFirst(entry);
 		this.setScrollAmount(this.getMaxScroll() - d0);
 	}
 
@@ -179,7 +179,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		if (this.renderBackground) {
 			guiGraphics.setColor(0.125F, 0.125F, 0.125F, 1.0F);
 			int texSize = 32;
-			guiGraphics.blit(Screen.BACKGROUND_LOCATION, this.getX(), this.getY(), this.getRight(), this.getBottom() + (int) this.getScrollAmount(), this.width, this.height, texSize, texSize);
+			guiGraphics.blit(Screen.MENU_BACKGROUND, this.getX(), this.getY(), this.getRight(), this.getBottom() + (int) this.getScrollAmount(), this.width, this.height, texSize, texSize);
 			guiGraphics.setColor(1.0F, 1.0F, 1.0F, 1.0F);
 		}
 

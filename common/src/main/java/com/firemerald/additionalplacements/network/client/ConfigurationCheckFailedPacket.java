@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.network.APPacket;
+import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -55,7 +56,7 @@ public abstract class ConfigurationCheckFailedPacket implements ClientConfigurat
 
 	@Override
 	@Environment(EnvType.CLIENT)
-	public @Nullable APPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
+	public @Nullable ServerConfigurationPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
 		MessageTree rootError = new MessageTree(Component.translatable("msg.additionalplacements.errors.type"));
 		compiledErrors.forEach(data -> {
 			MessageTree typeError = new MessageTree(Component.literal(data.getLeft().toString())); //TODO friendly name?

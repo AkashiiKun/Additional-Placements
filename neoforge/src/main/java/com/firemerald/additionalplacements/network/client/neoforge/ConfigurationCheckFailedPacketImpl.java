@@ -1,16 +1,17 @@
 package com.firemerald.additionalplacements.network.client.neoforge;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.ConfigurationCheckFailedPacket;
 import com.firemerald.additionalplacements.util.MessageTree;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.List;
 
 public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailedPacket implements ClientConfigurationPacketImpl {
-    public static final ResourceLocation ID = AdditionalPlacementsMod.rl("configuration_check_failed");
+    public static final CustomPacketPayload.Type<ConfigurationCheckFailedPacketImpl> TYPE = APPacket.type("configuration_check_failed");
 
     public static ConfigurationCheckFailedPacket of(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {
         return new ConfigurationCheckFailedPacketImpl(compiledErrors);
@@ -25,7 +26,7 @@ public class ConfigurationCheckFailedPacketImpl extends ConfigurationCheckFailed
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<ConfigurationCheckFailedPacketImpl> type() {
+        return TYPE;
     }
 }

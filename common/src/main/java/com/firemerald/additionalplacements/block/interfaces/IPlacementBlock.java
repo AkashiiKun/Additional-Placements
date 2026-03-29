@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces;
 import java.util.List;
 import java.util.function.Function;
 
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 import org.joml.Quaternionf;
 
@@ -22,7 +23,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -50,11 +50,11 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 
 	BlockState additionalplacements$updateShapeImpl(BlockState state, Direction direction, BlockState otherState, LevelAccessor level, BlockPos pos, BlockPos otherPos);
 
-	default void additionalplacements$appendHoverTextImpl(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
-		if (APConfigs.common().showTooltip.get() && additionalplacements$getGenerationType().placementEnabled()) additionalplacements$addPlacementTooltip(stack, level, tooltip, flag);
+	default void additionalplacements$appendHoverTextImpl(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		if (APConfigs.common().showTooltip.get() && additionalplacements$getGenerationType().placementEnabled()) additionalplacements$addPlacementTooltip(stack, context, tooltip, flag);
 	}
 
-	void additionalplacements$addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag);
+	void additionalplacements$addPlacementTooltip(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag);
 
 	boolean additionalplacements$hasAdditionalStates();
 

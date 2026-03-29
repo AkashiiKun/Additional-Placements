@@ -19,7 +19,9 @@ import net.fabricmc.api.Environment;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
+import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.repository.Pack;
@@ -34,29 +36,38 @@ import org.jetbrains.annotations.NotNull;
 
 @Environment(EnvType.CLIENT)
 public class APDynamicResources implements PackResources {
-    public static final Pack PACK = Pack.create(
-            "Additional Placements dynamic resources",
-            Component.literal("title"),
-            true,
+    public static final PackLocationInfo LOCATION =  new PackLocationInfo(
+            "Additional Placements Dynamic Resources",
+            Component.literal("Additional Placements dynamic resources"),
+            PackSource.BUILT_IN,
+            Optional.empty());
+
+    public static final Pack PACK = new Pack(
+            LOCATION,
             new Pack.ResourcesSupplier() {
                 @Override
-                public @NotNull PackResources openPrimary(@NotNull String id) {
+                public PackResources openPrimary(PackLocationInfo location) {
                     return new APDynamicResources();
                 }
 
                 @Override
-                public @NotNull PackResources openFull(@NotNull String id, Pack.@NotNull Info info) {
+                public PackResources openFull(PackLocationInfo location, Pack.Metadata metadata) {
                     return new APDynamicResources();
                 }
             },
-            getPackInfo(Component.literal("description"), PackCompatibility.COMPATIBLE, FeatureFlagSet.of(), List.of()),
-            Pack.Position.BOTTOM,
-            true,
-            PackSource.BUILT_IN
+            getPackMetadata(
+                    Component.literal("description"),
+                    PackCompatibility.COMPATIBLE,
+                    FeatureFlagSet.of(),
+                    List.of()),
+            new PackSelectionConfig(
+                    true,
+                    Pack.Position.BOTTOM,
+                    true)
     );
 
     @ExpectPlatform
-    public static Pack.Info getPackInfo(Component description, PackCompatibility compatibility, FeatureFlagSet featureFlagSet, List<String> overlays) {
+    public static Pack.Metadata getPackMetadata(Component description, PackCompatibility compatibility, FeatureFlagSet featureFlagSet, List<String> overlays) {
         throw new AssertionError();
     }
 
@@ -158,15 +169,15 @@ public class APDynamicResources implements PackResources {
     }
 
     @Override
+    public @NotNull PackLocationInfo location() {
+        return LOCATION;
+    }
+
+    @Override
     public @NotNull String packId() {
-        return "Additional Placements Dynamic Resources";
+        return LOCATION.id();
     }
 
     @Override
     public void close() {}
-
-    @Override
-    public boolean isBuiltin() {
-        return true;
-    }
 }

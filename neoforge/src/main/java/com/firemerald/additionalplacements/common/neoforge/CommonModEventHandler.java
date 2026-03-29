@@ -14,13 +14,12 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
-import net.neoforged.neoforge.network.event.OnGameConfigurationEvent;
-import net.neoforged.neoforge.network.event.RegisterPayloadHandlerEvent;
+import net.neoforged.neoforge.network.event.RegisterConfigurationTasksEvent;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
@@ -34,7 +33,7 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class CommonModEventHandler {
     private static boolean init = false;
 
@@ -43,26 +42,19 @@ public class CommonModEventHandler {
         if (!init) {
             RegistrationImpl.registerTypes();
             ModLoadingContext ctx = ModLoadingContext.get();
-            APConfigs.init((type, configSpec) -> {
-                ctx.registerConfig(switch (type) {
-                    case COMMON -> ModConfig.Type.COMMON;
-                    case CLIENT -> ModConfig.Type.CLIENT;
-                    case SERVER -> ModConfig.Type.SERVER;
-                }, configSpec);
-                return configSpec;
-            });
+            APConfigs.init(ctx.getActiveContainer()::registerConfig);
             init = true;
         }
     }
 
     @SubscribeEvent
     public static void onModConfigsLoaded(ModConfigEvent.Loading event) {
-        CommonModEvents.onConfigLoaded(event.getConfig().getSpec());
+        CommonModEvents.onConfigLoaded(event.getConfig());
     }
 
     @SubscribeEvent
     public static void onModConfigsReloaded(ModConfigEvent.Reloading event) {
-        CommonModEvents.onConfigReloaded(event.getConfig().getSpec());
+        CommonModEvents.onConfigReloaded(event.getConfig());
     }
 
     @SubscribeEvent
@@ -93,12 +85,12 @@ public class CommonModEventHandler {
     }
 
     @SubscribeEvent
-    public static void register(RegisterPayloadHandlerEvent event) {
+    public static void register(RegisterPayloadHandlersEvent event) {
         APNetworkImpl.register(event);
     }
 
     @SubscribeEvent
-    public static void onGetherLoginConfigurationTasks(OnGameConfigurationEvent event) {
+    public static void onGatherLoginConfigurationTasks(RegisterConfigurationTasksEvent event) {
         event.register(new CheckDataConfigurationTaskImpl());
     }
 }

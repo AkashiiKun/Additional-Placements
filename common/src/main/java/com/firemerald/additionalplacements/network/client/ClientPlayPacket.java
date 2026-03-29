@@ -2,13 +2,15 @@ package com.firemerald.additionalplacements.network.client;
 
 import com.firemerald.additionalplacements.network.APPacket;
 
+import com.firemerald.additionalplacements.network.server.ServerPlayPacket;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.Connection;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.function.Consumer;
 
-public interface ClientPlayPacket extends ClientPacket {
+public interface ClientPlayPacket extends ClientPacket<RegistryFriendlyByteBuf> {
 	@Environment(EnvType.CLIENT)
-	APPacket handleClient(Consumer<Runnable> enqueueWork);
+	ServerPlayPacket handleClient(Consumer<Runnable> enqueueWork);
 }

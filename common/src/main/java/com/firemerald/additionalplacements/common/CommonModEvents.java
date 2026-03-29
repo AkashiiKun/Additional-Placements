@@ -16,12 +16,12 @@ import net.minecraft.commands.Commands;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.item.BlockItem;
-import net.minecraft.world.item.HoneycombItem;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopper;
+import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -33,11 +33,11 @@ public class CommonModEvents {
     public static boolean misMatchedTags = false, autoGenerateFailed = false;
     protected static boolean reloadedFromChecker = false;
 
-    public static void onItemTooltip(ItemStack stack, TooltipFlag context, List<Component> lines) {
+    public static void onItemTooltip(ItemStack stack, Item.TooltipContext context, TooltipFlag tooltipType, List<Component> lines) {
         if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
-                if (verticalBlock.additionalplacements$hasAdditionalStates()) verticalBlock.additionalplacements$appendHoverTextImpl(stack, null, lines, context);
+                if (verticalBlock.additionalplacements$hasAdditionalStates()) verticalBlock.additionalplacements$appendHoverTextImpl(stack, context, lines, tooltipType);
             }
         }
     }
@@ -143,11 +143,11 @@ public class CommonModEvents {
         delegate.set(backwardMemoized, (com.google.common.base.Supplier<BiMap<U, T>>) () -> forwardMemoized.get().inverse()); //replace with supplier that gets the inverse of the forward map
     }
 
-    public static void onConfigLoaded(Object configHolder) {
-        APConfigs.onConfigLoaded(configHolder);
+    public static void onConfigLoaded(ModConfig config) {
+        APConfigs.onConfigLoaded(config.getSpec());
     }
 
-    public static void onConfigReloaded(Object configHolder) {
-        APConfigs.onConfigLoaded(configHolder);
+    public static void onConfigReloaded(ModConfig config) {
+        APConfigs.onConfigReloaded(config.getSpec());
     }
 }

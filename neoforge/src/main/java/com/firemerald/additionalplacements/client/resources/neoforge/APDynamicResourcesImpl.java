@@ -8,7 +8,7 @@ import net.minecraft.world.flag.FeatureFlagSet;
 import java.util.List;
 
 public class APDynamicResourcesImpl {
-    public static Pack.Info getPackInfo(Component description, PackCompatibility compatibility, FeatureFlagSet featureFlagSet, List<String> overlays) {
-        return new Pack.Info(description, compatibility, featureFlagSet, overlays, true);
+    public static Pack.Metadata getPackMetadata(Component description, PackCompatibility compatibility, FeatureFlagSet featureFlagSet, List<String> overlays) {
+        return new Pack.Metadata(description, compatibility, featureFlagSet, overlays, true);
     }
 }

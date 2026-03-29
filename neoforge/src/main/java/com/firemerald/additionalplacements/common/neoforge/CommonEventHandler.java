@@ -4,6 +4,7 @@ import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
 
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
@@ -12,11 +13,11 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.neoforge.event.server.ServerStoppingEvent;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.GAME)
 public class CommonEventHandler {
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
-        CommonModEvents.onItemTooltip(event.getItemStack(), event.getFlags(), event.getToolTip());
+        CommonModEvents.onItemTooltip(event.getItemStack(), event.getContext(), event.getFlags(), event.getToolTip());
     }
 
     @SubscribeEvent

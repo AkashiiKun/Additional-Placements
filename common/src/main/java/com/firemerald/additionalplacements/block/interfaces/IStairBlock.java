@@ -3,8 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces;
 import java.util.List;
 import java.util.function.Function;
 
-import org.jetbrains.annotations.Nullable;
-import org.joml.Matrix3f;
+import net.minecraft.world.item.Item;
 import org.joml.Matrix4f;
 
 import com.firemerald.additionalplacements.block.stairs.AdditionalStairBlock;
@@ -210,15 +209,14 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 		//y is forward
 		//x is right
 		pose.pushPose();
-		pose.mulPoseMatrix(new Matrix4f(
+		pose.mulPose(new Matrix4f(
 				facing.right  .getStepX(), facing.right  .getStepY(), facing.right  .getStepZ(), 0,
 				facing.forward.getStepX(), facing.forward.getStepY(), facing.forward.getStepZ(), 0,
 				facing.up     .getStepX(), facing.up     .getStepY(), facing.up     .getStepZ(), 0,
 				0, 0, 0, 1
 				));
-		Matrix4f poseMat = pose.last().pose();
-		Matrix3f normMat = pose.last().normal();
-		BlockHighlightHelper.lineLoop(vertexConsumer, poseMat, normMat, ARROW_OFFSET, r, g, b, a,
+		PoseStack.Pose lastPose = pose.last();
+		BlockHighlightHelper.lineLoop(vertexConsumer, lastPose, ARROW_OFFSET, r, g, b, a,
 				 0          ,  ARROW_OUTER,
 				 ARROW_OUTER,  0          ,
 				 ARROW_INNER,  0          ,
@@ -235,29 +233,28 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	@Override
 	@Environment(EnvType.CLIENT)
     default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, float partial, float r, float g, float b, float a) {
-		Matrix4f poseMat = pose.last().pose();
-		Matrix3f normMat = pose.last().normal();
+		PoseStack.Pose lastPose = pose.last();
 
 		//outer box
-		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 				OUTER_EDGE);
 
 		if (this.additionalplacements$connectionsType().allowFlipped) {
 			//inner edges
-			BlockHighlightHelper.lineCenteredGrid(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+			BlockHighlightHelper.lineCenteredGrid(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 					INNER_EDGE, OUTER_EDGE);
 
 			//middle cross
-			BlockHighlightHelper.lineCenteredCross(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+			BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 					OUTER_EDGE);
 		} else {
 			//corners
-			BlockHighlightHelper.lineOctal(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+			BlockHighlightHelper.lineOctal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 					INNER_EDGE, INNER_EDGE,
 					OUTER_EDGE, INNER_EDGE);
 
 			//middle cross
-			BlockHighlightHelper.lineCenteredCross(vertexConsumer, poseMat, normMat, -OUTER_EDGE, r, g, b, a,
+			BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 					INNER_EDGE);
 		}
 	}
@@ -325,7 +322,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	}
 
     @Override
-    default void additionalplacements$addPlacementTooltip(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+    default void additionalplacements$addPlacementTooltip(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		tooltip.add(Component.translatable("tooltip.additionalplacements.vertical_placement"));
 		tooltip.add(Component.translatable(additionalplacements$connectionsType().tooltip));
 	}

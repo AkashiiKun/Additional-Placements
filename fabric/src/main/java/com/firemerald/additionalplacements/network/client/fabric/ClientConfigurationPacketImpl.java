@@ -1,20 +1,18 @@
 package com.firemerald.additionalplacements.network.client.fabric;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.ClientConfigurationPacket;
-import com.firemerald.additionalplacements.network.fabric.APNetworkImpl;
 import com.firemerald.additionalplacements.network.fabric.APPacketImpl;
+import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
+import com.firemerald.additionalplacements.network.server.fabric.ServerConfigurationPacketImpl;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.networking.v1.PacketSender;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientConfigurationPacketListenerImpl;
-import net.minecraft.network.protocol.common.ClientboundDisconnectPacket;
+import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
+import net.minecraft.network.FriendlyByteBuf;
 
-public interface ClientConfigurationPacketImpl extends APPacketImpl, ClientConfigurationPacket {
+public interface ClientConfigurationPacketImpl extends APPacketImpl<FriendlyByteBuf>, ClientConfigurationPacket {
     @Environment(EnvType.CLIENT)
-    default void handleClient(Minecraft client, ClientConfigurationPacketListenerImpl handler, PacketSender responseSender) {
-        APPacket reply = handleClient(client::execute, reason -> handler.handleDisconnect(new ClientboundDisconnectPacket(reason)));
-        if (reply instanceof APPacketImpl apPacket) APNetworkImpl.send(apPacket, responseSender);
+    default void handleClient(ClientConfigurationNetworking.Context context) {
+        ServerConfigurationPacket reply = handleClient(context.client()::execute, context.responseSender()::disconnect);
+        if (reply instanceof ServerConfigurationPacketImpl apPacket) apPacket.send(context.responseSender());
     }
 }

@@ -21,7 +21,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -62,7 +61,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		this.parentBlock = parentBlock;
 	}
 
-	@SuppressWarnings("unchecked")
     @Override
 	public T additionalplacements$getOtherBlock() {
 		return parentBlock;
@@ -124,7 +122,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Override
 	@Deprecated
-	@SuppressWarnings("deprecation")
 	public @NotNull List<ItemStack> getDrops(@NotNull BlockState state, LootParams.@NotNull Builder params) {
 		return parentBlock.getDrops(this.getModelState(state), params);
 	}
@@ -165,7 +162,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void attack(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().attack(modelState, level, pos, player);
@@ -178,14 +174,11 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@Deprecated
 	public float getExplosionResistance() {
 		return additionalplacements$getOtherBlock().getExplosionResistance();
 	}
 
 	@Override
-	@Deprecated
-	@SuppressWarnings("deprecation")
 	public void onPlace(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState oldState, boolean movedByPiston) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().onPlace(modelState, level, pos, getModelStateSafe(oldState), movedByPiston);
@@ -193,7 +186,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().onRemove(modelState, level, pos, getModelStateSafe(newState), movedByPiston);
@@ -206,7 +198,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void randomTick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().randomTick(modelState, level, pos, rand);
@@ -214,7 +205,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void tick(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, @NotNull RandomSource rand) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().tick(modelState, level, pos, rand);
@@ -222,10 +212,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public @NotNull InteractionResult use(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull InteractionHand hand, @NotNull BlockHitResult hitResult) {
+	public @NotNull InteractionResult useWithoutItem(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull Player player, @NotNull BlockHitResult hitResult) {
 		BlockState modelState = getModelState(state);
-		InteractionResult res = modelState.getBlock().use(modelState, level, pos, player, hand, hitResult);
+		InteractionResult res = modelState.getBlock().useWithoutItem(modelState, level, pos, player, hitResult);
 		applyChanges(state, modelState, level, pos);
 		return res;
 	}
@@ -272,8 +261,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean isPathfindable(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull PathComputationType pathType) {
+	public boolean isPathfindable(@NotNull BlockState state, @NotNull PathComputationType pathType) {
 		return false;
 	}
 
@@ -319,37 +307,32 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState rotate(@NotNull BlockState blockState, @NotNull Rotation rotation) {
 		return additionalplacements$rotateImpl(blockState, rotation);
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState mirror(@NotNull BlockState blockState, @NotNull Mirror mirror) {
 		return additionalplacements$mirrorImpl(blockState, mirror);
 	}
 
 	@Override
-	public void appendHoverText(@NotNull ItemStack stack, @Nullable BlockGetter level, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-		additionalplacements$appendHoverTextImpl(stack, level, tooltip, flag);
+	public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
+		additionalplacements$appendHoverTextImpl(stack, context, tooltip, flag);
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public @NotNull BlockState updateShape(@NotNull BlockState state, @NotNull Direction direction, @NotNull BlockState otherState, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockPos otherPos) {
 		return additionalplacements$updateShapeImpl(state, direction, otherState, level, pos, otherPos);
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public @NotNull FluidState getFluidState(@NotNull BlockState state) {
 		BlockState modelState = getModelState(state);
 		return modelState.getBlock().getFluidState(modelState);
 	}
 
 	@Override
-    @SuppressWarnings("deprecation")
 	public boolean skipRendering(@NotNull BlockState thisState, @NotNull BlockState adjacentState, @NotNull Direction dir) {
 		//TODO make better?
 		return false;
@@ -362,14 +345,12 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public float getShadeBrightness(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos) {
 		BlockState modelState = getModelState(state);
 		return modelState.getBlock().getShadeBrightness(modelState, level, pos);
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public boolean isSignalSource(@NotNull BlockState state) {
 		BlockState modelState = getModelState(state);
 		return modelState.getBlock().isSignalSource(modelState);
@@ -384,7 +365,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	public abstract BlockRotation getRotation(BlockState state);
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public @NotNull VoxelShape getShape(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull CollisionContext context) {
 		if (rotatesModel(state))
 			return getRotation(state).applyBlockSpace(getModelState(state).getShape(level, pos, context));

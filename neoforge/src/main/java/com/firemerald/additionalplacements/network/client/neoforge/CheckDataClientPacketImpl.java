@@ -1,12 +1,12 @@
 package com.firemerald.additionalplacements.network.client.neoforge;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
+import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.CheckDataClientPacket;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public class CheckDataClientPacketImpl extends CheckDataClientPacket implements ClientConfigurationPacketImpl {
-    public static final ResourceLocation ID = AdditionalPlacementsMod.rl("check_data");
+    public static final CustomPacketPayload.Type<CheckDataClientPacketImpl> TYPE = APPacket.type("check_data");
 
     public static CheckDataClientPacket of() {
         return new CheckDataClientPacketImpl();
@@ -21,7 +21,7 @@ public class CheckDataClientPacketImpl extends CheckDataClientPacket implements 
     }
 
     @Override
-    public ResourceLocation id() {
-        return ID;
+    public Type<CheckDataClientPacketImpl> type() {
+        return TYPE;
     }
 }
