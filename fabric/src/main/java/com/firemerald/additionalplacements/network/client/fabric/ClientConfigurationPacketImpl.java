@@ -14,7 +14,7 @@ import net.minecraft.network.protocol.common.ClientboundDisconnectPacket;
 public interface ClientConfigurationPacketImpl extends APPacketImpl, ClientConfigurationPacket {
     @Environment(EnvType.CLIENT)
     default void handleClient(Minecraft client, ClientConfigurationPacketListenerImpl handler, PacketSender responseSender) {
-        APPacket reply = handleClient(Minecraft.getInstance()::execute, reason -> handler.handleDisconnect(new ClientboundDisconnectPacket(reason)));
+        APPacket reply = handleClient(client::execute, reason -> handler.handleDisconnect(new ClientboundDisconnectPacket(reason)));
         if (reply instanceof APPacketImpl apPacket) APNetworkImpl.send(apPacket, responseSender);
     }
 }
