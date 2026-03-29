@@ -7,7 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,7 +17,7 @@ public class Blocklist {
     public final boolean allowTags;
     public final boolean defValue;
     protected final List<String> defaultBlocklistConfig;
-    protected ForgeConfigSpec.ConfigValue<List<? extends String>> blocklistConfig;
+    protected ModConfigSpec.ConfigValue<List<? extends String>> blocklistConfig;
     private IBlocklistEntry[] blocklist;
 
     public Blocklist(boolean allowTags, boolean defValue, IBlocklistEntry... entries) {
@@ -35,7 +35,7 @@ public class Blocklist {
         }
     }
 
-    public void addToConfig(ForgeConfigSpec.Builder builder, String key, String comment) {
+    public void addToConfig(ModConfigSpec.Builder builder, String key, String comment) {
         blocklistConfig = builder
                 .comment(comment + "\nSee https://github.com/FirEmerald/AdditionalPlacements/wiki/Blocklist-Format for blocklist format")
                 .defineListAllowEmpty(Collections.singletonList(key), () -> defaultBlocklistConfig, o -> o instanceof String);

@@ -9,7 +9,10 @@ import com.firemerald.additionalplacements.datagen.ModelGenerator;
 import com.firemerald.additionalplacements.forge.AdditionalPlacementsForge;
 import com.firemerald.additionalplacements.generation.forge.RegistrationImpl;
 import com.firemerald.additionalplacements.network.forge.APNetworkImpl;
+import fuzs.forgeconfigapiport.forge.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.forge.api.neoforge.v4.NeoForgeConfigSpecAdapter;
 import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -38,8 +41,11 @@ public class CommonModEventHandler {
     public static void onNewRegistry(NewRegistryEvent event) { //best hook I could find for loading a config after all mods have been processed but before registries are built
         if (!init) {
             RegistrationImpl.registerTypes();
-            ModLoadingContext ctx = ModLoadingContext.get();
-            APConfigs.init(ctx::registerConfig);
+            APConfigs.init((type, config) -> NeoForgeConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, switch (type) {
+                case COMMON -> ModConfig.Type.COMMON;
+                case CLIENT -> ModConfig.Type.CLIENT;
+                case SERVER -> ModConfig.Type.SERVER;
+            }, config));
             init = true;
         }
     }

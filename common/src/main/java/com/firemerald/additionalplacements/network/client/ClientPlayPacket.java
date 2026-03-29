@@ -10,5 +10,5 @@ import java.util.function.Consumer;
 
 public interface ClientPlayPacket extends ClientPacket {
 	@Environment(EnvType.CLIENT)
-	APPacket handleClient(Connection connection, Consumer<Runnable> enqueueWork);
+	APPacket handleClient(Consumer<Runnable> enqueueWork);
 }

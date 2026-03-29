@@ -8,8 +8,9 @@ import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.common.TagMismatchChecker;
 import com.firemerald.additionalplacements.compat.LoadedMods;
 import com.firemerald.additionalplacements.network.fabric.APNetworkImpl;
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeConfigRegistry;
-import fuzs.forgeconfigapiport.fabric.api.forge.v4.ForgeModConfigEvents;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
+import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
+import net.neoforged.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.config.APConfigs;
@@ -32,8 +33,8 @@ import net.minecraft.world.level.block.Block;
 public class FabricModEvents implements ModInitializer {
     @Override
     public void onInitialize() {
-        ForgeModConfigEvents.loading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigLoaded);
-        ForgeModConfigEvents.reloading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigReloaded);
+        NeoForgeModConfigEvents.loading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigLoaded);
+        NeoForgeModConfigEvents.reloading(AdditionalPlacementsMod.MOD_ID).register(CommonModEvents::onConfigReloaded);
         APNetworkImpl.register();
         loadRegistry();
         CommandRegistrationCallback.EVENT.register(CommonModEvents::onRegisterCommands);
@@ -45,7 +46,11 @@ public class FabricModEvents implements ModInitializer {
 
     private static void loadRegistry() {
         Registration.gatherTypes();
-        APConfigs.init((type, spec) -> ForgeConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, type, spec));
+        APConfigs.init((type, spec) -> NeoForgeConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, switch (type) {
+            case COMMON -> ModConfig.Type.COMMON;
+            case CLIENT -> ModConfig.Type.CLIENT;
+            case SERVER -> ModConfig.Type.SERVER;
+        }, spec));
         List<Pair<ResourceLocation, Block>> created = new ArrayList<>();
         BuiltInRegistries.BLOCK.entrySet().forEach(entry -> Registration.tryApply(entry.getValue(), entry.getKey().location(), (id, obj) -> created.add(Pair.of(id, obj))));
         created.forEach(pair -> Registry.register(BuiltInRegistries.BLOCK, pair.getLeft(), pair.getRight()));

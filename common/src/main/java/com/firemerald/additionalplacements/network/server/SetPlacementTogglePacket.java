@@ -33,7 +33,7 @@ public abstract class SetPlacementTogglePacket implements ServerPlayPacket {
 	}
 
 	@Override
-	public APPacket handleServer(ServerPlayer player, Connection connection, Consumer<Runnable> enqueueWork) {
+	public APPacket handleServer(ServerPlayer player, Consumer<Runnable> enqueueWork) {
 		if (player instanceof IAPServerPlayer iapServerPlayer) iapServerPlayer.additionalplacements$setPlacementEnabled(state);
 		return null;
 	}

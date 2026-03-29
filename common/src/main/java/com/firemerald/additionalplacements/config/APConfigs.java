@@ -1,40 +1,41 @@
 package com.firemerald.additionalplacements.config;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
+import net.neoforged.fml.config.IConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.fml.config.IConfigSpec;
-import net.minecraftforge.fml.config.ModConfig;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 public class APConfigs {
     private static StartupConfig startup;
-    private static ForgeConfigSpec startupSpec;
+    private static ModConfigSpec startupSpec;
     private static CommonConfig common;
-    private static ForgeConfigSpec commonSpec;
+    private static ModConfigSpec commonSpec;
+    private static Object commonHolder;
     private static ServerConfig server;
-    private static ForgeConfigSpec serverSpec;
+    private static ModConfigSpec serverSpec;
+    private static Object serverHolder;
     private static ClientConfig client;
-    private static ForgeConfigSpec clientSpec;
+    private static ModConfigSpec clientSpec;
+    private static Object clientHolder;
 
-    public static void init(BiConsumer<ModConfig.Type, IConfigSpec<?>> registerConfig) {
-        final Pair<StartupConfig, ForgeConfigSpec> startupSpecPair = new ForgeConfigSpec.Builder().configure(StartupConfig::new);
+    public static void init(BiFunction<ConfigType, IConfigSpec<?>, Object> registerConfig) {
+        final Pair<StartupConfig, ModConfigSpec> startupSpecPair = new ModConfigSpec.Builder().configure(StartupConfig::new);
         startup = startupSpecPair.getLeft();
         startupSpec = startupSpecPair.getRight();
 		startup.loadConfig(PlatformUtils.getConfigFolder().resolve("additionalplacements-startup.toml"), startupSpec);
-        final Pair<CommonConfig, ForgeConfigSpec> commonSpecPair = new ForgeConfigSpec.Builder().configure(CommonConfig::new);
+        final Pair<CommonConfig, ModConfigSpec> commonSpecPair = new ModConfigSpec.Builder().configure(CommonConfig::new);
         common = commonSpecPair.getLeft();
-        registerConfig.accept(ModConfig.Type.COMMON, commonSpec = commonSpecPair.getRight());
-        final Pair<ServerConfig, ForgeConfigSpec> serverSpecPair = new ForgeConfigSpec.Builder().configure(ServerConfig::new);
+        commonHolder = registerConfig.apply(ConfigType.COMMON, commonSpec = commonSpecPair.getRight());
+        final Pair<ServerConfig, ModConfigSpec> serverSpecPair = new ModConfigSpec.Builder().configure(ServerConfig::new);
         server = serverSpecPair.getLeft();
-        registerConfig.accept(ModConfig.Type.SERVER, serverSpec = serverSpecPair.getRight());
-        final Pair<ClientConfig, ForgeConfigSpec> clientSpecPair = new ForgeConfigSpec.Builder().configure(ClientConfig::new);
+        serverHolder = registerConfig.apply(ConfigType.SERVER, serverSpec = serverSpecPair.getRight());
+        final Pair<ClientConfig, ModConfigSpec> clientSpecPair = new ModConfigSpec.Builder().configure(ClientConfig::new);
         client = clientSpecPair.getLeft();
-        registerConfig.accept(ModConfig.Type.CLIENT, clientSpec = clientSpecPair.getRight());
+        clientHolder = registerConfig.apply(ConfigType.CLIENT, clientSpec = clientSpecPair.getRight());
     }
 
     public static StartupConfig startup() {
@@ -70,10 +71,10 @@ public class APConfigs {
     }
 
     @ApiStatus.Internal
-    public static void onConfigLoaded(IConfigSpec<?> configSpec) {
-    	if (configSpec == commonSpec) common.onConfigLoaded();
-    	else if (configSpec == serverSpec) server.onConfigLoaded();
-    	else if (configSpec == clientSpec) client.onConfigLoaded();
+    public static void onConfigLoaded(Object configHolder) {
+    	if (configHolder == commonHolder) common.onConfigLoaded();
+    	else if (configHolder == serverHolder) server.onConfigLoaded();
+    	else if (configHolder == clientHolder) client.onConfigLoaded();
     }
 
 	public static boolean isColorString(Object o) {
@@ -98,7 +99,7 @@ public class APConfigs {
 		};
 	}
 
-	public static float[] parseColorString(ConfigValue<String> s) {
+	public static float[] parseColorString(ModConfigSpec.ConfigValue<String> s) {
 		return parseColorString(s.get());
 	}
 }

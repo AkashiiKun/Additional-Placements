@@ -15,8 +15,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.ApiStatus;
 
 public abstract class GenerationType<T extends Block, U extends AdditionalPlacementBlock<T>> {
@@ -62,7 +61,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	private final Set<String> addsProperties;
 	private final Blocklist enabled;
 	private final boolean defaultPlacementEnabled;
-	private BooleanValue placementEnabled;
+	private ModConfigSpec.BooleanValue placementEnabled;
 	private final List<CreatedBlockEntry<T, U>> created = new ArrayList<>();
 	private final List<IBlockBlacklister<? super T>> blacklisters = new LinkedList<>();
 
@@ -85,7 +84,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 
 	//The following method is for the "startup" config, a custom config that loads before block registration and doesn't support re-loading changed values in-game.
 	//They should be used for options that affect the dynamic generation of additional placement blocks.
-	public void buildStartupConfig(ForgeConfigSpec.Builder builder) {
+	public void buildStartupConfig(ModConfigSpec.Builder builder) {
 		enabled.addToConfig(builder, "enabled", "Blocklist for controlling which blocks (that are valid for this type) will generate variants of this type");
 	}
 
@@ -97,7 +96,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 		enabled.loadListsFromConfig();
 	}
 
-	public void buildCommonConfig(ForgeConfigSpec.Builder builder) {
+	public void buildCommonConfig(ModConfigSpec.Builder builder) {
 		placementEnabled = builder
 				.comment("Whether or not to allow for manual placement of the additional placement variants of this block type.")
 				.define("enable_placement", defaultPlacementEnabled); //TODO make this also a blacklist
@@ -112,7 +111,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 
 	protected void updateCommonSettings() {}
 
-	public void buildClientConfig(ForgeConfigSpec.Builder builder) {}
+	public void buildClientConfig(ModConfigSpec.Builder builder) {}
 
 	public final void onClientConfigLoaded() {
 		loadClientConfig();
@@ -123,7 +122,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 
 	protected void updateClientSettings() {}
 
-	public void buildServerConfig(ForgeConfigSpec.Builder builder) {}
+	public void buildServerConfig(ModConfigSpec.Builder builder) {}
 
 	public final void onServerConfigLoaded() {
 		loadServerConfig();

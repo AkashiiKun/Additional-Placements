@@ -6,7 +6,7 @@ import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock
 import com.firemerald.additionalplacements.config.blocklist.Blocklist;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class SimpleRotatableGenerationType<T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock> extends SimpleGenerationType<T, U> {
 	public abstract static class BuilderBase<T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock, V extends SimpleRotatableGenerationType<T, U>, W extends BuilderBase<T, U, V, W>> extends SimpleGenerationType.BuilderBase<T, U, V, W> {
@@ -48,7 +48,7 @@ public class SimpleRotatableGenerationType<T extends Block, U extends Additional
 	}
 
 	@Override
-	public void buildClientConfig(ForgeConfigSpec.Builder builder) {
+	public void buildClientConfig(ModConfigSpec.Builder builder) {
 		super.buildClientConfig(builder);
 		textureRotationEnabled.addToConfig(builder, "rotated_textures", "Blocklist to control which blocks will rotate the textures of their original blocks.");
 		modelRotationEnabled.addToConfig(builder, "rotated_models", "Blocklist to control which blocks will use \"rotated models\" of their original blocks.");
@@ -68,7 +68,7 @@ public class SimpleRotatableGenerationType<T extends Block, U extends Additional
 	}
 
 	@Override
-	public void buildServerConfig(ForgeConfigSpec.Builder builder) {
+	public void buildServerConfig(ModConfigSpec.Builder builder) {
 		super.buildServerConfig(builder);
 		logicRotationEnabled.addToConfig(builder, "rotated_logic", "Blocklist to control which blocks will use \"rotated logic\" of their original blocks. Mainly affects bounding boxes.");
 	}

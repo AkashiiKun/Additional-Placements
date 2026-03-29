@@ -2,14 +2,12 @@ package com.firemerald.additionalplacements.config;
 
 import com.firemerald.additionalplacements.generation.GenerationType;
 import com.firemerald.additionalplacements.generation.Registration;
-
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ServerConfig {
-	public final BooleanValue checkTags, autoRebuildTags, fakePlayerPlacement;
+	public final ModConfigSpec.BooleanValue checkTags, autoRebuildTags, fakePlayerPlacement;
 
-	public ServerConfig(ForgeConfigSpec.Builder builder) {
+	public ServerConfig(ModConfigSpec.Builder builder) {
         builder.comment("World settings").push("server");
         checkTags = builder
         		.comment("Check for and notify of mismatching tags. Only works when the same option in the common config is true.")

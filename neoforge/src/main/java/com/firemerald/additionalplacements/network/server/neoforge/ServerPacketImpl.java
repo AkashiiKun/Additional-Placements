@@ -1,0 +1,12 @@
+package com.firemerald.additionalplacements.network.server.neoforge;
+
+import com.firemerald.additionalplacements.network.neoforge.APPacketImpl;
+import net.minecraft.network.protocol.PacketFlow;
+import net.neoforged.neoforge.network.handling.IPayloadContext;
+
+public interface ServerPacketImpl<T extends IPayloadContext> extends APPacketImpl<T> {
+    @Override
+    default PacketFlow getFlow() {
+        return PacketFlow.SERVERBOUND;
+    }
+}

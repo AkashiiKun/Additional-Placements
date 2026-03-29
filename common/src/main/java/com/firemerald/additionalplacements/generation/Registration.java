@@ -17,7 +17,7 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.ApiStatus;
 
 public class Registration {
@@ -25,7 +25,7 @@ public class Registration {
 	private static final Map<ResourceLocation, GenerationType<?, ?>> TYPES = new LinkedHashMap<>();
 	private static final Map<Class<?>, GenerationType<?, ?>> TYPES_BY_CLASS = new HashMap<>();
 
-	@PlatformOnly(PlatformOnly.FORGE)
+	@PlatformOnly({PlatformOnly.FORGE, "neoforge"})
 	@ExpectPlatform
 	public static void addRegistration(RegistrationInitializer listener) {
 		throw new AssertionError();
@@ -102,7 +102,7 @@ public class Registration {
 		return types().flatMap(GenerationType::created);
 	}
 
-	public static void buildConfig(ForgeConfigSpec.Builder builder, BiConsumer<GenerationType<?, ?>, ForgeConfigSpec.Builder> build) {
+	public static void buildConfig(ModConfigSpec.Builder builder, BiConsumer<GenerationType<?, ?>, ModConfigSpec.Builder> build) {
         builder.comment("Options for registered block types for additional placement generation.").push("types");
         Registration.forEach((name, type) -> {
         	List<String> path = split(name.getNamespace() + "." + name.getPath());

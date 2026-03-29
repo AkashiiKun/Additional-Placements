@@ -22,7 +22,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.WeatheringCopper;
-import net.minecraftforge.fml.config.ModConfig;
 
 import java.lang.reflect.Field;
 import java.util.List;
@@ -144,11 +143,11 @@ public class CommonModEvents {
         delegate.set(backwardMemoized, (com.google.common.base.Supplier<BiMap<U, T>>) () -> forwardMemoized.get().inverse()); //replace with supplier that gets the inverse of the forward map
     }
 
-    public static void onConfigLoaded(ModConfig config) {
-        APConfigs.onConfigLoaded(config.getSpec());
+    public static void onConfigLoaded(Object configHolder) {
+        APConfigs.onConfigLoaded(configHolder);
     }
 
-    public static void onConfigReloaded(ModConfig config) {
-        APConfigs.onConfigLoaded(config.getSpec());
+    public static void onConfigReloaded(Object configHolder) {
+        APConfigs.onConfigLoaded(configHolder);
     }
 }

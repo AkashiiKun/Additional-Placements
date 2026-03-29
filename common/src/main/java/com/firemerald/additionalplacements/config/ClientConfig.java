@@ -2,19 +2,15 @@ package com.firemerald.additionalplacements.config;
 
 import com.firemerald.additionalplacements.generation.GenerationType;
 import com.firemerald.additionalplacements.generation.Registration;
-
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.ForgeConfigSpec.LongValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ClientConfig {
-	public final BooleanValue defaultPlacementLogicState, loginPlacementLogicStateMessage, togglePlacementLogicStateMessage, enablePlacementHighlight;
-	public final LongValue toggleQuickpressTime;
-	public final ConfigValue<String> gridColor, previewColor;
+	public final ModConfigSpec.BooleanValue defaultPlacementLogicState, loginPlacementLogicStateMessage, togglePlacementLogicStateMessage, enablePlacementHighlight;
+	public final ModConfigSpec.LongValue toggleQuickpressTime;
+	public final ModConfigSpec.ConfigValue<String> gridColor, previewColor;
 	private float[] gridColorVal = {.4f, 0, 0, 0}, previewColorVal = {.4f, 1, 1, 1}; //order intentionally left reversed to aid in capturing missed config load events
 
-	public ClientConfig(ForgeConfigSpec.Builder builder) {
+	public ClientConfig(ModConfigSpec.Builder builder) {
         builder.comment("Client settings").push("client");
         defaultPlacementLogicState = builder
         		.comment("Default enabled state for Additional Placement placement logic. Please note that this value takes effect any time you load a world or log in to a server.")

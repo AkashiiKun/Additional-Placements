@@ -8,7 +8,7 @@ import net.minecraftforge.event.network.CustomPayloadEvent;
 public interface ClientPlayPacketImpl extends ClientPacketImpl, ClientPlayPacket {
     @Override
     default void handleImpl(CustomPayloadEvent.Context context) {
-        APPacket reply = handleClient(context.getConnection(), context::enqueueWork);
+        APPacket reply = handleClient(context::enqueueWork);
         if (reply != null) APNetworkImpl.reply(reply, context);
     }
 }

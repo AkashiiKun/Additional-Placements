@@ -10,7 +10,7 @@ import net.minecraft.server.network.ServerGamePacketListenerImpl;
 
 public interface ServerPlayPacketImpl extends APPacketImpl, ServerPlayPacket {
     default void handleServer(MinecraftServer server, ServerPlayer player, ServerGamePacketListenerImpl handler, PacketSender responseSender) {
-        APPacket reply = handleServer(player, handler.connection, server::execute);
+        APPacket reply = handleServer(player, server::execute);
         if (reply instanceof APPacketImpl apPacket) apPacket.send(responseSender);
     }
 }

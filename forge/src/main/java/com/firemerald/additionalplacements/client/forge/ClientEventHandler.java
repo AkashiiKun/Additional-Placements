@@ -36,8 +36,8 @@ public class ClientEventHandler {
     }
 
     @SubscribeEvent
-    public static void onClientTick(TickEvent.ClientTickEvent event) {
-        if (event.phase == TickEvent.Phase.END) ClientModEvents.onClientPostTick();
+    public static void onClientTick(TickEvent.ClientTickEvent.Post event) {
+        ClientModEvents.onClientPostTick();
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

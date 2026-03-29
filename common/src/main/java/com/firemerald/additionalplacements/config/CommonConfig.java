@@ -2,18 +2,15 @@ package com.firemerald.additionalplacements.config;
 
 import com.firemerald.additionalplacements.generation.GenerationType;
 import com.firemerald.additionalplacements.generation.Registration;
-
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
-import net.minecraftforge.common.ForgeConfigSpec.IntValue;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class CommonConfig {
-	public final BooleanValue showTooltip;
-	public final BooleanValue checkTags, autoRebuildTags, logTagMismatch;
-	public final IntValue checkerPriority;
-	public final BooleanValue fixStates, fixOldStates;
+	public final ModConfigSpec.BooleanValue showTooltip;
+	public final ModConfigSpec.BooleanValue checkTags, autoRebuildTags, logTagMismatch;
+	public final ModConfigSpec.IntValue checkerPriority;
+	public final ModConfigSpec.BooleanValue fixStates, fixOldStates;
 
-	public CommonConfig(ForgeConfigSpec.Builder builder) {
+	public CommonConfig(ModConfigSpec.Builder builder) {
         builder.comment("Common settings").push("common");
         showTooltip = builder
         		.comment("Show tooltip when a block has additional placements")

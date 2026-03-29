@@ -74,6 +74,9 @@ subprojects {
             name = 'ParchmentMC'
             url = 'https://maven.parchmentmc.org'
         }
+		maven { 
+            url 'https://maven.neoforged.net/releases/'
+		}
     }
 
     dependencies {
