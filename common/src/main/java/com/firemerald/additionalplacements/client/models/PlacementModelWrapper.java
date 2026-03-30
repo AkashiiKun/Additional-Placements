@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.client.models;
 
-import net.minecraft.client.renderer.block.model.BakedOverrides;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -27,11 +26,6 @@ public interface PlacementModelWrapper extends BakedModel {
     }
 
     @Override
-    default boolean isCustomRenderer() {
-        return getWrappedModel().isCustomRenderer();
-    }
-
-    @Override
     default @NotNull TextureAtlasSprite getParticleIcon() {
         return getParticleModel().getParticleIcon();
     }
@@ -39,10 +33,5 @@ public interface PlacementModelWrapper extends BakedModel {
     @Override
     default @NotNull ItemTransforms getTransforms() {
         return getWrappedModel().getTransforms();
-    }
-
-    @Override
-    default @NotNull BakedOverrides overrides() {
-        return getWrappedModel().overrides();
     }
 }

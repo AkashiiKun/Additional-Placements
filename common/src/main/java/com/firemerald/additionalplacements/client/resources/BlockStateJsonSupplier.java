@@ -6,6 +6,7 @@ import com.firemerald.additionalplacements.client.models.definitions.StateModelD
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import net.minecraft.client.data.models.blockstates.VariantProperties;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -25,11 +26,11 @@ public record BlockStateJsonSupplier(AdditionalPlacementBlock<?> block, String b
         if (index >= props.length) {
             JsonObject variant = new JsonObject();
             variants.add(currentStateDef.substring(0, currentStateDef.length() - 1), variant);
-            variant.addProperty("model", AdditionalPlacementsMod.rl(currentStateDir + "model").toString());
             StateModelDefinition modelDef = block.getModelDefinition(state);
-            if (modelDef.xRotation() != 0) variant.addProperty("x", modelDef.xRotation());
-            if (modelDef.yRotation() != 0) variant.addProperty("y", modelDef.yRotation());
-            variant.addProperty("uvlock", true);
+            VariantProperties.MODEL.withValue(AdditionalPlacementsMod.rl(currentStateDir + "model")).addToVariant(variant);
+            VariantProperties.X_ROT.withValue(modelDef.xRotation()).addToVariant(variant);
+            VariantProperties.Y_ROT.withValue(modelDef.yRotation()).addToVariant(variant);
+            VariantProperties.UV_LOCK.withValue(true).addToVariant(variant);
         }
         else {
             @SuppressWarnings("unchecked")

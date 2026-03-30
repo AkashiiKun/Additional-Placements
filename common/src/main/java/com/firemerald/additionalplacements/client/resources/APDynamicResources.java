@@ -23,7 +23,7 @@ import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackSelectionConfig;
 import net.minecraft.server.packs.PackType;
-import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
+import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
@@ -164,7 +164,7 @@ public class APDynamicResources implements PackResources {
     }
 
     @Override
-    public <T> T getMetadataSection(@NotNull MetadataSectionSerializer<T> metadataSectionSerializer) throws IOException {
+    public <T> T getMetadataSection(MetadataSectionType<T> type) throws IOException {
         return null;
     }
 

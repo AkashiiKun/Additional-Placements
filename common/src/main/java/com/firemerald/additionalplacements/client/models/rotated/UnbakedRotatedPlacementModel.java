@@ -2,15 +2,11 @@ package com.firemerald.additionalplacements.client.models.rotated;
 
 import com.firemerald.additionalplacements.client.models.IAPUnbakedModel;
 import com.firemerald.additionalplacements.util.BlockRotation;
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.function.Function;
-
-public class UnbakedRotatedPlacementModel<T extends UnbakedRotatedPlacementModel<T>> implements IAPUnbakedModel<T> {
+public class UnbakedRotatedPlacementModel implements IAPUnbakedModel {
 	public final BlockState modelState;
 	public final BlockRotation modelRotation;
 	public final boolean rotatesTexture;
@@ -22,7 +18,7 @@ public class UnbakedRotatedPlacementModel<T extends UnbakedRotatedPlacementModel
 	}
 
 	@Override
-	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
+	public @NotNull BakedModel bake(ModelBaker baker, ModelState modelState) {
 		return BakedRotatedPlacementModel.of(this.modelState, modelRotation, rotatesTexture);
 	}
 

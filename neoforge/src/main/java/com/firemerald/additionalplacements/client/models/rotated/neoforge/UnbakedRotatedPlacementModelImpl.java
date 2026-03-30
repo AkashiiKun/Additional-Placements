@@ -4,7 +4,7 @@ import com.firemerald.additionalplacements.client.models.neoforge.IAPUnbakedMode
 import com.firemerald.additionalplacements.client.models.rotated.RotatedModelData;
 import com.firemerald.additionalplacements.client.models.rotated.UnbakedRotatedPlacementModel;
 
-public class UnbakedRotatedPlacementModelImpl extends UnbakedRotatedPlacementModel<UnbakedRotatedPlacementModelImpl> implements IAPUnbakedModelImpl<UnbakedRotatedPlacementModelImpl> {
+public class UnbakedRotatedPlacementModelImpl extends UnbakedRotatedPlacementModel implements IAPUnbakedModelImpl {
     public UnbakedRotatedPlacementModelImpl(RotatedModelData data) {
         super(data);
     }

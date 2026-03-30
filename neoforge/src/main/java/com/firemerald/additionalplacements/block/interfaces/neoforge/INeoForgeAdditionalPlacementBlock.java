@@ -105,9 +105,9 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+    default ItemStack getCloneItemStack(LevelReader level, BlockPos pos, BlockState state, boolean includeData, Player player) {
         BlockState modelState = getModelState(state);
-        return modelState.getBlock().getCloneItemStack(modelState, target, level, pos, player);
+        return modelState.getBlock().getCloneItemStack(level, pos, modelState, includeData, player);
     }
 
     @Override

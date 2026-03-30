@@ -11,6 +11,7 @@ accessible method net/minecraft/world/level/block/state/BlockBehaviour        pr
 accessible method net/minecraft/world/level/block/state/BlockBehaviour        getShadeBrightness                (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/BlockGetter;Lnet/minecraft/core/BlockPos;)F
 accessible method net/minecraft/world/level/block/state/BlockBehaviour        isSignalSource                    (Lnet/minecraft/world/level/block/state/BlockState;)Z
 accessible method net/minecraft/world/level/block/state/BlockBehaviour        useWithoutItem                    (Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/phys/BlockHitResult;)Lnet/minecraft/world/InteractionResult;
+accessible method net/minecraft/world/level/block/state/BlockBehaviour        getCloneItemStack                 (Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Z)Lnet/minecraft/world/item/ItemStack;
 
 
 accessible method net/minecraft/world/level/block/BasePressurePlateBlock      getEntityCount                    (Lnet/minecraft/world/level/Level;Lnet/minecraft/world/phys/AABB;Ljava/lang/Class;)I

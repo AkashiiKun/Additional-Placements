@@ -1,26 +1,26 @@
 package com.firemerald.additionalplacements.client.models.fabric;
 
 import com.firemerald.additionalplacements.client.models.PlacementModelWrapper;
-import net.fabricmc.fabric.api.renderer.v1.model.WrapperBakedModel;
-import net.fabricmc.fabric.api.renderer.v1.render.RenderContext;
+import net.fabricmc.fabric.api.renderer.v1.mesh.QuadEmitter;
 import net.fabricmc.fabric.impl.renderer.VanillaModelEncoder;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-@SuppressWarnings("UnstableApiUsage")
-public interface PlacementModelWrapperImpl extends PlacementModelWrapper, WrapperBakedModel {
+public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
     @Override
-    default void emitBlockQuads(BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, RenderContext context) {
-        VanillaModelEncoder.emitBlockQuads(this, state, randomSupplier, context);
+    default void emitBlockQuads(QuadEmitter emitter, BlockAndTintGetter blockView, BlockState state, BlockPos pos, Supplier<RandomSource> randomSupplier, Predicate<@Nullable Direction> cullTest) {
+        VanillaModelEncoder.emitBlockQuads(emitter, this, state, randomSupplier, cullTest);
     }
 
     @Override
-    default void emitItemQuads(ItemStack stack, Supplier<RandomSource> randomSupplier, RenderContext context) {
-        VanillaModelEncoder.emitItemQuads(this, null, randomSupplier, context);
+    default void emitItemQuads(QuadEmitter emitter, Supplier<RandomSource> randomSupplier) {
+        VanillaModelEncoder.emitItemQuads(emitter, this, null, randomSupplier);
     }
 }

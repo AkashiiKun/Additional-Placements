@@ -1,16 +1,15 @@
 package com.firemerald.additionalplacements.client.models.retextured;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.client.models.IAPUnbakedModel;
-import net.minecraft.client.renderer.block.model.ItemOverride;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.TextureSlots;
 import net.minecraft.client.resources.model.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.function.Function;
-
-public class UnbakedRetexturedPlacementModel<T extends UnbakedRetexturedPlacementModel<T>> implements IAPUnbakedModel<T> {
+public class UnbakedRetexturedPlacementModel implements IAPUnbakedModel {
 	public final ResourceLocation ourModelLocation;
 	private UnbakedModel ourModel;
 	public final BlockState theirModelState;
@@ -21,8 +20,8 @@ public class UnbakedRetexturedPlacementModel<T extends UnbakedRetexturedPlacemen
     }
 
 	@Override
-	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
-		return BakedRetexturedPlacementModel.of(ourModel.bake(baker, spriteGetter, modelState), theirModelState);
+	public @NotNull BakedModel bake(ModelBaker baker, ModelState modelState) {
+		return BakedRetexturedPlacementModel.of(UnbakedModel.bakeWithTopModelValues(ourModel, baker, modelState), theirModelState);
 	}
 
 	@Override

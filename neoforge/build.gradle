@@ -15,7 +15,7 @@ loom {
 
     runs {
         data {
-            data()
+            clientData()
             programArgs "--all", "--mod", "additionalplacements"
             programArgs "--existing", commonResources.absolutePath
             programArgs "--output", generatedResources.absolutePath
@@ -54,7 +54,7 @@ dependencies {
     modImplementation "maven.modrinth:balm:$balm_version"
     modImplementation "maven.modrinth:kleeslabs:$kleeslabs_version"
     //modCompileOnly "maven.modrinth:continuity:$continuity_version"
-    modCompileOnly "curse.maven:ctm-267602:$ctm_file"
+    //modCompileOnly "curse.maven:ctm-267602:$ctm_file"
 
     //modImplementation("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
     //modImplementation "net.createmod.ponder:ponder-neoforge:$ponder_version+mc$create_mc_version"

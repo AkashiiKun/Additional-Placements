@@ -16,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.ChunkRenderTypeSet;
+import net.neoforged.neoforge.client.extensions.IBakedModelExtension;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.common.util.TriState;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +26,7 @@ import java.util.List;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
+public interface PlacementModelWrapperImpl extends PlacementModelWrapper, IBakedModelExtension {
     @Override
     List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data, @Nullable RenderType renderType);
 
@@ -35,9 +36,8 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
     }
 
     @Override
-    default BakedModel applyTransform(ItemDisplayContext transformType, PoseStack poseStack, boolean applyLeftHandTransform) {
+    default void applyTransform(ItemDisplayContext transformType, PoseStack poseStack, boolean applyLeftHandTransform) {
         getWrappedModel().applyTransform(transformType, poseStack, applyLeftHandTransform);
-        return this;
     }
 
     @Override
@@ -56,10 +56,11 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
     }
 
     @Override
-    default List<RenderType> getRenderTypes(ItemStack itemStack) {
-        return getWrappedModel().getRenderTypes(itemStack);
+    default RenderType getRenderType(ItemStack itemStack) {
+        return getWrappedModel().getRenderType(itemStack);
     }
 
+    @SuppressWarnings("removal")
     @Override
     default List<BakedModel> getRenderPasses(ItemStack itemStack) {
         return getWrappedModel().getRenderPasses(itemStack);

@@ -4,7 +4,7 @@ import com.firemerald.additionalplacements.client.models.neoforge.IAPUnbakedMode
 import com.firemerald.additionalplacements.client.models.retextured.RetexturedModelData;
 import com.firemerald.additionalplacements.client.models.retextured.UnbakedRetexturedPlacementModel;
 
-public class UnbakedRetexturedPlacementModelImpl extends UnbakedRetexturedPlacementModel<UnbakedRetexturedPlacementModelImpl> implements IAPUnbakedModelImpl<UnbakedRetexturedPlacementModelImpl> {
+public class UnbakedRetexturedPlacementModelImpl extends UnbakedRetexturedPlacementModel implements IAPUnbakedModelImpl {
     public UnbakedRetexturedPlacementModelImpl(RetexturedModelData data) {
         super(data);
     }

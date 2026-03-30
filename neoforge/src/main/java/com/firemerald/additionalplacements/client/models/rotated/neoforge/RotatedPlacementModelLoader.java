@@ -4,9 +4,14 @@ import com.firemerald.additionalplacements.client.models.rotated.RotatedModelDat
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.neoforged.neoforge.client.model.UnbakedModelLoader;
 
-public class RotatedPlacementModelLoader implements IGeometryLoader<UnbakedRotatedPlacementModelImpl> {
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
+@MethodsReturnNonnullByDefault
+public class RotatedPlacementModelLoader implements UnbakedModelLoader<UnbakedRotatedPlacementModelImpl> {
     @Override
     public UnbakedRotatedPlacementModelImpl read(JsonObject jsonObject, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
         return new UnbakedRotatedPlacementModelImpl(RotatedModelData.fromJson(jsonObject, jsonDeserializationContext));

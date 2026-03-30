@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.firemerald.additionalplacements.common.CommonModEvents;
 import com.firemerald.additionalplacements.compat.LoadedMods;
-import com.firemerald.additionalplacements.datagen.ModelGenerator;
 import com.firemerald.additionalplacements.neoforge.AdditionalPlacementsNeoForge;
 import com.firemerald.additionalplacements.generation.neoforge.RegistrationImpl;
 import com.firemerald.additionalplacements.network.neoforge.APNetworkImpl;
@@ -18,19 +17,15 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.network.event.RegisterConfigurationTasksEvent;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.generation.Registration;
 
-import net.minecraft.data.DataProvider;
-import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 
@@ -76,13 +71,6 @@ public class CommonModEventHandler {
     public static void onFMLCommonSetup(FMLCommonSetupEvent event) {
         LoadedMods.populate();
         CommonModEvents.modifyWaxables();
-    }
-
-    @SubscribeEvent
-    public static void onGatherData(GatherDataEvent event) {
-        if (event.includeClient()) {
-            event.getGenerator().addProvider(true, (DataProvider.Factory<ModelGenerator>) (PackOutput pack) -> new ModelGenerator(pack, AdditionalPlacementsMod.MOD_ID, event.getExistingFileHelper()));
-        }
     }
 
     @SubscribeEvent

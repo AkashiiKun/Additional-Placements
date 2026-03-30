@@ -7,6 +7,8 @@ import com.firemerald.additionalplacements.client.models.retextured.neoforge.Ret
 import com.firemerald.additionalplacements.client.models.rotated.RotatedModelData;
 import com.firemerald.additionalplacements.client.models.rotated.neoforge.RotatedPlacementModelLoader;
 import com.firemerald.additionalplacements.client.resources.APDynamicResources;
+import com.firemerald.additionalplacements.datagen.AdditionalPlacementsModelProvider;
+import net.minecraft.data.DataProvider;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -16,6 +18,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT)
@@ -32,7 +35,12 @@ public class ClientModEventHandler {
     }
 
     @SubscribeEvent
-    public static void onModelRegistryEvent(ModelEvent.RegisterGeometryLoaders event) {
+    public static void onGatherClientData(GatherDataEvent.Client event) {
+        event.getGenerator().addProvider(true, (DataProvider.Factory<AdditionalPlacementsModelProvider>) AdditionalPlacementsModelProvider::new);
+    }
+
+    @SubscribeEvent
+    public static void registerGeometryLoaders(ModelEvent.RegisterLoaders event) {
         event.register(RotatedModelData.ID, new RotatedPlacementModelLoader());
         event.register(RetexturedModelData.ID, new RetexturedPlacementModelLoader());
     }

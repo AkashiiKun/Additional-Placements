@@ -4,6 +4,7 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.AdditionalBlockStateProperties;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
+import com.firemerald.additionalplacements.client.models.DelegateBakedModelExtension;
 import com.firemerald.additionalplacements.client.models.Unwrapper;
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
@@ -22,8 +23,8 @@ public enum LoadedMods {
         if (PlatformUtils.isClient()) {
             AdditionalPlacementsMod.LOGGER.info("Continuity detected, registering continuity BakedModel unwrappers");
             Unwrapper.registerUnwrapper(model -> {
-                if (model instanceof CtmBakedModel ctm) return ctm.getWrappedModel();
-                else if (model instanceof EmissiveBakedModel emm) return emm.getWrappedModel();
+                if (model instanceof CtmBakedModel) return ((DelegateBakedModelExtension) model).additionalplacements$parent();
+                else if (model instanceof EmissiveBakedModel) return ((DelegateBakedModelExtension) model).additionalplacements$parent();
                 else return null;
             });
         }
