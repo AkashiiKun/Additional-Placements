@@ -4,13 +4,13 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.AdditionalBlockStateProperties;
 import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
-import com.firemerald.additionalplacements.client.models.DelegateBakedModelExtension;
+import com.firemerald.additionalplacements.client.models.WrapperBlockStateModelExtension;
 import com.firemerald.additionalplacements.client.models.Unwrapper;
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import me.pepperbell.continuity.client.model.CtmBakedModel;
-import me.pepperbell.continuity.client.model.EmissiveBakedModel;
+import me.pepperbell.continuity.client.model.CtmBlockStateModel;
+import me.pepperbell.continuity.client.model.EmissiveBlockStateModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
@@ -23,8 +23,8 @@ public enum LoadedMods {
         if (PlatformUtils.isClient()) {
             AdditionalPlacementsMod.LOGGER.info("Continuity detected, registering continuity BakedModel unwrappers");
             Unwrapper.registerUnwrapper(model -> {
-                if (model instanceof CtmBakedModel) return ((DelegateBakedModelExtension) model).additionalplacements$parent();
-                else if (model instanceof EmissiveBakedModel) return ((DelegateBakedModelExtension) model).additionalplacements$parent();
+                if (model instanceof CtmBlockStateModel) return ((WrapperBlockStateModelExtension) model).additionalplacements$wrapped();
+                else if (model instanceof EmissiveBlockStateModel) return ((WrapperBlockStateModelExtension) model).additionalplacements$wrapped();
                 else return null;
             });
         }

@@ -5,7 +5,7 @@
   "minVersion": "0.8",
   "plugin": "com.firemerald.additionalplacements.mixin.APMixinPlugin",
   "client": [
-    "MixinDelegateBakedModel",
+    "MixinWrapperBlockStateModel",
     "MixinLocalPlayer"
   ],
   "mixins": [

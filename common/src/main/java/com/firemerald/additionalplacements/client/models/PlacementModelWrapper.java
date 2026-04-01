@@ -1,37 +1,29 @@
 package com.firemerald.additionalplacements.client.models;
 
-import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.util.RandomSource;
 import org.jetbrains.annotations.NotNull;
 
-public interface PlacementModelWrapper extends BakedModel {
-    BakedModel getWrappedModel();
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
-    BakedModel getParticleModel();
+public interface PlacementModelWrapper extends BlockStateModel {
+    BlockStateModel getWrappedModel();
+
+    BlockStateModel getParticleModel();
+
+    Stream<BlockModelPart> wrapParts(RandomSource random);
 
     @Override
-    default boolean useAmbientOcclusion() {
-        return getWrappedModel().useAmbientOcclusion();
+    default void collectParts(RandomSource random, List<BlockModelPart> output) {
+        wrapParts(random).forEach(output::add);
     }
 
     @Override
-    default boolean isGui3d() {
-        return getWrappedModel().isGui3d();
-    }
-
-    @Override
-    default boolean usesBlockLight() {
-        return getWrappedModel().isGui3d();
-    }
-
-    @Override
-    default @NotNull TextureAtlasSprite getParticleIcon() {
-        return getParticleModel().getParticleIcon();
-    }
-
-    @Override
-    default @NotNull ItemTransforms getTransforms() {
-        return getWrappedModel().getTransforms();
+    default @NotNull TextureAtlasSprite particleIcon() {
+        return getParticleModel().particleIcon();
     }
 }

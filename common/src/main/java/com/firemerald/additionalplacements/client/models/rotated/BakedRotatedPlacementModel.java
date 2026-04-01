@@ -1,28 +1,26 @@
 package com.firemerald.additionalplacements.client.models.rotated;
 
-import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.PlacementModelWrapper;
 import com.firemerald.additionalplacements.client.models.Unwrapper;
 import com.firemerald.additionalplacements.util.BlockRotation;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-public class BakedRotatedPlacementModel implements PlacementModelWrapper {
+public abstract class BakedRotatedPlacementModel implements PlacementModelWrapper {
 	@ExpectPlatform
 	public static BakedRotatedPlacementModel of(BlockState theirModelState, BlockRotation modelRotation, boolean rotatesTexture) {
 		throw new AssertionError();
 	}
 
 	public final BlockState theirModelState;
-	private BakedModel theirModel;
+	private BlockStateModel theirModel;
 	public final BlockRotation modelRotation;
 	public final boolean rotatesTexture;
 
@@ -33,20 +31,18 @@ public class BakedRotatedPlacementModel implements PlacementModelWrapper {
 	}
 
 	@Override
-	public BakedModel getWrappedModel() {
+	public BlockStateModel getWrappedModel() {
 		if (theirModel != null) return theirModel;
 		else return theirModel = Unwrapper.unwrap(Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState));
 	}
 
 	@Override
-	public BakedModel getParticleModel() {
+	public BlockStateModel getParticleModel() {
 		return getWrappedModel();
 	}
 
 	@Override
-	@Deprecated
-	public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand) {
-		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.rotatedQuads(modelRotation, rotatesTexture, side, dir -> getWrappedModel().getQuads(modelState, dir, rand), null);
+	public Stream<BlockModelPart> wrapParts(RandomSource random) {
+		return getWrappedModel().collectParts(random).stream().map(toWrap -> RotatedBlockModelPart.of(toWrap, modelRotation, rotatesTexture));
 	}
 }

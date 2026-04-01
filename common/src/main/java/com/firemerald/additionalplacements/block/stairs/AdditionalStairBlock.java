@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.block.stairs;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
@@ -165,6 +166,12 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
+	@Environment(EnvType.CLIENT)
+	public String[] getAllModels() {
+		return StairModels.MODELS;
+	}
+
+	@Override
 	public CompoundTag fix(CompoundTag properties, Consumer<Block> changeBlock) {
 		CommonStairShapeState commonShape = getOldPropertyShapeState(properties);
 		if (commonShape != null) applyState(commonShape, properties, changeBlock);
@@ -175,7 +182,8 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 		if (APConfigs.common().fixStates.get()) {
 			if (IStateFixer.contains(properties, connectionsType)) {
                 AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing V3 stair block state: {}", this, properties);
-				String shapeStateName = IStateFixer.getPropertyString(properties, connectionsType);
+				@SuppressWarnings("OptionalGetWithoutIsPresent")
+				String shapeStateName = IStateFixer.getPropertyString(properties, connectionsType).get();
 				if (!connectionsType.isValid(shapeStateName)) {
                     AdditionalPlacementsMod.LOGGER.debug("{} Fixing V3 stair block state", this);
 					return CommonStairShapeState.get(shapeStateName);
@@ -184,23 +192,23 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 				if (properties.contains("shape")) {
 					if (properties.contains("facing")) { //potentially V2
                         AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing potential V2 stair block state: {}", this, properties);
-						V2StairFacing facing = V2StairFacing.get(properties.getString("facing"));
-						V2StairShape shape = V2StairShape.get(properties.getString("shape"));
-						if (facing != null && shape != null) { //V2
+						Optional<V2StairFacing> facing = properties.getString("facing").map(V2StairFacing::get);
+						Optional<V2StairShape> shape = properties.getString("shape").map(V2StairShape::get);
+						if (facing.isPresent() && shape.isPresent()) { //V2
                             AdditionalPlacementsMod.LOGGER.debug("{} Fixing V2 stair block state", this);
 							properties.remove("facing");
 							properties.remove("shape");
-							return V2StairShapeState.toCommon(facing, shape);
+							return V2StairShapeState.toCommon(facing.get(), shape.get());
 						}
 					} else if (properties.contains("placing")) { //potentially V1
                         AdditionalPlacementsMod.LOGGER.debug("{} Potentially fixing potential V1 stair block state: {}", this, properties);
-						V1StairPlacing placing = V1StairPlacing.get(properties.getString("placing"));
-						V1StairShape shape = V1StairShape.get(properties.getString("shape"));
-						if (placing != null && shape != null) { //V1
+						Optional<V1StairPlacing> placing = properties.getString("placing").map(V1StairPlacing::get);
+						Optional<V1StairShape> shape = properties.getString("shape").map(V1StairShape::get);
+						if (placing.isPresent() && shape.isPresent()) { //V1
                             AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 stair block state", this);
 							properties.remove("placing");
 							properties.remove("shape");
-							return V1StairShapeState.toCommon(placing, shape);
+							return V1StairShapeState.toCommon(placing.get(), shape.get());
 						}
 					}
 				}

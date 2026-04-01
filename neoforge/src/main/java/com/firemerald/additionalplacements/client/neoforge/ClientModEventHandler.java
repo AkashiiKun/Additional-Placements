@@ -2,10 +2,8 @@ package com.firemerald.additionalplacements.client.neoforge;
 
 import com.firemerald.additionalplacements.client.APClientData;
 import com.firemerald.additionalplacements.client.ClientModEvents;
-import com.firemerald.additionalplacements.client.models.retextured.RetexturedModelData;
-import com.firemerald.additionalplacements.client.models.retextured.neoforge.RetexturedPlacementModelLoader;
-import com.firemerald.additionalplacements.client.models.rotated.RotatedModelData;
-import com.firemerald.additionalplacements.client.models.rotated.neoforge.RotatedPlacementModelLoader;
+import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition;
+import com.firemerald.additionalplacements.client.models.neoforge.DynamicModelsDefinitionImpl;
 import com.firemerald.additionalplacements.client.resources.APDynamicResources;
 import com.firemerald.additionalplacements.datagen.AdditionalPlacementsModelProvider;
 import net.minecraft.data.DataProvider;
@@ -15,7 +13,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.client.event.ModelEvent;
+import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
 import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -40,9 +38,8 @@ public class ClientModEventHandler {
     }
 
     @SubscribeEvent
-    public static void registerGeometryLoaders(ModelEvent.RegisterLoaders event) {
-        event.register(RotatedModelData.ID, new RotatedPlacementModelLoader());
-        event.register(RetexturedModelData.ID, new RetexturedPlacementModelLoader());
+    public static void registerBlockStateModels(RegisterBlockStateModels event) {
+        event.registerDefinition(DynamicModelsDefinition.ID, DynamicModelsDefinitionImpl.CODEC);
     }
 
     @SubscribeEvent

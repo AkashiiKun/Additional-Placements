@@ -1,33 +1,35 @@
 package com.firemerald.additionalplacements.client.models.rotated.neoforge;
 
-import com.firemerald.additionalplacements.client.models.neoforge.BlockModelUtilsImpl;
 import com.firemerald.additionalplacements.client.models.neoforge.PlacementModelWrapperImpl;
 import com.firemerald.additionalplacements.client.models.rotated.BakedRotatedPlacementModel;
 import com.firemerald.additionalplacements.client.models.BlockModelUtils;
+import com.firemerald.additionalplacements.client.models.rotated.RotatedBlockModelPart;
 import com.firemerald.additionalplacements.util.BlockRotation;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.client.model.data.ModelData;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 public class BakedRotatedPlacementModelImpl extends BakedRotatedPlacementModel implements PlacementModelWrapperImpl {
 	public static BakedRotatedPlacementModel of(BlockState theirModelState, BlockRotation modelRotation, boolean rotatesTexture) {
 		return new BakedRotatedPlacementModelImpl(theirModelState, modelRotation, rotatesTexture);
 	}
 
-	private BakedRotatedPlacementModelImpl(BlockState theirModelState, BlockRotation modelRotation, boolean rotatesTexture) {
+	protected BakedRotatedPlacementModelImpl(BlockState theirModelState, BlockRotation modelRotation, boolean rotatesTexture) {
 		super(theirModelState, modelRotation, rotatesTexture);
     }
 
 	@Override
-	public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
-		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.rotatedQuads(modelRotation, rotatesTexture, side, dir -> getWrappedModel().getQuads(modelState, dir, rand, data, renderType), renderType);
+	public Stream<BlockModelPart> wrapParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+		return getWrappedModel().collectParts(level, pos, BlockModelUtils.getModeledState(state), random).stream().map(toWrap -> RotatedBlockModelPart.of(toWrap, modelRotation, rotatesTexture));
+	}
+
+	@Override
+	public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+		return this;
 	}
 }

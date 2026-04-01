@@ -1,15 +1,15 @@
 package com.firemerald.additionalplacements.client.models.definitions;
 
-import net.minecraft.client.data.models.blockstates.VariantProperties;
+import com.mojang.math.Quadrant;
 import net.minecraft.resources.ResourceLocation;
 
-public record StateModelDefinition(String model, VariantProperties.Rotation xRotation, VariantProperties.Rotation yRotation) {
-	public StateModelDefinition(String model, VariantProperties.Rotation yRotation) {
-		this(model, VariantProperties.Rotation.R0, yRotation);
+public record StateModelDefinition(String model, Quadrant xRotation, Quadrant yRotation) {
+	public StateModelDefinition(String model, Quadrant yRotation) {
+		this(model, Quadrant.R0, yRotation);
 	}
 
 	public StateModelDefinition(String model) {
-		this(model, VariantProperties.Rotation.R0, VariantProperties.Rotation.R0);
+		this(model, Quadrant.R0, Quadrant.R0);
 	}
 
 	public ResourceLocation location(ResourceLocation prefix) {

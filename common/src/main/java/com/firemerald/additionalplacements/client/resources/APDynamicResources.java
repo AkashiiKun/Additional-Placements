@@ -2,20 +2,18 @@ package com.firemerald.additionalplacements.client.resources;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.BiConsumer;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
-import com.firemerald.additionalplacements.client.models.retextured.RetexturedModelData;
-import com.firemerald.additionalplacements.client.models.rotated.RotatedModelData;
-import com.firemerald.additionalplacements.generation.CreatedBlockEntry;
-import com.firemerald.additionalplacements.generation.GenerationType;
+import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition;
 import com.firemerald.additionalplacements.generation.Registration;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -71,14 +69,6 @@ public class APDynamicResources implements PackResources {
         throw new AssertionError();
     }
 
-    private IJsonInputSupplier getBlockModelSupplier(AdditionalPlacementBlock<?> block, BlockState state) {
-        if (block.rotatesModel(state)) {
-            return new RotatedModelData(block.getModelState(state), block.getRotation(state), block.rotatesTexture(state));
-        } else {
-            return new RetexturedModelData(block.getModelDefinition(state).location(block.getBaseModelPrefix()), block.getModelState(state));
-        }
-    }
-
     @Override
     public IoSupplier<InputStream> getRootResource(String @NotNull ... strings) {
         return null;
@@ -91,31 +81,8 @@ public class APDynamicResources implements PackResources {
         else if (!resourceLocation.getPath().endsWith(".json")) return null;
         else if (resourceLocation.getPath().startsWith("blockstates/")) { //blockstate json
             String blockName = resourceLocation.getPath().substring(12, resourceLocation.getPath().length() - 5);
-            Block block = BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName)).get().value();
-            if (block instanceof AdditionalPlacementBlock<?> placement) return new BlockStateJsonSupplier(placement, blockName);
-            else return null;
-        }
-        else if (resourceLocation.getPath().startsWith("models/block/") && resourceLocation.getPath().endsWith("/model.json")) {
-            String key = resourceLocation.getPath().substring(13, resourceLocation.getPath().length() - 11);
-            Optional<?> match = Registration.types().flatMap(GenerationType::created).filter(entry -> key.startsWith(entry.newId().getPath())).findFirst();
-            if (match.isPresent()) {
-                CreatedBlockEntry<?, ?> entry = (CreatedBlockEntry<?, ?>) match.get();
-                String[] stateVals = key.substring(entry.newId().getPath().length() + 1).split("/");
-                BlockState state = entry.newBlock().defaultBlockState();
-                Collection<Property<?>> props = state.getProperties();
-                if (stateVals.length != props.size()) return null;
-                else {
-                    Iterator<Property<?>> it = props.iterator();
-                    for (String stateVal : stateVals) {
-                        Property<?> prop = it.next();
-                        @SuppressWarnings("unchecked")
-                        Optional<Comparable<?>> opt = (Optional<Comparable<?>>) prop.getValue(stateVal);
-                        if (opt.isEmpty()) return null;
-                        else state = set(state, prop, opt.get());
-                    }
-                    return getBlockModelSupplier(entry.newBlock(), state);
-                }
-            }
+            Optional<Holder.Reference<Block>> block = BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName));
+            if (block.isPresent() && block.get().value() instanceof AdditionalPlacementBlock<?>) return DynamicBlockstateJson.INSTANCE;
             else return null;
         }
         else return null;
@@ -134,27 +101,9 @@ public class APDynamicResources implements PackResources {
                     ResourceLocation id = entry.newId();
                     resourceOutput.accept(
                             AdditionalPlacementsMod.rl("blockstates/" + id.getPath() + ".json"),
-                            new BlockStateJsonSupplier(entry.newBlock(), id.getPath()));
+                            DynamicBlockstateJson.INSTANCE);
                 }));
-            } else if ("models".equals(path)) {
-                Registration.types().flatMap(GenerationType::created).forEach(entry -> {
-                    AdditionalPlacementBlock<?> block = entry.newBlock();
-                    BlockState state = block.defaultBlockState();
-                    parseBlockstates(state, new ArrayList<>(state.getProperties()), 0, "models/block/" + entry.newId().getPath() + "/", (modelPath, newState) -> resourceOutput.accept(
-                            AdditionalPlacementsMod.rl(modelPath + ".json"),
-                            getBlockModelSupplier(entry.newBlock(), newState)));
-                });
             }
-        }
-    }
-
-    private <T extends Comparable<T>> void parseBlockstates(BlockState state, List<Property<?>> props, int index, String currentStateDir, BiConsumer<String, BlockState> action) {
-        if (index >= props.size())
-            action.accept(currentStateDir + "model", state);
-        else {
-            @SuppressWarnings("unchecked")
-            Property<T> prop = (Property<T>) props.get(index);
-            prop.getAllValues().forEach(val -> parseBlockstates(set(state, prop, val.value()), props, index + 1, currentStateDir + prop.getName(val.value()) + "/", action));
         }
     }
 

@@ -1,11 +1,13 @@
 package com.firemerald.additionalplacements.block;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStateFixer;
+import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import com.firemerald.additionalplacements.client.models.definitions.SlabModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.config.APConfigs;
@@ -169,6 +171,12 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
+	@Environment(EnvType.CLIENT)
+	public String[] getAllModels() {
+		return SlabModels.MODELS;
+	}
+
+	@Override
 	public CompoundTag fix(CompoundTag properties, Consumer<Block> changeBlock) {
 		if (APConfigs.common().fixOldStates.get()) {
 			if (!IStateFixer.contains(properties, AXIS)) {
@@ -176,10 +184,10 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 						IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_AXIS) &&
 						IStateFixer.contains(properties, BlockStateProperties.SLAB_TYPE))) {
                     AdditionalPlacementsMod.LOGGER.debug("{} Fixing V1 slab block state: {}", this, properties);
-					Direction facing = IStateFixer.getProperty(properties, BlockStateProperties.HORIZONTAL_FACING);
-					if (facing != null) {
-						IStateFixer.setProperty(properties, AXIS, facing.getAxis());
-						IStateFixer.setProperty(properties, SlabBlock.TYPE, facing.getAxisDirection() == AxisDirection.POSITIVE ? SlabType.TOP : SlabType.BOTTOM);
+					Optional<Direction> facing = IStateFixer.getProperty(properties, BlockStateProperties.HORIZONTAL_FACING);
+					if (facing.isPresent()) {
+						IStateFixer.setProperty(properties, AXIS, facing.get().getAxis());
+						IStateFixer.setProperty(properties, SlabBlock.TYPE, facing.get().getAxisDirection() == AxisDirection.POSITIVE ? SlabType.TOP : SlabType.BOTTOM);
 						IStateFixer.remove(properties, BlockStateProperties.HORIZONTAL_FACING);
 					}
 				} else if (IStateFixer.contains(properties, BlockStateProperties.HORIZONTAL_AXIS)) {

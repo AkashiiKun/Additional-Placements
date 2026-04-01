@@ -11,8 +11,8 @@ public class BlockModelUtilsImpl {
                 tintIndex,
                 direction,
                 sprite,
-                originalQuad.isShade(),
-                originalQuad.getLightEmission(),
+                originalQuad.shade(),
+                originalQuad.lightEmission(),
                 originalQuad.hasAmbientOcclusion()
         );
     }

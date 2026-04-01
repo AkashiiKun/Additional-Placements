@@ -137,7 +137,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void fallOn(@NotNull Level level, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Entity entity, float fallDistance) {
+	public void fallOn(@NotNull Level level, @NotNull BlockState state, @NotNull BlockPos pos, @NotNull Entity entity, double fallDistance) {
 		BlockState modelState = getModelState(state);
 		modelState.getBlock().fallOn(level, modelState, pos, entity, fallDistance);
 	}
@@ -184,9 +184,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean movedByPiston) {
+	public void affectNeighborsAfterRemoval(BlockState state, ServerLevel level, BlockPos pos, boolean isMoving) {
 		BlockState modelState = getModelState(state);
-		modelState.getBlock().onRemove(modelState, level, pos, getModelStateSafe(newState), movedByPiston);
+		modelState.getBlock().affectNeighborsAfterRemoval(modelState, level, pos, isMoving);
 	}
 
 	@Override
@@ -315,11 +315,6 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 	}
 
 	@Override
-	public void appendHoverText(@NotNull ItemStack stack, @NotNull Item.TooltipContext context, @NotNull List<Component> tooltip, @NotNull TooltipFlag flag) {
-		additionalplacements$appendHoverTextImpl(stack, context, tooltip, flag);
-	}
-
-	@Override
 	public BlockState updateShape(@NotNull BlockState state, @NotNull LevelReader level, @NotNull ScheduledTickAccess tickAccess, @NotNull BlockPos pos, @NotNull Direction direction, @NotNull BlockPos otherPos, @NotNull BlockState otherState, @NotNull RandomSource rand) {
 		return additionalplacements$updateShapeImpl(state, level, tickAccess, pos, direction, otherPos, otherState, rand);
 	}
@@ -382,4 +377,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 
 	@Environment(EnvType.CLIENT)
 	public abstract StateModelDefinition getModelDefinition(BlockState state);
+
+	@Environment(EnvType.CLIENT)
+	public abstract String[] getAllModels();
 }

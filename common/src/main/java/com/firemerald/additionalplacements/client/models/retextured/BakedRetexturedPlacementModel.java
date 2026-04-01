@@ -1,52 +1,50 @@
 package com.firemerald.additionalplacements.client.models.retextured;
 
-import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.PlacementModelWrapper;
 import com.firemerald.additionalplacements.client.models.Unwrapper;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.resources.model.BakedModel;
-import net.minecraft.core.Direction;
+import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-public class BakedRetexturedPlacementModel implements PlacementModelWrapper {
+public abstract class BakedRetexturedPlacementModel implements PlacementModelWrapper {
 	@ExpectPlatform
-	public static BakedRetexturedPlacementModel of(BakedModel ourModel, BlockState theirModelState) {
+	public static BakedRetexturedPlacementModel of(BlockStateModel ourModel, BlockState theirModelState) {
 		throw new AssertionError();
 	}
 
-	public final BakedModel ourModel;
+	public final BlockStateModel ourModel;
 	private final BlockState theirModelState;
-	private BakedModel theirModel;
+	private BlockStateModel theirModel;
 
-	protected BakedRetexturedPlacementModel(BakedModel ourModel, BlockState theirModelState) {
+	protected BakedRetexturedPlacementModel(BlockStateModel ourModel, BlockState theirModelState) {
 		this.ourModel = ourModel;
 		this.theirModelState = theirModelState;
 	}
 
-	public BakedModel theirModel() {
+	public BlockStateModel theirModel() {
 		if (theirModel != null) return theirModel;
 		else return theirModel = Unwrapper.unwrap(Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState));
 	}
 
 	@Override
-	public BakedModel getWrappedModel() {
+	public BlockStateModel getWrappedModel() {
 		return ourModel;
 	}
 
 	@Override
-	public BakedModel getParticleModel() {
+	public BlockStateModel getParticleModel() {
 		return theirModel();
 	}
 
 	@Override
-	public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand) {
-		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.retexturedQuads(side, dir -> ourModel.getQuads(state, dir, rand), dir -> theirModel().getQuads(modelState, dir, rand), null);
+	public Stream<BlockModelPart> wrapParts(RandomSource random) {
+		List<BlockModelPart> theirParts = theirModel().collectParts(random);
+		return getWrappedModel().collectParts(random).stream().map(ourPart -> RetexturedBlockModelPart.of(ourPart, theirParts));
 	}
 }

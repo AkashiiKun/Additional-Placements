@@ -88,4 +88,10 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 	public StateModelDefinition getModelDefinition(BlockState state) {
 		return CarpetModels.getModel(state);
 	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public String[] getAllModels() {
+		return CarpetModels.MODELS;
+	}
 }

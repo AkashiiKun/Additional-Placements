@@ -5,8 +5,7 @@ import java.util.List;
 public class APMixinPluginImpl {
     public static List<String> getPlatformMixins() {
         return List.of(
-                "fabric.MixinBlockModel",
-                "fabric.MixinBlockModelDeserializer",
+                "fabric.MixinBlockModelDefinition",
                 "fabric.MixinModResourcePackCreator"
         );
     }

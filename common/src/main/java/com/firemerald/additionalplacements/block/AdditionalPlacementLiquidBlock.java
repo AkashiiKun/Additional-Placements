@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
@@ -28,8 +29,8 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public @NotNull ItemStack pickupBlock(@Nullable Player player, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState) {
-		ItemStack ret = this.additionalplacements$getOtherBlock().pickupBlock(player, level, pos, this.getModelState(blockState));
+	public @NotNull ItemStack pickupBlock(@Nullable LivingEntity owner, @NotNull LevelAccessor level, @NotNull BlockPos pos, @NotNull BlockState blockState) {
+		ItemStack ret = this.additionalplacements$getOtherBlock().pickupBlock(owner, level, pos, this.getModelState(blockState));
 		level.setBlock(pos, this.copyProperties(level.getBlockState(pos), blockState), 3);
 		return ret;
 	}
@@ -40,8 +41,8 @@ public abstract class AdditionalPlacementLiquidBlock<T extends Block & BucketPic
 	}
 
 	@Override
-	public boolean canPlaceLiquid(@Nullable Player player, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Fluid fluid) {
-		return this.additionalplacements$getOtherBlock().canPlaceLiquid(player, level, pos, getModelState(blockState), fluid);
+	public boolean canPlaceLiquid(@Nullable LivingEntity owner, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull BlockState blockState, @NotNull Fluid fluid) {
+		return this.additionalplacements$getOtherBlock().canPlaceLiquid(owner, level, pos, getModelState(blockState), fluid);
 	}
 
 	@Override

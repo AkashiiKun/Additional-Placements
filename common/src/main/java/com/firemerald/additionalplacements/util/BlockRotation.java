@@ -5,13 +5,15 @@ import java.util.WeakHashMap;
 
 import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
-public enum BlockRotation
-{
+public enum BlockRotation implements StringRepresentable {
 	IDENTITY(Direction.values(), new int[6]) {
 		@Override
 		public Direction apply(Direction original) {
@@ -337,6 +339,8 @@ public enum BlockRotation
 		}
 	};
 
+	public static final Codec<BlockRotation> CODEC = new StringRepresentable.EnumCodec<>(values(), BlockRotation::valueOf);
+
 	private final Map<VoxelShape, VoxelShape> shapeCache = new WeakHashMap<>(); //we cache these values, to avoid overhead, but weakly in case of dynamically computed shapes
 	private final Direction[] applyDirection, unapplyDirection;
 	private final int[] vertexShiftLeft;
@@ -346,6 +350,12 @@ public enum BlockRotation
 		unapplyDirection = new Direction[6];
 		for (int i = 0; i < 6; ++i) unapplyDirection[applyDirection[i].get3DDataValue()] = Direction.from3DDataValue(i);
 		this.vertexShiftLeft = vertexShiftLeft;
+	}
+
+	@Override
+	@NotNull
+	public String getSerializedName() {
+		return this.name();
 	}
 
 	public Direction apply(Direction original) {

@@ -2,15 +2,24 @@ package com.firemerald.additionalplacements.client.models.retextured.fabric;
 
 import com.firemerald.additionalplacements.client.models.fabric.PlacementModelWrapperImpl;
 import com.firemerald.additionalplacements.client.models.retextured.BakedRetexturedPlacementModel;
-import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
 
 public class BakedRetexturedPlacementModelImpl extends BakedRetexturedPlacementModel implements PlacementModelWrapperImpl {
-	public static BakedRetexturedPlacementModel of(BakedModel ourModel, BlockState theirModelState) {
+	public static BakedRetexturedPlacementModel of(BlockStateModel ourModel, BlockState theirModelState) {
 		return new BakedRetexturedPlacementModelImpl(ourModel, theirModelState);
 	}
 
-	private BakedRetexturedPlacementModelImpl(BakedModel ourModel, BlockState theirModelState) {
+	protected BakedRetexturedPlacementModelImpl(BlockStateModel ourModel, BlockState theirModelState) {
 		super(ourModel, theirModelState);
-    }
+	}
+
+	@Override
+	public @Nullable Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
+		return this;
+	}
 }

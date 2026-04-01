@@ -13,6 +13,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.InsideBlockEffectApplier;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.Block;
@@ -104,7 +105,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity) {
+	public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity, InsideBlockEffectApplier effectApplier) {
 		if (!level.isClientSide) {
 			int strength = plateMethods.additionalplacements$getSignalForStatePublic(state);
 			if (strength == 0) this.checkPressed(entity, level, pos, state, strength);
@@ -133,11 +134,9 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public void onRemove(@NotNull BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull BlockState newState, boolean isMoving) {
-		if (!isMoving && !state.is(newState.getBlock())) {
-			if (plateMethods.additionalplacements$getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
-			super.onRemove(state, level, pos, newState, isMoving);
-		}
+	public void affectNeighborsAfterRemoval(@NotNull BlockState state, @NotNull ServerLevel level, @NotNull BlockPos pos, boolean isMoving) {
+		super.affectNeighborsAfterRemoval(state, level, pos, isMoving);
+		if (!isMoving && plateMethods.additionalplacements$getSignalForStatePublic(state) > 0) this.updateNeighbours(level, pos, state);
 	}
 
 	protected void updateNeighbours(Level level, BlockPos pos, BlockState state) {
@@ -159,5 +158,11 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	@Environment(EnvType.CLIENT)
 	public ResourceLocation getBaseModelPrefix() {
 		return PressurePlateModels.BASE_MODEL_FOLDER;
+	}
+
+	@Override
+	@Environment(EnvType.CLIENT)
+	public String[] getAllModels() {
+		return PressurePlateModels.MODELS;
 	}
 }

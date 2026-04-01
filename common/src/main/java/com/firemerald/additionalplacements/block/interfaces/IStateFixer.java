@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.block.interfaces;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 
 import net.minecraft.nbt.CompoundTag;
@@ -18,11 +19,11 @@ public interface IStateFixer {
 		tag.put(property.getName(), StringTag.valueOf(property.getName(value)));
 	}
 
-	static <T extends Comparable<T>> T getProperty(CompoundTag tag, Property<T> property) {
-		return property.getValue(getPropertyString(tag, property)).orElse(null);
+	static <T extends Comparable<T>> Optional<T> getProperty(CompoundTag tag, Property<T> property) {
+		return getPropertyString(tag, property).flatMap(property::getValue);
 	}
 
-	static String getPropertyString(CompoundTag tag, Property<?> property) {
+	static Optional<String> getPropertyString(CompoundTag tag, Property<?> property) {
 		return tag.getString(property.getName());
 	}
 
