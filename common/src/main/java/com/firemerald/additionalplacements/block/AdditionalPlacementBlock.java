@@ -1,25 +1,22 @@
 package com.firemerald.additionalplacements.block;
 
 import java.util.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.firemerald.additionalplacements.client.block.modeldef.IBlockModelDef;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.*;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.common.AdditionalPlacementsBlockTags;
 import com.firemerald.additionalplacements.util.BlockRotation;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
@@ -28,7 +25,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -372,12 +368,5 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return false;
 	}
 
-	@Environment(EnvType.CLIENT)
-	public abstract ResourceLocation getBaseModelPrefix();
-
-	@Environment(EnvType.CLIENT)
-	public abstract StateModelDefinition getModelDefinition(BlockState state);
-
-	@Environment(EnvType.CLIENT)
-	public abstract String[] getAllModels();
+	public abstract Supplier<? extends IBlockModelDef<?>> getModelDef();
 }

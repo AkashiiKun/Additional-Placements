@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
@@ -26,8 +27,11 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 
-@Environment(EnvType.CLIENT)
 public class BlockModelUtils {
+	static {
+		PlatformUtils.checkIsClient();
+	}
+
 	public static BlockState getModeledState(BlockState state) {
 		if (state != null && state.getBlock() instanceof AdditionalPlacementBlock<?> block) return block.getModelState(state);
 		else return state;

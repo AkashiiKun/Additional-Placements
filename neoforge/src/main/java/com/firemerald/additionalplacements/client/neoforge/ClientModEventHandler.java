@@ -6,6 +6,7 @@ import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition
 import com.firemerald.additionalplacements.client.models.neoforge.DynamicModelsDefinitionImpl;
 import com.firemerald.additionalplacements.client.resources.APDynamicResources;
 import com.firemerald.additionalplacements.datagen.AdditionalPlacementsModelProvider;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.minecraft.data.DataProvider;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.api.distmarker.Dist;
@@ -20,8 +21,11 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
 
 @EventBusSubscriber(value = Dist.CLIENT)
-@OnlyIn(Dist.CLIENT)
 public class ClientModEventHandler {
+    static {
+        PlatformUtils.checkIsClient();
+    }
+
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
         ClientModEvents.addBlockColors(event::register);

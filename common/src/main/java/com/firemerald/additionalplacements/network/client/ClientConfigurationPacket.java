@@ -10,6 +10,5 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 public interface ClientConfigurationPacket extends ClientPacket<FriendlyByteBuf> {
-    @Environment(EnvType.CLIENT)
     @Nullable ServerConfigurationPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect);
 }

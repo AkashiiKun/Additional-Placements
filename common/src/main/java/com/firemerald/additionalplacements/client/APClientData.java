@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.network.server.SetPlacementTogglePacket;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.mojang.blaze3d.platform.InputConstants;
 
 import net.fabricmc.api.EnvType;
@@ -11,8 +12,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 
-@Environment(EnvType.CLIENT)
 public class APClientData {
+	static {
+		PlatformUtils.checkIsClient();
+	}
+
 	public static final KeyMapping AP_PLACEMENT_KEY = new KeyMapping("key.additionalplacements.placement_toggle", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), "key.categories.additionalplacements");
 
 	private static boolean placementEnabled = true;

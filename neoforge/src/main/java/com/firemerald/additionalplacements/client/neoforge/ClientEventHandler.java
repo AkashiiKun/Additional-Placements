@@ -5,6 +5,7 @@ import com.firemerald.additionalplacements.client.ClientModEvents;
 import com.firemerald.additionalplacements.client.gui.screen.ConnectionErrorsScreen;
 import com.firemerald.additionalplacements.config.APConfigs;
 
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.minecraft.client.gui.screens.DisconnectedScreen;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
@@ -14,8 +15,11 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.*;
 
 @EventBusSubscriber(value = Dist.CLIENT)
-@OnlyIn(Dist.CLIENT)
 public class ClientEventHandler {
+    static {
+        PlatformUtils.checkIsClient();
+    }
+
     @SubscribeEvent
     public static void onHighlightBlock(RenderHighlightEvent.Block event) {
         ClientModEvents.onHighlightBlock(event.getLevelRenderer(), event.getCamera(), event.getTarget(), event.getDeltaTracker(), event.getPoseStack(), event.getMultiBufferSource());

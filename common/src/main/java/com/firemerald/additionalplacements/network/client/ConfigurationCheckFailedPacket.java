@@ -3,8 +3,8 @@ package com.firemerald.additionalplacements.network.client;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -13,8 +13,6 @@ import com.firemerald.additionalplacements.client.gui.screen.ConnectionErrorsScr
 import com.firemerald.additionalplacements.util.MessageTree;
 import com.mojang.realmsclient.RealmsMainScreen;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
@@ -55,8 +53,8 @@ public abstract class ConfigurationCheckFailedPacket implements ClientConfigurat
 	}
 
 	@Override
-	@Environment(EnvType.CLIENT)
 	public @Nullable ServerConfigurationPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
+		//PlatformUtils.checkIsClient(); check disabled for performance
 		MessageTree rootError = new MessageTree(Component.translatable("msg.additionalplacements.errors.type"));
 		compiledErrors.forEach(data -> {
 			MessageTree typeError = new MessageTree(Component.literal(data.getLeft().toString())); //TODO friendly name?
@@ -78,8 +76,11 @@ public abstract class ConfigurationCheckFailedPacket implements ClientConfigurat
 		return null;
 	}
 
-	@Environment(EnvType.CLIENT)
 	record HandleErrors(MessageTree rootError) implements Runnable {
+		static {
+			PlatformUtils.checkIsClient();
+		}
+
 		@Override
 		public void run() {
 			Minecraft minecraft = Minecraft.getInstance();

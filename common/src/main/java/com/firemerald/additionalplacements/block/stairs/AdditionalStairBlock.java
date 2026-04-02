@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.block.stairs;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementLiquidBlock;
@@ -16,8 +17,7 @@ import com.firemerald.additionalplacements.block.stairs.v2.V2StairFacing;
 import com.firemerald.additionalplacements.block.stairs.v2.V2StairShape;
 import com.firemerald.additionalplacements.block.stairs.v2.V2StairShapeState;
 import com.firemerald.additionalplacements.block.stairs.vanilla.VanillaStairShapeState;
-import com.firemerald.additionalplacements.client.models.definitions.StairModels;
-import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
+import com.firemerald.additionalplacements.client.block.modeldef.StairsModelDef;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.util.BlockRotation;
 
@@ -154,21 +154,9 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
-	@Environment(EnvType.CLIENT)
-	public ResourceLocation getBaseModelPrefix() {
-		return StairModels.BASE_MODEL_FOLDER;
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public StateModelDefinition getModelDefinition(BlockState state) {
-		return StairModels.getModelDefinition(additionalplacements$getShapeState(state));
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public String[] getAllModels() {
-		return StairModels.MODELS;
+	@NotNull
+	public Supplier<StairsModelDef> getModelDef() {
+		return () -> StairsModelDef.INSTANCE;
 	}
 
 	@Override

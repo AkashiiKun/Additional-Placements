@@ -19,4 +19,12 @@ public class PlatformUtils {
     public static Path getConfigFolder() {
         throw new AssertionError();
     }
+
+    public static void checkIsClient() {
+        if (isDedicatedServer()) throw new IllegalStateException("Client-side access detected on dedicated server.");
+    }
+
+    public static void checkIsServer() {
+        if (isClient()) throw new IllegalStateException("Dedicated server-side access detected on server.");
+    }
 }

@@ -11,6 +11,5 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import java.util.function.Consumer;
 
 public interface ClientPlayPacket extends ClientPacket<RegistryFriendlyByteBuf> {
-	@Environment(EnvType.CLIENT)
 	ServerPlayPacket handleClient(Consumer<Runnable> enqueueWork);
 }

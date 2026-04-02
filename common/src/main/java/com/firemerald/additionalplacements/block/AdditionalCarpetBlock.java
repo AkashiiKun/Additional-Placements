@@ -1,16 +1,12 @@
 package com.firemerald.additionalplacements.block;
 
 import com.firemerald.additionalplacements.block.interfaces.ICarpetBlock;
-import com.firemerald.additionalplacements.client.models.definitions.CarpetModels;
-import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
+import com.firemerald.additionalplacements.client.block.modeldef.CarpetModelDef;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -20,6 +16,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetBlock> implements ICarpetBlock<CarpetBlock> {
 	public static final VoxelShape[] SHAPES = {
@@ -78,20 +77,8 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 	}
 
 	@Override
-	@Environment(EnvType.CLIENT)
-	public ResourceLocation getBaseModelPrefix() {
-		return CarpetModels.BASE_MODEL_FOLDER;
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public StateModelDefinition getModelDefinition(BlockState state) {
-		return CarpetModels.getModel(state);
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public String[] getAllModels() {
-		return CarpetModels.MODELS;
+	@NotNull
+	public Supplier<CarpetModelDef> getModelDef() {
+		return () -> CarpetModelDef.INSTANCE;
 	}
 }

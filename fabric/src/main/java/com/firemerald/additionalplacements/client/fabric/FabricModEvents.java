@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.client.fabric;
 import com.firemerald.additionalplacements.client.APClientData;
 import com.firemerald.additionalplacements.client.ClientModEvents;
 import com.firemerald.additionalplacements.common.CommonModEvents;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,8 +29,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 
-@Environment(EnvType.CLIENT)
 public class FabricModEvents implements ClientModInitializer {
+    static {
+        PlatformUtils.checkIsClient();
+    }
+
     @Override
     public void onInitializeClient() {
         ItemTooltipCallback.EVENT.register(CommonModEvents::onItemTooltip);

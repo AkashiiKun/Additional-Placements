@@ -2,23 +2,20 @@ package com.firemerald.additionalplacements.block.interfaces;
 
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
+import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlight;
+import com.firemerald.additionalplacements.client.block.highlight.SlabBlockHighlight;
 import com.firemerald.additionalplacements.compat.LoadedMods;
-import net.minecraft.client.DeltaTracker;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import org.jetbrains.annotations.Nullable;
 
 import com.firemerald.additionalplacements.block.VerticalSlabBlock;
-import com.firemerald.additionalplacements.client.BlockHighlightHelper;
 import com.firemerald.additionalplacements.generation.APGenerationTypes;
 import com.firemerald.additionalplacements.generation.GenerationType;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -32,7 +29,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
-import net.minecraft.world.phys.BlockHitResult;
 
 public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable {
 	interface IVanillaSlabBlock extends ISlabBlock<VerticalSlabBlock>, IVanillaBlock<VerticalSlabBlock> {
@@ -139,25 +135,10 @@ public interface ISlabBlock<T extends Block> extends IPlacementBlock<T>, IPaneCo
         }
 	}
 
-	float OUTER_EDGE = .5f;
-	float INNER_EDGE = .25f;
-
 	@Override
-	@Environment(EnvType.CLIENT)
-    default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
-		PoseStack.Pose lastPose = pose.last();
-
-		//outer box
-		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-				OUTER_EDGE);
-
-		//inner box
-		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-				INNER_EDGE);
-
-		//diagonals
-		BlockHighlightHelper.lineAxisDiagonal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-				INNER_EDGE, OUTER_EDGE);
+	default Supplier<? extends IBlockHighlight<?>> getBlockHighlight() {
+		//PlatformUtils.checkIsClient(); check omitted for performance
+		return () -> SlabBlockHighlight.INSTANCE;
 	}
 
 	@Override

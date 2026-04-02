@@ -1,6 +1,7 @@
 package com.firemerald.additionalplacements.client.models;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
+import com.firemerald.additionalplacements.client.block.modeldef.IBlockModelDef;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.client.models.retextured.BakedRetexturedPlacementModel;
 import com.firemerald.additionalplacements.client.models.rotated.BakedRotatedPlacementModel;
@@ -23,9 +24,11 @@ public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements 
             boolean rotatesTexture = block.rotatesTexture(state);
             return BakedRotatedPlacementModel.of(theirModelState, modelRotation, rotatesTexture);
         } else {
-            StateModelDefinition modelDefinition = block.getModelDefinition(state);
+            @SuppressWarnings("unchecked")
+            IBlockModelDef<AdditionalPlacementBlock<?>> modelDef = (IBlockModelDef<AdditionalPlacementBlock<?>>) block.getModelDef().get();
+            StateModelDefinition modelDefinition = modelDef.getModelDefinition(block, state);
             SingleVariant.Unbaked ourModel = new SingleVariant.Unbaked(new Variant(
-                    modelDefinition.location(block.getBaseModelPrefix()),
+                    modelDefinition.location(modelDef.getBaseModelPrefix(block)),
                     new Variant.SimpleModelState(
                             modelDefinition.xRotation(),
                             modelDefinition.yRotation(),
@@ -45,7 +48,9 @@ public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements 
 
     @Override
     public void resolveDependencies(Resolver resolver) {
-        ResourceLocation rootFolder = block.getBaseModelPrefix();
-        for (String model : block.getAllModels()) resolver.markDependency(rootFolder.withSuffix(model));
+        @SuppressWarnings("unchecked")
+        IBlockModelDef<AdditionalPlacementBlock<?>> modelDef = (IBlockModelDef<AdditionalPlacementBlock<?>>) block.getModelDef().get();
+        ResourceLocation rootFolder = modelDef.getBaseModelPrefix(block);
+        for (String model : modelDef.getAllModels(block)) resolver.markDependency(rootFolder.withSuffix(model));
     }
 }

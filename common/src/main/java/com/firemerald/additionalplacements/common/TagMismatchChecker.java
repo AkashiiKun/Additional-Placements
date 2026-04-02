@@ -11,6 +11,7 @@ import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.minecraft.client.player.LocalPlayer;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -71,8 +72,8 @@ public class TagMismatchChecker extends Thread {
 	public void run() {
 		for (Block block : BuiltInRegistries.BLOCK) {
 			if (halted) return;
-			if (block instanceof AdditionalPlacementBlock) {
-				Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>> mismatch = ((AdditionalPlacementBlock<?>) block).checkTagMismatch();
+			if (block instanceof AdditionalPlacementBlock<?> additionalPlacementBlock) {
+				Triple<Block, Collection<TagKey<Block>>, Collection<TagKey<Block>>> mismatch = additionalPlacementBlock.checkTagMismatch();
 				if (mismatch != null) blockMissingExtra.add(mismatch);
 			}
 		}
@@ -134,9 +135,9 @@ public class TagMismatchChecker extends Thread {
 		else return hasPermission.test(2);
 	}
 
-	@Environment(EnvType.CLIENT)
 	public static boolean canGenerateTagsClient(Player player) {
-		Player clientPlayer = Minecraft.getInstance().player;
+		assert PlatformUtils.isClient();
+		LocalPlayer clientPlayer = Minecraft.getInstance().player;
 		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
 	}
 

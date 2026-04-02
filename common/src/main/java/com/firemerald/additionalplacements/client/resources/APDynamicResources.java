@@ -10,6 +10,7 @@ import com.firemerald.additionalplacements.block.*;
 import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition;
 import com.firemerald.additionalplacements.generation.Registration;
 
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -32,8 +33,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
 
-@Environment(EnvType.CLIENT)
 public class APDynamicResources implements PackResources {
+    static {
+        PlatformUtils.checkIsClient();
+    }
+
     public static final PackLocationInfo LOCATION =  new PackLocationInfo(
             "Additional Placements Dynamic Resources",
             Component.literal("Additional Placements dynamic resources"),

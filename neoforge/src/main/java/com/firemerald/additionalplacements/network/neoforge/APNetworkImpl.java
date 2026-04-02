@@ -11,6 +11,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.registration.PayloadRegistrar;
@@ -43,7 +44,7 @@ public class APNetworkImpl {
     }
 
     public static void sendToServer(ServerPacket<?> packet) {
-        if (packet instanceof ServerPacketImpl<?> serverPacket) PacketDistributor.sendToServer(serverPacket);
+        if (packet instanceof ServerPacketImpl<?> serverPacket) ClientPacketDistributor.sendToServer(serverPacket);
     }
 
     public static void sendToClient(ClientPacket<?> packet, ServerPlayer player) {

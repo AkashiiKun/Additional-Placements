@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
+import com.firemerald.additionalplacements.util.PlatformUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
@@ -45,8 +46,8 @@ public abstract class CheckDataClientPacket implements ClientConfigurationPacket
 	}
 
 	@Override
-	@Environment(EnvType.CLIENT)
 	public @Nullable ServerConfigurationPacket handleClient(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect) {
+		//PlatformUtils.checkIsClient(); check disabled for performance
 		return CheckDataServerPacket.of(data);
 	}
 }

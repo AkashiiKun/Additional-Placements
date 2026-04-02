@@ -1,12 +1,9 @@
 package com.firemerald.additionalplacements.block;
 
 import com.firemerald.additionalplacements.block.interfaces.IPressurePlateBlock;
-import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
-import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
+import com.firemerald.additionalplacements.client.block.modeldef.PressurePlateModelDef;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
@@ -16,8 +13,10 @@ import net.minecraft.world.level.block.BasePressurePlateBlock;
 import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PressurePlateBlock;
-import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.function.Supplier;
 
 public abstract class AdditionalPressurePlateBlock extends AdditionalBasePressurePlateBlock<PressurePlateBlock> implements IPressurePlateBlock<PressurePlateBlock> {
 	public static AdditionalPressurePlateBlock of(PressurePlateBlock plate, ResourceKey<Block> id) {
@@ -49,8 +48,8 @@ public abstract class AdditionalPressurePlateBlock extends AdditionalBasePressur
 	}
 
 	@Override
-	@Environment(EnvType.CLIENT)
-	public StateModelDefinition getModelDefinition(BlockState state) {
-		return PressurePlateModels.getPressurePlateModel(state);
+	@NotNull
+	public Supplier<PressurePlateModelDef> getModelDef() {
+		return () -> PressurePlateModelDef.INSTANCE;
 	}
 }

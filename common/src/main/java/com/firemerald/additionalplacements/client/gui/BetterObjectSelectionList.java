@@ -68,7 +68,6 @@ public class BetterObjectSelectionList<E extends BetterObjectSelectionList.Entry
 
 	}
 
-	@Environment(EnvType.CLIENT)
 	public abstract static class Entry<E extends Entry<E>> extends AbstractBetterSelectionList.Entry<E> implements NarrationSupplier {
 		public abstract Component getNarration();
 

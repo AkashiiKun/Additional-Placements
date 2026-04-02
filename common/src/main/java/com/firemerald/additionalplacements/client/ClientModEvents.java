@@ -2,6 +2,7 @@ package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
+import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlight;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
@@ -51,12 +52,15 @@ public class ClientModEvents {
         if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
-                if (verticalBlock.additionalplacements$hasAdditionalStates()) verticalBlock.additionalplacements$renderHighlight(poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, delta);
+                if (verticalBlock.additionalplacements$hasAdditionalStates()) {
+                    //noinspection unchecked
+                    ((IBlockHighlight<IPlacementBlock<?>>) verticalBlock.getBlockHighlight().get()).additionalplacements$renderHighlight(verticalBlock, poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, delta);
+                }
             }
         }
     }
 
     public static void addBlockColors(BiConsumer<BlockColor, Block[]> register) {
-        register.accept(new AdditionalBlockColor(), BuiltInRegistries.BLOCK.stream().filter(block -> block instanceof AdditionalPlacementBlock && !((AdditionalPlacementBlock<?>) block).hasCustomColors()).toArray(Block[]::new));
+        register.accept(new AdditionalBlockColor(), BuiltInRegistries.BLOCK.stream().filter(block -> block instanceof AdditionalPlacementBlock<?> additionalPlacementBlock && !additionalPlacementBlock.hasCustomColors()).toArray(Block[]::new));
     }
 }

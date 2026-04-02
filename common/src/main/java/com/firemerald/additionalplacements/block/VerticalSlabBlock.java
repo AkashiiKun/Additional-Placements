@@ -2,11 +2,14 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStateFixer;
+import com.firemerald.additionalplacements.client.block.modeldef.IBlockModelDef;
+import com.firemerald.additionalplacements.client.block.modeldef.SlabModelDef;
 import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import com.firemerald.additionalplacements.client.models.definitions.SlabModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
@@ -159,24 +162,6 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	@Environment(EnvType.CLIENT)
-	public ResourceLocation getBaseModelPrefix() {
-		return SlabModels.BASE_MODEL_FOLDER;
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public StateModelDefinition getModelDefinition(BlockState state) {
-		return SlabModels.getModel(state);
-	}
-
-	@Override
-	@Environment(EnvType.CLIENT)
-	public String[] getAllModels() {
-		return SlabModels.MODELS;
-	}
-
-	@Override
 	public CompoundTag fix(CompoundTag properties, Consumer<Block> changeBlock) {
 		if (APConfigs.common().fixOldStates.get()) {
 			if (!IStateFixer.contains(properties, AXIS)) {
@@ -202,5 +187,11 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	@Override
 	public Axis additionalplacements$getAxis(BlockState state) {
 		return state.getValue(AXIS);
+	}
+
+	@Override
+	@NotNull
+	public Supplier<SlabModelDef> getModelDef() {
+		return () -> SlabModelDef.INSTANCE;
 	}
 }
