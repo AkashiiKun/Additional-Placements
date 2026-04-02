@@ -19,6 +19,7 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenDirection;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
@@ -211,8 +212,8 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 				scrollY = this.getY();
 			}
 
-			guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_BACKGROUND_SPRITE, scrollPos, this.getY(), 6, this.getHeight());
-			guiGraphics.blitSprite(RenderType::guiTextured, SCROLLER_SPRITE, scrollPos, scrollY, 6, scrollSize);
+			guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_BACKGROUND_SPRITE, scrollPos, this.getY(), 6, this.getHeight());
+			guiGraphics.blitSprite(RenderPipelines.GUI_TEXTURED, SCROLLER_SPRITE, scrollPos, scrollY, 6, scrollSize);
 		}
 
 		this.renderDecorations(guiGraphics, mouseX, mouseY);
@@ -226,14 +227,14 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	protected void renderListSeparators(GuiGraphics pGuiGraphics) {
 		ResourceLocation headerSeparator = this.minecraft.level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
 		ResourceLocation footerSeparator = this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
-		pGuiGraphics.blit(RenderType::guiTextured, headerSeparator, this.getX(), this.getY() - 2, 0.0F, 0.0F, this.getWidth(), 2, 32, 2);
-		pGuiGraphics.blit(RenderType::guiTextured, footerSeparator, this.getX(), this.getBottom(), 0.0F, 0.0F, this.getWidth(), 2, 32, 2);
+		pGuiGraphics.blit(RenderPipelines.GUI_TEXTURED, headerSeparator, this.getX(), this.getY() - 2, 0.0F, 0.0F, this.getWidth(), 2, 32, 2);
+		pGuiGraphics.blit(RenderPipelines.GUI_TEXTURED, footerSeparator, this.getX(), this.getBottom(), 0.0F, 0.0F, this.getWidth(), 2, 32, 2);
 	}
 
 	protected void renderListBackground(GuiGraphics pGuiGraphics) {
 		ResourceLocation resourcelocation = this.minecraft.level == null ? MENU_LIST_BACKGROUND : INWORLD_MENU_LIST_BACKGROUND;
 		pGuiGraphics.blit(
-				RenderType::guiTextured,
+				RenderPipelines.GUI_TEXTURED,
 				resourcelocation,
 				this.getX(),
 				this.getY(),

@@ -4,6 +4,7 @@ import com.firemerald.additionalplacements.client.models.neoforge.WrappedBlockMo
 import com.firemerald.additionalplacements.client.models.retextured.RetexturedBlockModelPart;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ public class RetexturedBlockModelPartImpl extends RetexturedBlockModelPart imple
 
     @Override
     @NotNull
-    public RenderType getRenderType(@NotNull BlockState state) {
+    public ChunkSectionLayer getRenderType(@NotNull BlockState state) {
         return getWrapped().getRenderType(state);
     }
 }

@@ -3,6 +3,7 @@ package com.firemerald.additionalplacements.client.fabric;
 import com.firemerald.additionalplacements.client.APClientData;
 import com.firemerald.additionalplacements.client.ClientModEvents;
 import com.firemerald.additionalplacements.common.CommonModEvents;
+import net.fabricmc.fabric.api.client.rendering.v1.BlockRenderLayerMap;
 import org.jetbrains.annotations.Nullable;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
@@ -11,7 +12,6 @@ import com.firemerald.additionalplacements.config.APConfigs;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
@@ -48,7 +48,7 @@ public class FabricModEvents implements ClientModInitializer {
             BuiltInRegistries.BLOCK.forEach(block -> {
                 if (block instanceof AdditionalPlacementBlock<?> additionalPlacementBlock) {
                     BlockState modelState = additionalPlacementBlock.getOtherBlockState();
-                    BlockRenderLayerMap.INSTANCE.putBlock(block, ItemBlockRenderTypes.getChunkRenderType(modelState));
+                    BlockRenderLayerMap.putBlock(block, ItemBlockRenderTypes.getChunkRenderType(modelState));
                 }
             });
             ClientModEvents.addBlockColors(client.getBlockColors()::register);

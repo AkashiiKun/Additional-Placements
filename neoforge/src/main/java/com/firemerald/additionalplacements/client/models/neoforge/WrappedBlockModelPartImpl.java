@@ -5,13 +5,14 @@ import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.extensions.BlockModelPartExtension;
 
 public interface WrappedBlockModelPartImpl extends WrappedBlockModelPart, BlockModelPartExtension {
     @Override
-    RenderType getRenderType(BlockState state);
+    ChunkSectionLayer getRenderType(BlockState state);
 
     @Override
     default TriState ambientOcclusion() {

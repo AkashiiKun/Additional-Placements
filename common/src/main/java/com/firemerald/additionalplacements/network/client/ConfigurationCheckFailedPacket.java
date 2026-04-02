@@ -91,7 +91,7 @@ public abstract class ConfigurationCheckFailedPacket implements ClientConfigurat
 					desScreen = new JoinMultiplayerScreen(desScreen);
 				}
 			}
-			minecraft.disconnect(new ConnectionErrorsScreen(rootError, desScreen));
+			minecraft.disconnect(new ConnectionErrorsScreen(rootError, desScreen), true);
 		}
 	}
 }
