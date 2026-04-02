@@ -31,6 +31,11 @@ public abstract class RetexturedBlockModelPart implements WrappedBlockModelPart 
     }
 
     @Override
+    public BlockModelPart getParticle() {
+        return originalModel.getFirst();
+    }
+
+    @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable Direction direction) {
         return BlockModelUtils.retexturedQuads(originalModel, wrapped, direction);
     }

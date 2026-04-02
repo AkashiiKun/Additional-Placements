@@ -31,6 +31,6 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper, BlockS
 
     @Override
     default TextureAtlasSprite particleIcon(BlockAndTintGetter level, BlockPos pos, BlockState state) {
-        return getWrappedModel().particleIcon(level, pos, state);
+        return getParticleModel().particleIcon(level, pos, state);
     }
 }
