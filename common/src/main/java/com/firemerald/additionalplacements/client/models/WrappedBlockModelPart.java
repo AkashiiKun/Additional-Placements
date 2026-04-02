@@ -7,6 +7,8 @@ import org.jetbrains.annotations.NotNull;
 public interface WrappedBlockModelPart extends BlockModelPart {
     BlockModelPart getWrapped();
 
+    BlockModelPart getParticle();
+
     @Override
     default boolean useAmbientOcclusion() {
         return getWrapped().useAmbientOcclusion();

@@ -34,6 +34,11 @@ public abstract class RotatedBlockModelPart implements WrappedBlockModelPart {
     }
 
     @Override
+    public BlockModelPart getParticle() {
+        return wrapped;
+    }
+
+    @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable Direction direction) {
         return BlockModelUtils.rotatedQuads(wrapped, modelRotation, rotatesTexture, direction);
     }
