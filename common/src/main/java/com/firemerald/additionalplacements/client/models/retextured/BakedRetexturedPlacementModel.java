@@ -45,6 +45,7 @@ public abstract class BakedRetexturedPlacementModel implements PlacementModelWra
 	@Override
 	public Stream<BlockModelPart> wrapParts(RandomSource random) {
 		List<BlockModelPart> theirParts = theirModel().collectParts(random);
+		if (theirParts.isEmpty()) return Stream.empty();
 		return getWrappedModel().collectParts(random).stream().map(ourPart -> RetexturedBlockModelPart.of(ourPart, theirParts));
 	}
 }
