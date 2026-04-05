@@ -75,9 +75,9 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
+    default boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, ItemStack toolStack, boolean willHarvest, FluidState fluid) {
         BlockState modelState = getModelState(state);
-        return modelState.getBlock().onDestroyedByPlayer(modelState, level, pos, player, willHarvest, fluid);
+        return modelState.getBlock().onDestroyedByPlayer(modelState, level, pos, player, toolStack, willHarvest, fluid);
     }
 
     @Override
