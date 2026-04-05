@@ -3,8 +3,10 @@ package com.firemerald.additionalplacements.client;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlight;
+import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlightAction;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.Camera;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
@@ -12,12 +14,15 @@ import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.state.BlockOutlineRenderState;
+import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 
 import java.util.function.BiConsumer;
 
@@ -44,17 +49,18 @@ public class ClientModEvents {
         }
     }
 
-    public static void onHighlightBlock(LevelRenderer levelRenderer, Camera camera, BlockHitResult target, DeltaTracker delta, PoseStack poseStack, MultiBufferSource multiBufferSource) {
-        if (!APConfigs.client().enablePlacementHighlight.get()) return;
-        Player player = Minecraft.getInstance().player;
+    public static void performBlockHighlight(LevelRenderState levelRenderState, IBlockHighlightAction highlightAction) {
+        Minecraft minecraft = Minecraft.getInstance();
+        Player player = minecraft.player;
         ItemStack stack = player.getMainHandItem();
         if (stack.isEmpty()) stack = player.getOffhandItem();
         if (stack.getItem() instanceof BlockItem) {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
                 if (verticalBlock.additionalplacements$hasAdditionalStates()) {
-                    //noinspection unchecked
-                    ((IBlockHighlight<IPlacementBlock<?>>) verticalBlock.getBlockHighlight().get()).additionalplacements$renderHighlight(verticalBlock, poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, delta);
+                    @SuppressWarnings("unchecked")
+                    IBlockHighlight<IPlacementBlock<?>> highlight = (IBlockHighlight<IPlacementBlock<?>>) verticalBlock.getBlockHighlight().get();
+                    highlightAction.perform(verticalBlock, highlight, player, minecraft.getDeltaTracker());
                 }
             }
         }

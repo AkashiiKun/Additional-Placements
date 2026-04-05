@@ -7,8 +7,8 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public class ClientConfig {
 	public final ModConfigSpec.BooleanValue defaultPlacementLogicState, loginPlacementLogicStateMessage, togglePlacementLogicStateMessage, enablePlacementHighlight;
 	public final ModConfigSpec.LongValue toggleQuickpressTime;
-	public final ModConfigSpec.ConfigValue<String> gridColor, previewColor;
-	private float[] gridColorVal = {.4f, 0, 0, 0}, previewColorVal = {.4f, 1, 1, 1}; //order intentionally left reversed to aid in capturing missed config load events
+	public final ModConfigSpec.ConfigValue<String> gridColor, gridColorHCB, gridColorHC, previewColor, previewColorHCB, previewColorHC;
+	private float[] gridColorVal = {.4f, 0, 0, 0}, gridColorHCBVal = {1, 0, 0, 0}, gridColorHCVal = {1, 0.88f, 1, 0.34f}, previewColorVal = {.4f, 1, 1, 1}, previewColorHCBVal = {1, 0, 0, 0}, previewColorHCVal = {1, .46f, .34f, 1}; //order intentionally left reversed to aid in capturing missed config load events
 
 	public ClientConfig(ModConfigSpec.Builder builder) {
         builder.comment("Client settings").push("client");
@@ -27,18 +27,34 @@ public class ClientConfig {
         enablePlacementHighlight = builder
         		.comment("Whether to enable the rendering of the placement grid and/or preview.")
         		.define("enable_placement_highlights", true);
-        gridColor = builder
-        		.comment("The color of the placement grid, in AARRGGBB hex format.")
-        		.define("grid_color", "66000000", APConfigs::isColorString);
+		gridColor = builder
+				.comment("The color of the placement grid, in AARRGGBB hex format.")
+				.define("grid_color", "66000000", APConfigs::isColorString);
+		gridColorHCB = builder
+				.comment("The color of the placement grid background in high contrast mode, in AARRGGBB hex format.")
+				.define("grid_color_high_constrast_background", "FF000000", APConfigs::isColorString);
+		gridColorHC = builder
+				.comment("The color of the placement grid foreground in high contrast mode, in AARRGGBB hex format.")
+				.define("grid_color_high_constrast_foreground", "FF57FFE1", APConfigs::isColorString);
         previewColor = builder
         		.comment("The color of the placement preview (currently used in stairs without mixed placement), in AARRGGBB hex format.")
         		.define("preview_color", "66FFFFFF", APConfigs::isColorString);
+		previewColorHCB = builder
+				.comment("The color of the placement preview background in high contrast mode (currently used in stairs without mixed placement), in AARRGGBB hex format.")
+				.define("preview_color_high_constrast_background", "FF000000", APConfigs::isColorString);
+		previewColorHC = builder
+				.comment("The color of the placement preview foreground in high contrast mode (currently used in stairs without mixed placement), in AARRGGBB hex format.")
+				.define("preview_color_high_constrast_foreground", "FFFF5775", APConfigs::isColorString);
         Registration.buildConfig(builder, GenerationType::buildClientConfig);
 	}
 
 	public void onConfigLoaded() {
 		gridColorVal = APConfigs.parseColorString(gridColor);
+		gridColorHCBVal = APConfigs.parseColorString(gridColorHCB);
+		gridColorHCVal = APConfigs.parseColorString(gridColorHC);
 		previewColorVal = APConfigs.parseColorString(previewColor);
+		previewColorHCBVal = APConfigs.parseColorString(previewColorHCB);
+		previewColorHCVal = APConfigs.parseColorString(previewColorHC);
 		Registration.forEach(GenerationType::onClientConfigLoaded);
 	}
 
@@ -46,7 +62,23 @@ public class ClientConfig {
 		return gridColorVal;
 	}
 
+	public float[] gridColorHCB() {
+		return gridColorHCBVal;
+	}
+
+	public float[] gridColorHC() {
+		return gridColorHCVal;
+	}
+
 	public float[] previewColor() {
 		return previewColorVal;
+	}
+
+	public float[] previewColorHCB() {
+		return previewColorHCBVal;
+	}
+
+	public float[] previewColorHC() {
+		return previewColorHCVal;
 	}
 }

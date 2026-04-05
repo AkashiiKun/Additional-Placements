@@ -138,7 +138,7 @@ public class TagMismatchChecker extends Thread {
 	public static boolean canGenerateTagsClient(Player player) {
 		assert PlatformUtils.isClient();
 		LocalPlayer clientPlayer = Minecraft.getInstance().player;
-		return clientPlayer == null || player.getGameProfile().getId().equals(clientPlayer.getGameProfile().getId());
+		return clientPlayer == null || player.getGameProfile().id().equals(clientPlayer.getGameProfile().id());
 	}
 
 	public static boolean canGenerateTags(Player player) {

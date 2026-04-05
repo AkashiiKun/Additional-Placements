@@ -7,8 +7,9 @@ import com.firemerald.additionalplacements.config.APConfigs;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.minecraft.client.gui.screens.DisconnectedScreen;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -18,11 +19,6 @@ import net.neoforged.neoforge.client.event.*;
 public class ClientEventHandler {
     static {
         PlatformUtils.checkIsClient();
-    }
-
-    @SubscribeEvent
-    public static void onHighlightBlock(RenderHighlightEvent.Block event) {
-        ClientModEvents.onHighlightBlock(event.getLevelRenderer(), event.getCamera(), event.getTarget(), event.getDeltaTracker(), event.getPoseStack(), event.getMultiBufferSource());
     }
 
     @SubscribeEvent
@@ -53,5 +49,18 @@ public class ClientEventHandler {
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onScreenOpening(ScreenEvent.Opening event) {
         if (event.getCurrentScreen() instanceof ConnectionErrorsScreen && event.getNewScreen() instanceof DisconnectedScreen) event.setCanceled(true);
+    }
+
+    @SubscribeEvent
+    public static void addBlockHighlightRenderers(ExtractBlockOutlineRenderStateEvent event) {
+        if (!APConfigs.client().enablePlacementHighlight.get()) return;
+        BlockHitResult hitResult = event.getHitResult();
+        if (hitResult.getType() != HitResult.Type.BLOCK) return;
+        ClientModEvents.performBlockHighlight(event.getLevelRenderState(), (block, highlight, player, deltaTracker) -> {
+            event.addCustomRenderer((renderState, buffer, poseStack, translucentPass, levelRenderState) -> {
+                highlight.additionalplacements$renderHighlight(block, poseStack, buffer, player, hitResult, levelRenderState, deltaTracker);
+                return false;
+            });
+        });
     }
 }

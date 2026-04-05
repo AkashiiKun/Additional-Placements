@@ -19,6 +19,7 @@ import net.minecraft.client.gui.narration.NarratedElementType;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.navigation.ScreenDirection;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.network.chat.CommonComponents;
@@ -298,8 +299,8 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		return Math.max(0, this.getMaxPosition() - (this.height - 4));
 	}
 
-	protected void updateScrollingState(double mouseX, double mouseY, int button) {
-		this.scrolling = button == 0 && mouseX >= this.getScrollbarPosition() && mouseX < this.getScrollbarPosition() + 6;
+	protected void updateScrollingState(MouseButtonEvent event) {
+		this.scrolling = event.button() == 0 && event.x() >= this.getScrollbarPosition() && event.x() < this.getScrollbarPosition() + 6;
 	}
 
 	protected int getScrollbarPosition() {
@@ -310,27 +311,18 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		return pButton == 0;
 	}
 
-	/**
-	 * Called when a mouse button is clicked within the GUI element.
-	 * <p>
-	 *
-	 * @return {@code true} if the event is consumed, {@code false} otherwise.
-	 * @param mouseX the X coordinate of the mouse.
-	 * @param mouseY the Y coordinate of the mouse.
-	 * @param button the button that was clicked.
-	 */
 	@Override
-	public boolean mouseClicked(double mouseX, double mouseY, int button) {
-		if (!this.isValidMouseClick(button)) {
+	public boolean mouseClicked(MouseButtonEvent event, boolean isDoubleClick) {
+		if (!this.isValidMouseClick(event.button())) {
 			return false;
 		} else {
-			this.updateScrollingState(mouseX, mouseY, button);
-			if (!this.isMouseOver(mouseX, mouseY)) {
+			this.updateScrollingState(event);
+			if (!this.isMouseOver(event.x(), event.y())) {
 				return false;
 			} else {
-				E clicked = this.getEntryAtPosition(mouseX, mouseY);
+				E clicked = this.getEntryAtPosition(event.x(), event.y());
 				if (clicked != null) {
-					if (clicked.mouseClicked(mouseX, mouseY, button)) {
+					if (clicked.mouseClicked(event, isDoubleClick)) {
 						E focused = this.getFocused();
 						if (focused != clicked && focused instanceof ContainerEventHandler containereventhandler) {
                             containereventhandler.setFocused(null);
@@ -340,7 +332,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 						this.setDragging(true);
 						return true;
 					}
-				} else if (this.clickedHeader((int) (mouseX - (this.getX() + this.width / 2d - this.getRowWidth() / 2d)), (int) (mouseY - this.getY()) + (int) this.getScrollAmount() - 4)) {
+				} else if (this.clickedHeader((int) (event.x() - (this.getX() + this.width / 2d - this.getRowWidth() / 2d)), (int) (event.y() - this.getY()) + (int) this.getScrollAmount() - 4)) {
 					return true;
 				}
 
@@ -349,43 +341,23 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		}
 	}
 
-	/**
-	 * Called when a mouse button is released within the GUI element.
-	 * <p>
-	 *
-	 * @return {@code true} if the event is consumed, {@code false} otherwise.
-	 * @param mouseX the X coordinate of the mouse.
-	 * @param mouseY the Y coordinate of the mouse.
-	 * @param button the button that was released.
-	 */
 	@Override
-	public boolean mouseReleased(double mouseX, double mouseY, int button) {
+	public boolean mouseReleased(MouseButtonEvent event) {
 		if (this.getFocused() != null) {
-			this.getFocused().mouseReleased(mouseX, mouseY, button);
+			this.getFocused().mouseReleased(event);
 		}
 
 		return false;
 	}
 
-	/**
-	 * Called when the mouse is dragged within the GUI element.
-	 * <p>
-	 *
-	 * @return {@code true} if the event is consumed, {@code false} otherwise.
-	 * @param mouseX the X coordinate of the mouse.
-	 * @param mouseY the Y coordinate of the mouse.
-	 * @param button the button that is being dragged.
-	 * @param dragX  the X distance of the drag.
-	 * @param dragY  the Y distance of the drag.
-	 */
 	@Override
-	public boolean mouseDragged(double mouseX, double mouseY, int button, double dragX, double dragY) {
-		if (super.mouseDragged(mouseX, mouseY, button, dragX, dragY)) {
+	public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
+		if (super.mouseDragged(event, dragX, dragY)) {
 			return true;
-		} else if (button == 0 && this.scrolling) {
-			if (mouseY < this.getY()) {
+		} else if (event.button() == 0 && this.scrolling) {
+			if (event.y() < this.getY()) {
 				this.setScrollAmount(0.0D);
-			} else if (mouseY > this.getBottom()) {
+			} else if (event.y() > this.getBottom()) {
 				this.setScrollAmount(this.getMaxScroll());
 			} else {
 				double maxScroll = Math.max(1, this.getMaxScroll());

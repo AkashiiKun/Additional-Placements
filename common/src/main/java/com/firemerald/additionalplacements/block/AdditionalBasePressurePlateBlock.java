@@ -102,7 +102,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 
 	@Override
 	public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity, InsideBlockEffectApplier effectApplier) {
-		if (!level.isClientSide) {
+		if (!level.isClientSide()) {
 			int strength = plateMethods.additionalplacements$getSignalForStatePublic(state);
 			if (strength == 0) this.checkPressed(entity, level, pos, state, strength);
 		}

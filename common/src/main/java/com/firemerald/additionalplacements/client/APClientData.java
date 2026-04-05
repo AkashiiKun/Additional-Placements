@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.client;
 
+import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.network.server.SetPlacementTogglePacket;
 import com.firemerald.additionalplacements.util.PlatformUtils;
@@ -17,7 +18,7 @@ public class APClientData {
 		PlatformUtils.checkIsClient();
 	}
 
-	public static final KeyMapping AP_PLACEMENT_KEY = new KeyMapping("key.additionalplacements.placement_toggle", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), "key.categories.additionalplacements");
+	public static final KeyMapping AP_PLACEMENT_KEY = new KeyMapping("key.additionalplacements.placement_toggle", InputConstants.Type.KEYSYM, InputConstants.UNKNOWN.getValue(), KeyMapping.Category.register(AdditionalPlacementsMod.rl("keybinds")));
 
 	private static boolean placementEnabled = true;
 	public static long placementKeyPressTime, lastSynchronizedTime;

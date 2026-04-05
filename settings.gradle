@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'additionalplacements-1.21.7'
+rootProject.name = 'additionalplacements-1.21.9'
 
 include 'common'
 include 'fabric'

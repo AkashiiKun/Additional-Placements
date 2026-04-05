@@ -7,11 +7,11 @@ import java.nio.file.Path;
 
 public class PlatformUtilsImpl {
     public static boolean isClient() {
-        return FMLEnvironment.dist.isClient();
+        return FMLEnvironment.getDist().isClient();
     }
 
     public static boolean isDedicatedServer() {
-        return FMLEnvironment.dist.isDedicatedServer();
+        return FMLEnvironment.getDist().isDedicatedServer();
     }
 
     public static Path getConfigFolder() {
