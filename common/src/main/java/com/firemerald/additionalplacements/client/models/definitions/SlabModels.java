@@ -5,15 +5,15 @@ import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 
 import com.mojang.math.Quadrant;
 import net.minecraft.core.Direction.Axis;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.SlabType;
 
 public class SlabModels {
-	public static final ResourceLocation BASE_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/slabs/base");
-	public static final ResourceLocation COLUMN_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/slabs/column");
-	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/slabs/side_all");
+	public static final Identifier BASE_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/slabs/base");
+	public static final Identifier COLUMN_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/slabs/column");
+	public static final Identifier SIDE_ALL_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/slabs/side_all");
 
 	public static final String[] MODELS = new String[] {
 			"/negative",

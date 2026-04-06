@@ -6,11 +6,12 @@ import com.firemerald.additionalplacements.client.models.definitions.StateModelD
 import com.firemerald.additionalplacements.client.models.retextured.BakedRetexturedPlacementModel;
 import com.firemerald.additionalplacements.client.models.rotated.BakedRotatedPlacementModel;
 import com.firemerald.additionalplacements.util.BlockRotation;
+import com.mojang.math.Quadrant;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
 import net.minecraft.client.renderer.block.model.SingleVariant;
 import net.minecraft.client.renderer.block.model.Variant;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,7 @@ public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements 
                     new Variant.SimpleModelState(
                             modelDefinition.xRotation(),
                             modelDefinition.yRotation(),
+                            Quadrant.R0,
                             true
                     )
             ));
@@ -50,7 +52,7 @@ public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements 
     public void resolveDependencies(Resolver resolver) {
         @SuppressWarnings("unchecked")
         IBlockModelDef<AdditionalPlacementBlock<?>> modelDef = (IBlockModelDef<AdditionalPlacementBlock<?>>) block.getModelDef().get();
-        ResourceLocation rootFolder = modelDef.getBaseModelPrefix(block);
+        Identifier rootFolder = modelDef.getBaseModelPrefix(block);
         for (String model : modelDef.getAllModels(block)) resolver.markDependency(rootFolder.withSuffix(model));
     }
 }

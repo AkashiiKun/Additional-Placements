@@ -18,18 +18,18 @@ import com.firemerald.additionalplacements.util.MessageTree;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class CheckDataServerPacket implements ServerConfigurationPacket {
 	@ExpectPlatform
-	public static CheckDataServerPacket of(Map<ResourceLocation, CompoundTag> serverData) {
+	public static CheckDataServerPacket of(Map<Identifier, CompoundTag> serverData) {
 		throw new AssertionError();
 	}
 
-	private final Map<ResourceLocation, Pair<CompoundTag, List<MessageTree>>> serverData;
+	private final Map<Identifier, Pair<CompoundTag, List<MessageTree>>> serverData;
 
-	public CheckDataServerPacket(Map<ResourceLocation, CompoundTag> serverData) {
+	public CheckDataServerPacket(Map<Identifier, CompoundTag> serverData) {
 		this.serverData = new HashMap<>();
 		Registration.forEach((id, type) -> {
 			CompoundTag clientTag = type.getClientCheckData();
@@ -41,7 +41,7 @@ public abstract class CheckDataServerPacket implements ServerConfigurationPacket
 	}
 
 	public CheckDataServerPacket(FriendlyByteBuf buf) {
-		serverData = buf.readMap(FriendlyByteBuf::readResourceLocation, buf2 -> {
+		serverData = buf.readMap(FriendlyByteBuf::readIdentifier, buf2 -> {
 			CompoundTag clientTag = buf2.readNbt();
 			List<MessageTree> clientErrors = buf2.readList(MessageTree::new);
 			return Pair.of(clientTag, clientErrors);
@@ -50,7 +50,7 @@ public abstract class CheckDataServerPacket implements ServerConfigurationPacket
 
 	@Override
 	public void write(FriendlyByteBuf buf) {
-		buf.writeMap(serverData, FriendlyByteBuf::writeResourceLocation, (buf2, data) -> {
+		buf.writeMap(serverData, FriendlyByteBuf::writeIdentifier, (buf2, data) -> {
 			buf2.writeNbt(data.getLeft());
 			buf2.writeCollection(data.getRight(), MessageTree::write);
 		});
@@ -58,7 +58,7 @@ public abstract class CheckDataServerPacket implements ServerConfigurationPacket
 
 	@Override
 	public @Nullable ClientConfigurationPacket handleServer(Consumer<Runnable> enqueueWork, Consumer<Component> disconnect, Consumer<ConfigurationTask.Type> finishTask) {
-		List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors = new ArrayList<>();
+		List<Triple<Identifier, List<MessageTree>, List<MessageTree>>> compiledErrors = new ArrayList<>();
 		Registration.forEach((id, type) -> {
 			Pair<CompoundTag, List<MessageTree>> clientData = this.serverData.get(id);
 			CompoundTag clientTag;

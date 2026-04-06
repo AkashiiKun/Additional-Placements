@@ -9,7 +9,7 @@ import com.firemerald.additionalplacements.client.models.definitions.*;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.StairBlock;
 
 public class StairModelsGenerator extends BlockModelGenerator<StairBlock, AdditionalStairBlock, StairModelsGenerator> {
@@ -23,12 +23,12 @@ public class StairModelsGenerator extends BlockModelGenerator<StairBlock, Additi
 		return block.connectionsType.getPossibleValues().stream().map(StairModels::getModelDefinition).map(StateModelDefinition::model).collect(Collectors.toSet()).toArray(String[]::new);
 	}
 	
-	public PropertyDispatch<MultiVariant> dispatch(StairConnectionsType connectionType, ResourceLocation modelPrefix) {
+	public PropertyDispatch<MultiVariant> dispatch(StairConnectionsType connectionType, Identifier modelPrefix) {
 		return PropertyDispatch.initial(connectionType).generate(shape -> variantOf(StairModels.getModelDefinition(shape), modelPrefix));
 	}
 	
 	@Override
-	public MultiVariantGenerator generator(AdditionalStairBlock block, ResourceLocation modelPrefix) {
+	public MultiVariantGenerator generator(AdditionalStairBlock block, Identifier modelPrefix) {
 		return MultiVariantGenerator.dispatch(block).with(dispatch(block.connectionsType, modelPrefix));
 	}
 }

@@ -19,24 +19,24 @@ import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.JoinMultiplayerScreen;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class ConfigurationCheckFailedPacket implements ClientConfigurationPacket {
 	@ExpectPlatform
-	public static ConfigurationCheckFailedPacket of(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {
+	public static ConfigurationCheckFailedPacket of(List<Triple<Identifier, List<MessageTree>, List<MessageTree>>> compiledErrors) {
 		throw new AssertionError();
 	}
 
-	private final List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors;
+	private final List<Triple<Identifier, List<MessageTree>, List<MessageTree>>> compiledErrors;
 
-	public ConfigurationCheckFailedPacket(List<Triple<ResourceLocation, List<MessageTree>, List<MessageTree>>> compiledErrors) {
+	public ConfigurationCheckFailedPacket(List<Triple<Identifier, List<MessageTree>, List<MessageTree>>> compiledErrors) {
 		this.compiledErrors = compiledErrors;
 	}
 
 	public ConfigurationCheckFailedPacket(FriendlyByteBuf buf) {
 		compiledErrors = buf.readList(buf2 -> {
-			ResourceLocation id = buf2.readResourceLocation();
+			Identifier id = buf2.readIdentifier();
 			List<MessageTree> clientErrors = buf2.readList(MessageTree::new);
 			List<MessageTree> serverErrors = buf2.readList(MessageTree::new);
 			return Triple.of(id, clientErrors, serverErrors);
@@ -46,7 +46,7 @@ public abstract class ConfigurationCheckFailedPacket implements ClientConfigurat
 	@Override
 	public void write(FriendlyByteBuf buf) {
 		buf.writeCollection(compiledErrors, (buf2, data) -> {
-			buf2.writeResourceLocation(data.getLeft());
+			buf2.writeIdentifier(data.getLeft());
 			buf2.writeCollection(data.getMiddle(), MessageTree::write);
 			buf2.writeCollection(data.getRight(), MessageTree::write);
 		});

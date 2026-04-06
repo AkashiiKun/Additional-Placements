@@ -14,11 +14,9 @@ import org.jetbrains.annotations.Nullable;
 import com.firemerald.additionalplacements.generation.Registration;
 import com.firemerald.additionalplacements.network.server.CheckDataServerPacket;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public abstract class CheckDataClientPacket implements ClientConfigurationPacket {
 	@ExpectPlatform
@@ -26,7 +24,7 @@ public abstract class CheckDataClientPacket implements ClientConfigurationPacket
 		throw new AssertionError();
 	}
 
-	private final Map<ResourceLocation, CompoundTag> data;
+	private final Map<Identifier, CompoundTag> data;
 
 	public CheckDataClientPacket() {
 		data = new HashMap<>();
@@ -37,12 +35,12 @@ public abstract class CheckDataClientPacket implements ClientConfigurationPacket
 	}
 
 	public CheckDataClientPacket(FriendlyByteBuf buf) {
-		data = buf.readMap(FriendlyByteBuf::readResourceLocation, buffer -> buffer.readNbt());
+		data = buf.readMap(FriendlyByteBuf::readIdentifier, buffer -> buffer.readNbt());
 	}
 
 	@Override
 	public void write(FriendlyByteBuf buf) {
-		buf.writeMap(data, FriendlyByteBuf::writeResourceLocation, (buffer, tag) -> buffer.writeNbt(tag));
+		buf.writeMap(data, FriendlyByteBuf::writeIdentifier, (buffer, tag) -> buffer.writeNbt(tag));
 	}
 
 	@Override

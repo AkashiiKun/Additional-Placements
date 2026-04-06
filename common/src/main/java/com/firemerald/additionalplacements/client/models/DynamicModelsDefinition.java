@@ -5,7 +5,7 @@ import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.mojang.serialization.MapCodec;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public abstract class DynamicModelsDefinition implements IAPCustomBlockModelDefinition {
-    public static final ResourceLocation ID = AdditionalPlacementsMod.rl("dynamic_models");
+    public static final Identifier ID = AdditionalPlacementsMod.rl("dynamic_models");
     public static final MapCodec<DynamicModelsDefinition> CODEC = MapCodec.unit(DynamicModelsDefinition::of);
 
     @ExpectPlatform
@@ -25,7 +25,7 @@ public abstract class DynamicModelsDefinition implements IAPCustomBlockModelDefi
     }
 
     @Override
-    public ResourceLocation id() {
+    public Identifier id() {
         return ID;
     }
 

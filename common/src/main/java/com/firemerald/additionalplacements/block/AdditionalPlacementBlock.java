@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.firemerald.additionalplacements.client.block.modeldef.IBlockModelDef;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.*;
 import org.apache.commons.lang3.tuple.Triple;

@@ -7,19 +7,20 @@ import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.client.models.definitions.*;
 import com.google.gson.JsonObject;
 
+import com.mojang.math.Quadrant;
 import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
 import net.minecraft.client.renderer.block.model.Variant;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplate;
 import net.neoforged.neoforge.client.model.generators.template.ExtendedModelTemplateBuilder;
 
 public abstract class BlockModelGenerator<T extends Block, U extends AdditionalPlacementBlock<T>, V extends BlockModelGenerator<T, U, V>> {
-	private ResourceLocation parentFolder;
+	private Identifier parentFolder;
 	private BetterTextureMapping textures;
 	private Consumer<ExtendedModelTemplateBuilder> extraProperties;
 	
@@ -27,14 +28,14 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		clear();
 	}
 
-	public MultiVariant variantOf(StateModelDefinition modelDef, ResourceLocation modelPrefix) {
+	public MultiVariant variantOf(StateModelDefinition modelDef, Identifier modelPrefix) {
 		return new MultiVariant(WeightedList.of(new Variant(
 				modelDef.location(modelPrefix),
-				new Variant.SimpleModelState(modelDef.xRotation(), modelDef.yRotation(), true)
+				new Variant.SimpleModelState(modelDef.xRotation(), modelDef.yRotation(), Quadrant.R0, true)
 		)));
 	}
 	
-	public abstract MultiVariantGenerator generator(U block, ResourceLocation modelPrefix);
+	public abstract MultiVariantGenerator generator(U block, Identifier modelPrefix);
 	
 	@SuppressWarnings("unchecked")
 	public V me() {
@@ -47,7 +48,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 				.clearExtraProperties();
 	}
 	
-	public V parentFolder(ResourceLocation parentFolder) {
+	public V parentFolder(Identifier parentFolder) {
 		this.parentFolder = parentFolder;
 		return me();
 	}
@@ -83,7 +84,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return textures(BetterTextureMapping.sideAll(block, suffix));
 	}
 	
-	public V sideAll(ResourceLocation texture) {
+	public V sideAll(Identifier texture) {
 		return textures(BetterTextureMapping.sideAll(texture));
 	}
 	
@@ -95,7 +96,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return textures(BetterTextureMapping.pillar(block, suffix));
 	}
 	
-	public V pillar(ResourceLocation side, ResourceLocation end) {
+	public V pillar(Identifier side, Identifier end) {
 		return textures(BetterTextureMapping.pillar(side, end));
 	}
 	
@@ -107,7 +108,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return textures(BetterTextureMapping.complete(block, suffix));
 	}
 	
-	public V complete(ResourceLocation side, ResourceLocation top, ResourceLocation bottom) {
+	public V complete(Identifier side, Identifier top, Identifier bottom) {
 		return textures(BetterTextureMapping.complete(side, top, bottom));
 	}
 	
@@ -117,12 +118,12 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return modelPaths();
 	}
 	
-	public V generate(final ResourceLocation modelFolder, String[] modelPaths, BlockModelGenerators generator) {
+	public V generate(final Identifier modelFolder, String[] modelPaths, BlockModelGenerators generator) {
 		ExtendedModelTemplateBuilder builder = new ExtendedModelTemplateBuilder();
 		extraProperties.accept(builder);
 		for (String model : modelPaths()) {
 			if (parentFolder != null) builder.parent(parentFolder.withSuffix(model));
-			final ResourceLocation modelLoc = modelFolder.withSuffix(model);
+			final Identifier modelLoc = modelFolder.withSuffix(model);
 			final ExtendedModelTemplate template = builder.build();
 			final BetterTextureMapping textures = this.textures;
 			generator.modelOutput.accept(modelLoc, () -> {
@@ -134,12 +135,12 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return me();
 	}
 	
-	public V generate(ResourceLocation modelFolder, BlockModelGenerators generator) {
+	public V generate(Identifier modelFolder, BlockModelGenerators generator) {
 		return generate(modelFolder, modelPaths(), generator);
 	}
 	
 	public V generate(U block, BlockModelGenerators generator) {
-		ResourceLocation folder = ModelLocationUtils.getModelLocation(block);
+		Identifier folder = ModelLocationUtils.getModelLocation(block);
 		generate(folder, modelPaths(block), generator);
 		generator.blockStateOutput.accept(generator(block, folder));
 		return me();

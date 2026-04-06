@@ -18,7 +18,7 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
@@ -27,7 +27,7 @@ import net.minecraft.world.level.storage.LevelResource;
 public class CommandExportTags {
 	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 	public static final String PACK_FOLDER_NAME = "additional_placements_generated_tags";
-	public static final ResourceLocation PACK_META_LOC = AdditionalPlacementsMod.rl("generated_datapack_meta.mcmeta");
+	public static final Identifier PACK_META_LOC = AdditionalPlacementsMod.rl("generated_datapack_meta.mcmeta");
 
 	public static void optionalMakeDirectory(Path path) throws IOException {
         if (!Files.exists(path)) Files.createDirectory(path);
@@ -79,12 +79,12 @@ public class CommandExportTags {
 					}
 				}
 				else Files.createDirectory(dataPath);
-				Map<TagKey<Block>, List<ResourceLocation>> tagMap = new HashMap<>();
+				Map<TagKey<Block>, List<Identifier>> tagMap = new HashMap<>();
 				BuiltInRegistries.BLOCK.entrySet().forEach(entry -> {
 					Block block = entry.getValue();
 					if (block instanceof AdditionalPlacementBlock) {
 						Set<TagKey<Block>> tags = ((AdditionalPlacementBlock<?>) block).getDesiredTags();
-						tags.forEach(tag -> tagMap.computeIfAbsent(tag, key -> new LinkedList<>()).add(entry.getKey().location()));
+						tags.forEach(tag -> tagMap.computeIfAbsent(tag, key -> new LinkedList<>()).add(entry.getKey().identifier()));
 					}
 				});
 				tagMap.forEach((tag, blocks) -> {

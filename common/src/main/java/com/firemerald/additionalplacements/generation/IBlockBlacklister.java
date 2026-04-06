@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.generation;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -15,5 +15,5 @@ public interface IBlockBlacklister<T extends Block> {
 	 * @param originalId the ID of the block being checked
 	 * @return if an additional placement block should not be generated for this block
 	 */
-	boolean blacklist(T originalBlock, ResourceLocation originalId);
+	boolean blacklist(T originalBlock, Identifier originalId);
 }

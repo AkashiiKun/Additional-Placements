@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 
@@ -21,7 +21,7 @@ public class AdditionalPlacementsBlockTags {
 	public static Set<TagKey<Block>> remap(Stream<TagKey<Block>> tags, String typeName, String typeNamePlural) {
 		Map<TagKey<Block>, TagKey<Block>> mapped = remappedTags.computeIfAbsent(typeName, key -> new HashMap<>());
 		return tags.map(tag -> mapped.computeIfAbsent(tag, name -> {
-			ResourceLocation loc = tag.location();
+			Identifier loc = tag.location();
 			int beginPlural = loc.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeNamePlural.toLowerCase(Locale.ENGLISH));
 			if (beginPlural < 0) {
 				int begin = loc.getPath().toLowerCase(Locale.ENGLISH).indexOf(typeName.toLowerCase(Locale.ENGLISH));
@@ -33,7 +33,7 @@ public class AdditionalPlacementsBlockTags {
 	}
 
 	private static TagKey<Block> remap(int begin, TagKey<Block> tag, String typeName) {
-		ResourceLocation loc = tag.location();
+		Identifier loc = tag.location();
 		String path = loc.getPath();
 		if ((begin > 0 //check char before
 				&& !SEPARATOR.test(path.charAt(begin - 1))) || (begin + typeName.length() < path.length() //check char after

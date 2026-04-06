@@ -12,6 +12,9 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public enum BlockRotation implements StringRepresentable {
 	IDENTITY(Direction.values(), new int[6]) {
@@ -31,18 +34,25 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public int[] applyVertices(Direction original, int[] oldData, int vertexSize) {
-			return BlockModelUtils.copyVertices(oldData);
+		public void shiftVertices(Direction original, Vector3fc[] sourcePos, long[] sourceTex, @Nullable Vector3fc[] sourceNorms, int @Nullable [] sourceColors, Vector3fc[] desPos, long[] desTex, @Nullable Vector3fc[] desNorms, int @Nullable [] desColors) {
+			System.arraycopy(sourcePos, 0, desPos, 0, sourcePos.length);
+			System.arraycopy(sourceTex, 0, desTex, 0, sourceTex.length);
+			if (sourceNorms != null) System.arraycopy(sourceNorms, 0, desNorms, 0, sourceNorms.length);
+			if (sourceColors != null) System.arraycopy(sourceColors, 0, desColors, 0, sourceColors.length);
 		}
 
 		@Override
 		public void applyBlockSpace(float[] vertex) {}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {}
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return pos;
+		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {}
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return norm;
+		}
 
 		@Override
 		public VoxelShape applyBlockSpace(VoxelShape shape) {
@@ -74,20 +84,21 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {
-			//newData[newPos + 0] = oldData[oldPos + 0];
-			newData[newPos + 1] = oldData[oldPos + 2];
-			newData[newPos + 2] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 1]));
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return new Vector3f(
+					pos.x(),
+					pos.z(),
+					1 - pos.y()
+			);
 		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {
-			int oldNorm = oldData[oldPos];
-			newData[newPos] =
-					(((        (oldNorm >>>  0)) & 0xFF) << 0) |
-					(((        (oldNorm >>> 16)) & 0xFF) << 8) |
-					(((0x100 - (oldNorm >>>  8)) & 0xFF) << 16) |
-					oldNorm & 0xFF000000;
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return new Vector3f(
+					norm.x(),
+					norm.z(),
+					-norm.y()
+			);
 		}
 
 		@Override
@@ -121,20 +132,21 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {
-			//newData[newPos + 0] = oldData[oldPos + 0];
-			newData[newPos + 1] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 2]));
-			newData[newPos + 2] = oldData[oldPos + 1];
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return new Vector3f(
+					pos.x(),
+					1 - pos.z(),
+					pos.y()
+			);
 		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {
-			int oldNorm = oldData[oldPos];
-			newData[newPos] =
-					(((        (oldNorm >>>  0)) & 0xFF) << 0) |
-					(((0x100 - (oldNorm >>> 16)) & 0xFF) << 8) |
-					(((        (oldNorm >>>  8)) & 0xFF) << 16) |
-					oldNorm & 0xFF000000;
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return new Vector3f(
+					norm.x(),
+					-norm.z(),
+					norm.y()
+			);
 		}
 
 		@Override
@@ -169,20 +181,21 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {
-			newData[newPos + 0] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 1]));
-			newData[newPos + 1] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 2]));
-			newData[newPos + 2] = oldData[oldPos + 0];
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return new Vector3f(
+					1 - pos.y(),
+					1 - pos.z(),
+					pos.x()
+			);
 		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {
-			int oldNorm = oldData[oldPos];
-			newData[newPos] =
-					(((0x100 - (oldNorm >>>  8)) & 0xFF) << 0) |
-					(((0x100 - (oldNorm >>> 16)) & 0xFF) << 8) |
-					(((        (oldNorm >>>  0)) & 0xFF) << 16) |
-					oldNorm & 0xFF000000;
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return new Vector3f(
+					-norm.y(),
+					-norm.z(),
+					norm.x()
+			);
 		}
 
 		@Override
@@ -217,20 +230,21 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {
-			newData[newPos + 0] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 0]));
-			newData[newPos + 1] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 2]));
-			newData[newPos + 2] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 1]));
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return new Vector3f(
+					1 - pos.x(),
+					1 - pos.z(),
+					1 - pos.y()
+			);
 		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {
-			int oldNorm = oldData[oldPos];
-			newData[newPos] =
-					(((0x100 - (oldNorm >>>  0)) & 0xFF) << 0) |
-					(((0x100 - (oldNorm >>> 16)) & 0xFF) << 8) |
-					(((0x100 - (oldNorm >>>  8)) & 0xFF) << 16) |
-					oldNorm & 0xFF000000;
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return new Vector3f(
+					-norm.x(),
+					-norm.z(),
+					-norm.y()
+			);
 		}
 
 		@Override
@@ -265,20 +279,21 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {
-			newData[newPos + 0] = oldData[oldPos + 1];
-			newData[newPos + 1] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 2]));
-			newData[newPos + 2] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 0]));
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return new Vector3f(
+					pos.y(),
+					1 - pos.z(),
+					1 - pos.x()
+			);
 		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {
-			int oldNorm = oldData[oldPos];
-			newData[newPos] =
-					(((        (oldNorm >>>  8)) & 0xFF) << 0) |
-					(((0x100 - (oldNorm >>> 16)) & 0xFF) << 8) |
-					(((0x100 - (oldNorm >>>  0)) & 0xFF) << 16) |
-					oldNorm & 0xFF000000;
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return new Vector3f(
+					norm.y(),
+					1-norm.z(),
+					1-norm.x()
+			);
 		}
 
 		@Override
@@ -311,20 +326,21 @@ public enum BlockRotation implements StringRepresentable {
 		}
 
 		@Override
-		public void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos) {
-			//newData[newPos + 0] = oldData[oldPos + 0];
-			newData[newPos + 1] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 1]));
-			newData[newPos + 2] = Float.floatToRawIntBits(1 - Float.intBitsToFloat(oldData[oldPos + 2]));
+		public Vector3fc rotatePos(Vector3fc pos) {
+			return new Vector3f(
+					pos.x(),
+					1 - pos.y(),
+					1 - pos.z()
+			);
 		}
 
 		@Override
-		public void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos) {
-			int oldNorm = oldData[oldPos];
-			newData[newPos] =
-					(((        (oldNorm >>>  0)) & 0xFF) << 0) |
-					(((0x100 - (oldNorm >>>  8)) & 0xFF) << 8) |
-					(((0x100 - (oldNorm >>> 16)) & 0xFF) << 16) |
-					oldNorm & 0xFF000000;
+		public Vector3fc rotateNorm(Vector3fc norm) {
+			return new Vector3f(
+					norm.x(),
+					-norm.y(),
+					-norm.z()
+			);
 		}
 
 		@Override
@@ -370,46 +386,60 @@ public enum BlockRotation implements StringRepresentable {
 		return original == null ? 0 : vertexShiftLeft[original.get3DDataValue()];
 	}
 
-	public int[] applyVertices(Direction original, int[] oldData, int vertexSize) {
-		return BlockModelUtils.copyVertices(oldData, vertexSize, getVertexShiftLeft(original));
+	public void shiftVertices(Direction original, Vector3fc[] sourcePos, long[] sourceTex, @Nullable Vector3fc[] sourceNorms, int @Nullable [] sourceColors, Vector3fc[] desPos, long[] desTex, @Nullable Vector3fc[] desNorms, int @Nullable [] desColors) {
+		int shiftLeft = getVertexShiftLeft(original);
+		BlockModelUtils.shiftData(sourcePos, desPos, sourcePos.length, shiftLeft);
+		BlockModelUtils.shiftData(sourceTex, desTex, sourceTex.length, shiftLeft);
+		if (sourceNorms != null) BlockModelUtils.shiftData(sourceNorms, desNorms, sourceNorms.length, shiftLeft);
+		if (sourceColors != null) BlockModelUtils.shiftData(sourceColors, desColors, sourceColors.length, shiftLeft);
 	}
 
-	public int[] applyVertices(Direction original, int[] oldData, int vertexSize, int posOffset, int uvOffset, int normOffset, boolean rotateUV, TextureAtlasSprite tex) {
+	public void rotateVertices(Direction original,
+							   Vector3fc[] sourcePos, long[] sourceTex, @Nullable Vector3fc[] sourceNorms, int @Nullable [] sourceColors,
+							   Vector3fc[] desPos, long[] desTex, @Nullable Vector3fc[] desNorms, int @Nullable [] desColors,
+							   boolean rotateUV, TextureAtlasSprite tex) {
 		int shiftLeft = getVertexShiftLeft(original);
 		rotateUV &= shiftLeft != 0;
-		int[] newData = BlockModelUtils.copyVertices(oldData, vertexSize, shiftLeft);
-		int oldPos = shiftLeft * vertexSize;
-		for (int newPos = 0; newPos < oldData.length; newPos += vertexSize) {
-			rotatePos(oldData, oldPos + posOffset, newData, newPos + posOffset);
-			if (rotateUV) rotateUV(oldData, oldPos + uvOffset, newData, newPos + uvOffset, shiftLeft, tex);
-			rotateNorm(oldData, oldPos + normOffset, newData, newPos + normOffset);
-			oldPos += vertexSize;
-			if (oldPos >= oldData.length) oldPos = 0;
+		if (!rotateUV) BlockModelUtils.shiftData(sourceTex, desTex, sourceTex.length, shiftLeft);
+		if (sourceColors != null) BlockModelUtils.shiftData(sourceColors, desColors, sourceColors.length, shiftLeft);
+		int sourceIndex = shiftLeft;
+		for (int desIndex = 0; desIndex < sourcePos.length; desIndex++) {
+			desPos[desIndex] = rotatePos(sourcePos[sourceIndex]);
+			if (rotateUV) desTex[desIndex] = rotateUV(sourceTex[sourceIndex], shiftLeft, tex);
+			if (sourceNorms != null) desNorms[desIndex] = rotateNorm(sourceNorms[sourceIndex]);
+			sourceIndex++;
+			if (sourceIndex >= sourcePos.length) sourceIndex = 0;
 		}
-		return newData;
 	}
 
 	public abstract void applyBlockSpace(float[] vertex);
 
-	public abstract void rotatePos(int[] oldData, int oldPos, int[] newData, int newPos);
+	public abstract Vector3fc rotatePos(Vector3fc pos);
 
-	public abstract void rotateNorm(int[] oldData, int oldPos, int[] newData, int newPos);
+	public abstract Vector3fc rotateNorm(Vector3fc norm);
 
-	public void rotateUV(int[] oldData, int oldPos, int[] newData, int newPos, int rotateUV, TextureAtlasSprite tex) {
+	public long rotateUV(long packedUV, int rotateUV, TextureAtlasSprite tex) {
+		if (rotateUV == 0) return packedUV;
+		float sourceU = BlockModelUtils.getU(packedUV);
+		float sourceV = BlockModelUtils.getV(packedUV);
+		float desU, desV;
 		switch (rotateUV) {
-		case 1:
-			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU(1 - tex.getVOffset(Float.intBitsToFloat(oldData[oldPos + 1])))); //1-V
-			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV(     tex.getUOffset(Float.intBitsToFloat(oldData[oldPos + 0])))); //U
-			break;
-		case 2:
-			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU0() + tex.getU1() - Float.intBitsToFloat(oldData[oldPos + 0])); //quick 1-U
-			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV0() + tex.getV1() - Float.intBitsToFloat(oldData[oldPos + 1])); //quick 1-V
-			break;
-		case 3:
-			newData[newPos + 0] = Float.floatToRawIntBits(tex.getU(     tex.getVOffset(Float.intBitsToFloat(oldData[oldPos + 1])))); //V
-			newData[newPos + 1] = Float.floatToRawIntBits(tex.getV(1 - tex.getUOffset(Float.intBitsToFloat(oldData[oldPos + 0])))); //1-U
-			break;
+			case 1:
+				desU = tex.getU(1 - BlockModelUtils.getVOffset(tex, sourceV)); //1-V
+				desV = tex.getV(BlockModelUtils.getUOffset(tex, sourceU)); //U
+				break;
+			case 2:
+				desU = tex.getU0() + tex.getU1() - sourceU; //quick 1-U
+				desV = tex.getV0() + tex.getV1() - sourceV; //quick 1-V
+				break;
+			case 3:
+				desU = tex.getU(BlockModelUtils.getVOffset(tex, sourceV)); //V
+				desV = tex.getV(1 - BlockModelUtils.getUOffset(tex, sourceU)); //1 - U
+				break;
+			default:
+				throw new IllegalStateException("Invalid rotateUV value - must be in range [0,3], got " + rotateUV);
 		}
+		return BlockModelUtils.packUV(desU, desV);
 	}
 
 	public VoxelShape applyBlockSpace(VoxelShape shape) {

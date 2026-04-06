@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.config.blocklist;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 public abstract class BlocklistEntryBase implements IBlocklistEntry {
@@ -11,13 +11,13 @@ public abstract class BlocklistEntryBase implements IBlocklistEntry {
     }
 
     @Override
-    public BlocklistResult apply(Block block, ResourceLocation id) {
+    public BlocklistResult apply(Block block, Identifier id) {
         if (contains(block, id)) {
            return value ? BlocklistResult.ALLOW : BlocklistResult.DENY;
         } else return BlocklistResult.DEFAULT;
     }
 
-    public abstract boolean contains(Block block, ResourceLocation id);
+    public abstract boolean contains(Block block, Identifier id);
 
     public abstract String filterString();
 

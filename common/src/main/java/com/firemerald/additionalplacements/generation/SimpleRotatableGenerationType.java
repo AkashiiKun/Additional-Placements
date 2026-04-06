@@ -4,7 +4,7 @@ import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 
 import com.firemerald.additionalplacements.config.blocklist.Blocklist;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
@@ -33,14 +33,14 @@ public class SimpleRotatableGenerationType<T extends Block, U extends Additional
 
 	public static class Builder<T extends Block, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock> extends BuilderBase<T, U, SimpleRotatableGenerationType<T, U>, Builder<T, U>> {
 		@Override
-		public SimpleRotatableGenerationType<T, U> construct(ResourceLocation name, String description) {
+		public SimpleRotatableGenerationType<T, U> construct(Identifier name, String description) {
 			return new SimpleRotatableGenerationType<>(name, description, this);
 		}
 	}
 
 	private final Blocklist logicRotationEnabled, textureRotationEnabled, modelRotationEnabled;
 
-	protected SimpleRotatableGenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
+	protected SimpleRotatableGenerationType(Identifier name, String description, BuilderBase<T, U, ?, ?> builder) {
 		super(name, description, builder);
 		this.logicRotationEnabled = builder.logicRotationEnabled;
 		this.textureRotationEnabled = builder.textureRotationEnabled;

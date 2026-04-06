@@ -16,14 +16,14 @@ import com.google.common.collect.Lists;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.injectables.annotations.PlatformOnly;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import org.jetbrains.annotations.ApiStatus;
 
 public class Registration {
 	private static final List<IBlockBlacklister<Block>> BLACKLISTERS = new LinkedList<>();
-	private static final Map<ResourceLocation, GenerationType<?, ?>> TYPES = new LinkedHashMap<>();
+	private static final Map<Identifier, GenerationType<?, ?>> TYPES = new LinkedHashMap<>();
 	private static final Map<Class<?>, GenerationType<?, ?>> TYPES_BY_CLASS = new HashMap<>();
 
 	@PlatformOnly({PlatformOnly.FORGE, "neoforge"})
@@ -44,7 +44,7 @@ public class Registration {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryApply(Block block, ResourceLocation blockId, BiConsumer<ResourceKey<Block>, AdditionalPlacementBlock<?>> action) {
+	public static <T extends Block, U extends AdditionalPlacementBlock<T>> void tryApply(Block block, Identifier blockId, BiConsumer<ResourceKey<Block>, AdditionalPlacementBlock<?>> action) {
 		if (block instanceof IPlacementBlock<?> placement && placement.additionalplacements$canGenerateAdditionalStates() && BLACKLISTERS.stream().noneMatch(blacklister -> blacklister.blacklist(block, blockId)) && APConfigs.startup().enabled.test(block, blockId)) {
 			GenerationType<T, U> type = (GenerationType<T, U>) getType(block);
 			if (type != null) type.apply((T) block, blockId, (BiConsumer<ResourceKey<Block>, U>) action);
@@ -67,7 +67,7 @@ public class Registration {
 		}
 	}
 
-	private static <T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>> V registerType(Class<T> clazz, ResourceLocation name, String description, BuilderBase<T, U, V, ?> builder) {
+	private static <T extends Block, U extends AdditionalPlacementBlock<T>, V extends GenerationType<T, U>> V registerType(Class<T> clazz, Identifier name, String description, BuilderBase<T, U, V, ?> builder) {
 		if (TYPES.containsKey(name)) throw new IllegalStateException("A generation type with name " + name + " is already registered!");
 		V type = builder.construct(name, description);
 		addBlacklisters(clazz, type);
@@ -83,7 +83,7 @@ public class Registration {
 		throw new AssertionError();
 	}
 
-	public static void forEach(BiConsumer<? super ResourceLocation, ? super GenerationType<?, ?>> action) {
+	public static void forEach(BiConsumer<? super Identifier, ? super GenerationType<?, ?>> action) {
 		TYPES.forEach(action);
 	}
 

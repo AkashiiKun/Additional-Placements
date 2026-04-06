@@ -4,7 +4,7 @@ import com.firemerald.additionalplacements.block.stairs.AdditionalStairBlock;
 import com.firemerald.additionalplacements.client.models.definitions.StairModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class StairsModelDef implements IBlockModelDef<AdditionalStairBlock> {
@@ -16,7 +16,7 @@ public class StairsModelDef implements IBlockModelDef<AdditionalStairBlock> {
     private StairsModelDef() {}
 
     @Override
-    public ResourceLocation getBaseModelPrefix(AdditionalStairBlock block) {
+    public Identifier getBaseModelPrefix(AdditionalStairBlock block) {
         return StairModels.BASE_MODEL_FOLDER;
     }
 

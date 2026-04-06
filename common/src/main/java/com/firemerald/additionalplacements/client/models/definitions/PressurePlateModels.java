@@ -5,15 +5,15 @@ import com.firemerald.additionalplacements.block.AdditionalFloorBlock;
 
 import com.mojang.math.Quadrant;
 import net.minecraft.core.Direction;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.PressurePlateBlock;
 import net.minecraft.world.level.block.WeightedPressurePlateBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class PressurePlateModels {
-	public static final ResourceLocation BASE_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/pressure_plates/base");
-	public static final ResourceLocation COLUMN_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/pressure_plates/column");
-	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/pressure_plates/side_all");
+	public static final Identifier BASE_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/pressure_plates/base");
+	public static final Identifier COLUMN_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/pressure_plates/column");
+	public static final Identifier SIDE_ALL_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/pressure_plates/side_all");
 
 	public static final String[] MODELS = new String[] {
 			"/unpressed",

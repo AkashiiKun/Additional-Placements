@@ -4,7 +4,7 @@ import com.firemerald.additionalplacements.block.AdditionalCarpetBlock;
 import com.firemerald.additionalplacements.client.models.definitions.CarpetModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class CarpetModelDef implements IBlockModelDef<AdditionalCarpetBlock> {
@@ -16,7 +16,7 @@ public class CarpetModelDef implements IBlockModelDef<AdditionalCarpetBlock> {
     private CarpetModelDef() {}
 
     @Override
-    public ResourceLocation getBaseModelPrefix(AdditionalCarpetBlock block) {
+    public Identifier getBaseModelPrefix(AdditionalCarpetBlock block) {
         return CarpetModels.BASE_MODEL_FOLDER;
     }
 

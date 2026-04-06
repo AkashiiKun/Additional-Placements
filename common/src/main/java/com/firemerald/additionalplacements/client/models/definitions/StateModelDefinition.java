@@ -1,7 +1,7 @@
 package com.firemerald.additionalplacements.client.models.definitions;
 
 import com.mojang.math.Quadrant;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public record StateModelDefinition(String model, Quadrant xRotation, Quadrant yRotation) {
 	public StateModelDefinition(String model, Quadrant yRotation) {
@@ -12,7 +12,7 @@ public record StateModelDefinition(String model, Quadrant xRotation, Quadrant yR
 		this(model, Quadrant.R0, Quadrant.R0);
 	}
 
-	public ResourceLocation location(ResourceLocation prefix) {
+	public Identifier location(Identifier prefix) {
 		return prefix.withSuffix(model);
 	}
 }

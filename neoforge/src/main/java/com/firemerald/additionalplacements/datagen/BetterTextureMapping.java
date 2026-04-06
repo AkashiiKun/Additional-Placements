@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.client.data.models.model.TextureMapping;
 import net.minecraft.client.data.models.model.TextureSlot;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 //TextureMapping is poopoo and doesn't let you map a texture slot to another texture slot so here's an ACTUALLY USEFUL mapping class.
@@ -22,7 +22,7 @@ public class BetterTextureMapping {
 			.put(TextureSlot.BOTTOM, TextureSlot.END)
 			.immutable();
 	
-	public static BetterTextureMapping sideAll(ResourceLocation texture) {
+	public static BetterTextureMapping sideAll(Identifier texture) {
 		return new BetterTextureMapping()
 				.put(TextureSlot.ALL, texture);
 	}
@@ -35,7 +35,7 @@ public class BetterTextureMapping {
 		return sideAll(TextureMapping.getBlockTexture(block, suffix));
 	}
 	
-	public static BetterTextureMapping pillar(ResourceLocation side, ResourceLocation end) {
+	public static BetterTextureMapping pillar(Identifier side, Identifier end) {
 		return new BetterTextureMapping()
 				.put(TextureSlot.SIDE, side)
 				.put(TextureSlot.END, end);
@@ -49,7 +49,7 @@ public class BetterTextureMapping {
 		return pillar(TextureMapping.getBlockTexture(block, suffix + "_side"), TextureMapping.getBlockTexture(block, suffix + "_end"));
 	}
 	
-	public static BetterTextureMapping complete(ResourceLocation side, ResourceLocation top, ResourceLocation bottom) {
+	public static BetterTextureMapping complete(Identifier side, Identifier top, Identifier bottom) {
 		return new BetterTextureMapping()
 				.put(TextureSlot.SIDE, side)
 				.put(TextureSlot.TOP, top)
@@ -79,7 +79,7 @@ public class BetterTextureMapping {
 		return this;
 	}
 	
-	public BetterTextureMapping put(String slot, ResourceLocation texture) {
+	public BetterTextureMapping put(String slot, Identifier texture) {
 		return put(slot, texture.toString());
 	}
 	
@@ -91,7 +91,7 @@ public class BetterTextureMapping {
 		return put(slot.getId(), texture);
 	}
 	
-	public BetterTextureMapping put(TextureSlot slot, ResourceLocation texture) {
+	public BetterTextureMapping put(TextureSlot slot, Identifier texture) {
 		return put(slot.getId(), texture);
 	}
 	

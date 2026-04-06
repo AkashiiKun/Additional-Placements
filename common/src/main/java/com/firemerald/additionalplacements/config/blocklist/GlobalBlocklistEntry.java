@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.config.blocklist;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 public class GlobalBlocklistEntry extends BlocklistEntryBase {
@@ -17,7 +17,7 @@ public class GlobalBlocklistEntry extends BlocklistEntryBase {
     }
 
     @Override
-    public boolean contains(Block block, ResourceLocation id) {
+    public boolean contains(Block block, Identifier id) {
         return true;
     }
 

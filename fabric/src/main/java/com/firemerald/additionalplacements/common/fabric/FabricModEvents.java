@@ -47,7 +47,7 @@ public class FabricModEvents implements ModInitializer {
         Registration.gatherTypes();
         APConfigs.init((type, spec) -> ConfigRegistry.INSTANCE.register(AdditionalPlacementsMod.MOD_ID, type, spec));
         List<Pair<ResourceKey<Block>, Block>> created = new ArrayList<>();
-        BuiltInRegistries.BLOCK.entrySet().forEach(entry -> Registration.tryApply(entry.getValue(), entry.getKey().location(), (key, obj) -> created.add(Pair.of(key, obj))));
+        BuiltInRegistries.BLOCK.entrySet().forEach(entry -> Registration.tryApply(entry.getValue(), entry.getKey().identifier(), (key, obj) -> created.add(Pair.of(key, obj))));
         created.forEach(pair -> Registry.register(BuiltInRegistries.BLOCK, pair.getLeft(), pair.getRight()));
         RegistryEntryAddedCallback.event(BuiltInRegistries.BLOCK).register((rawId, id, block) -> Registration.tryApply(block, id, (blockId, obj) -> Registry.register(BuiltInRegistries.BLOCK, blockId, obj)));
     }

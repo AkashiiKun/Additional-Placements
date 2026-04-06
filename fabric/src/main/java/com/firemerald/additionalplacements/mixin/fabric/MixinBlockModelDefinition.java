@@ -11,7 +11,7 @@ import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
 import net.minecraft.client.renderer.block.model.BlockModelDefinition;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -67,7 +67,7 @@ public class MixinBlockModelDefinition implements BlockModelDefinitionExtensions
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void modifyCodec(CallbackInfo ci) {
         final Codec<BlockModelDefinition> vanillaCodec = CODEC;
-        final MapCodec<ResourceLocation> keyCodec = ResourceLocation.CODEC.fieldOf("neoforge:definition_type");
+        final MapCodec<Identifier> keyCodec = Identifier.CODEC.fieldOf("neoforge:definition_type");
         final Codec<IAPCustomBlockModelDefinition> moddedCodec = new MapCodec<IAPCustomBlockModelDefinition>() {
             @Override
             public <T> Stream<T> keys(DynamicOps<T> ops) {

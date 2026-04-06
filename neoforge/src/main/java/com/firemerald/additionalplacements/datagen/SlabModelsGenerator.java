@@ -5,7 +5,7 @@ import com.firemerald.additionalplacements.client.models.definitions.*;
 
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.SlabBlock;
 
 public class SlabModelsGenerator extends SimpleModelsGenerator<SlabBlock, VerticalSlabBlock, SlabModelsGenerator> {
@@ -15,7 +15,7 @@ public class SlabModelsGenerator extends SimpleModelsGenerator<SlabBlock, Vertic
 	}
 
 	@Override
-	public PropertyDispatch<MultiVariant> dispatch(ResourceLocation modelPrefix) {
+	public PropertyDispatch<MultiVariant> dispatch(Identifier modelPrefix) {
 		return PropertyDispatch.initial(VerticalSlabBlock.AXIS, SlabBlock.TYPE).generate((axis, type) -> variantOf(SlabModels.getModel(axis, type), modelPrefix));
 	}
 }

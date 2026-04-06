@@ -24,7 +24,7 @@ public class StairsBlockHighlight implements IBlockHighlight<IStairBlock<?>> {
     float ARROW_INNER = 0.125f;
 
     @Override
-    public void additionalplacements$renderPlacementPreview(IStairBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+    public void additionalplacements$renderPlacementPreview(IStairBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {
         if (!block.additionalplacements$connectionsType().allowFlipped) return;
         ComplexFacing facing = block.additionalplacements$getFacing(result.getDirection(),
                 (float) (result.getLocation().x - result.getBlockPos().getX() - .5),
@@ -41,7 +41,7 @@ public class StairsBlockHighlight implements IBlockHighlight<IStairBlock<?>> {
                 0, 0, 0, 1
         ));
         PoseStack.Pose lastPose = pose.last();
-        BlockHighlightHelper.lineLoop(vertexConsumer, lastPose, ARROW_OFFSET, r, g, b, a,
+        BlockHighlightHelper.lineLoop(vertexConsumer, lastPose, ARROW_OFFSET, r, g, b, a, width,
                 0          ,  ARROW_OUTER,
                 ARROW_OUTER,  0          ,
                 ARROW_INNER,  0          ,
@@ -56,30 +56,35 @@ public class StairsBlockHighlight implements IBlockHighlight<IStairBlock<?>> {
     float INNER_EDGE = .25f;
 
     @Override
-    public void additionalplacements$renderPlacementHighlight(IStairBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+    public void additionalplacements$renderPlacementHighlight(IStairBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {
         PoseStack.Pose lastPose = pose.last();
 
         //outer box
         BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                OUTER_EDGE);
+                OUTER_EDGE,
+                width);
 
         if (block.additionalplacements$connectionsType().allowFlipped) {
             //inner edges
             BlockHighlightHelper.lineCenteredGrid(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                    INNER_EDGE, OUTER_EDGE);
+                    INNER_EDGE, OUTER_EDGE,
+                    width);
 
             //middle cross
             BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                    OUTER_EDGE);
+                    OUTER_EDGE,
+                    width);
         } else {
             //corners
             BlockHighlightHelper.lineOctal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
                     INNER_EDGE, INNER_EDGE,
-                    OUTER_EDGE, INNER_EDGE);
+                    OUTER_EDGE, INNER_EDGE,
+                    width);
 
             //middle cross
             BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                    INNER_EDGE);
+                    INNER_EDGE,
+                    width);
         }
     }
 }

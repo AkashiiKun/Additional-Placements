@@ -20,6 +20,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.permissions.Permissions;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
@@ -27,7 +28,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 public class CommandGenerateStairsDebugger {
 	public static void register(CommandDispatcher<CommandSourceStack> dispatch, CommandBuildContext buildContext) {
 		dispatch.register(Commands.literal("ap_stairs_state_debug")
-				.requires(source -> source.hasPermission(2))
+				.requires(source -> source.permissions().hasPermission(Permissions.COMMANDS_GAMEMASTER))
 				.then(Commands.argument("pos", BlockPosArgument.blockPos())
 						.then(Commands.argument("block", BlockStateArgument.block(buildContext))
 								.executes(context -> {

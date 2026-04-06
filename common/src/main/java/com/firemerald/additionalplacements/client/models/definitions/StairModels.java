@@ -6,12 +6,12 @@ import com.firemerald.additionalplacements.block.stairs.common.CommonStairShapeS
 import com.firemerald.additionalplacements.util.ComplexFacing;
 
 import com.mojang.math.Quadrant;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public class StairModels {
-	public static final ResourceLocation BASE_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/stairs/base");
-	public static final ResourceLocation COLUMN_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/stairs/column");
-	public static final ResourceLocation SIDE_ALL_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/stairs/side_all");
+	public static final Identifier BASE_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/stairs/base");
+	public static final Identifier COLUMN_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/stairs/column");
+	public static final Identifier SIDE_ALL_MODEL_FOLDER = AdditionalPlacementsMod.rl("block/stairs/side_all");
 
 	public static final String[] MODELS = new String[] {
 			"/top/straight",

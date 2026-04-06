@@ -21,19 +21,22 @@ public class SlabBlockHighlight implements IBlockHighlight<ISlabBlock<?>> {
     float INNER_EDGE = .25f;
 
     @Override
-    public void additionalplacements$renderPlacementHighlight(ISlabBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+    public void additionalplacements$renderPlacementHighlight(ISlabBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {
         PoseStack.Pose lastPose = pose.last();
 
         //outer box
         BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                OUTER_EDGE);
+                OUTER_EDGE,
+                width);
 
         //inner box
         BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                INNER_EDGE);
+                INNER_EDGE,
+                width);
 
         //diagonals
         BlockHighlightHelper.lineAxisDiagonal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-                INNER_EDGE, OUTER_EDGE);
+                INNER_EDGE, OUTER_EDGE,
+                width);
     }
 }

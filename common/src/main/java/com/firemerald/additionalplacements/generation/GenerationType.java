@@ -13,8 +13,8 @@ import com.firemerald.additionalplacements.util.MessageTree;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.Property;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -55,10 +55,10 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 			return me();
 		}
 
-		public abstract V construct(ResourceLocation name, String description);
+		public abstract V construct(Identifier name, String description);
 	}
 
-	public final ResourceLocation name;
+	public final Identifier name;
 	public final String description;
 	private final Set<String> addsProperties;
 	private final Blocklist enabled;
@@ -67,7 +67,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	private final List<CreatedBlockEntry<T, U>> created = new ArrayList<>();
 	private final List<IBlockBlacklister<? super T>> blacklisters = new LinkedList<>();
 
-	protected GenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
+	protected GenerationType(Identifier name, String description, BuilderBase<T, U, ?, ?> builder) {
 		this.name = name;
 		this.description = description;
 		this.addsProperties = builder.addsProperties;
@@ -173,7 +173,7 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 	 */
 	public void checkServerData(CompoundTag tag, Consumer<MessageTree> logError) {}
 
-	public final boolean enabledForBlock(T block, ResourceLocation blockId) {
+	public final boolean enabledForBlock(T block, Identifier blockId) {
 		if (blacklisters.stream().anyMatch(blacklister -> blacklister.blacklist(block, blockId))) return false;
 		if (enabled.test(block, blockId)) {
 			Collection<String> has = block.defaultBlockState().getProperties().stream().map(Property::getName).filter(addsProperties::contains).toList();
@@ -186,9 +186,9 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 		} else return false;
 	}
 
-	public final void apply(T block, ResourceLocation blockId, BiConsumer<ResourceKey<Block>, U> action) {
+	public final void apply(T block, Identifier blockId, BiConsumer<ResourceKey<Block>, U> action) {
 		if (enabledForBlock(block, blockId)) {
-			ResourceLocation newId = ResourceLocation.fromNamespaceAndPath(name.getNamespace(), blockId.getNamespace() + "." + blockId.getPath());
+			Identifier newId = Identifier.fromNamespaceAndPath(name.getNamespace(), blockId.getNamespace() + "." + blockId.getPath());
 			ResourceKey<Block> key = ResourceKey.create(BuiltInRegistries.BLOCK.key(), newId);
 			U created = construct(block, key, blockId);
 			this.created.add(new CreatedBlockEntry<>(blockId, block, newId, created));
@@ -197,9 +197,9 @@ public abstract class GenerationType<T extends Block, U extends AdditionalPlacem
 		}
 	}
 
-	public abstract U construct(T block, ResourceKey<Block> key, ResourceLocation blockId);
+	public abstract U construct(T block, ResourceKey<Block> key, Identifier blockId);
 
-	public void applyConfig(U block, ResourceLocation blockId) {}
+	public void applyConfig(U block, Identifier blockId) {}
 
 	public void forEachCreated(Consumer<? super CreatedBlockEntry<T, U>> action) {
 		created.forEach(action);

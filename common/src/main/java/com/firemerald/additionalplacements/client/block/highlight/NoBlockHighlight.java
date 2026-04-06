@@ -23,5 +23,5 @@ public class NoBlockHighlight implements IBlockHighlight<IPlacementBlock<?>> {
     public void additionalplacements$renderHighlight(IPlacementBlock<?> block, PoseStack pose, MultiBufferSource bufferSource, Player player, BlockHitResult result, LevelRenderState renderState, DeltaTracker delta) {}
 
     @Override
-    public void additionalplacements$renderPlacementHighlight(IPlacementBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {}
+    public void additionalplacements$renderPlacementHighlight(IPlacementBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {}
 }

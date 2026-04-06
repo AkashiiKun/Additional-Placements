@@ -26,7 +26,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.generation.Registration;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 @EventBusSubscriber
@@ -58,7 +58,7 @@ public class CommonModEventHandler {
         if (event.getRegistry() == BuiltInRegistries.BLOCK) {
             List<Pair<ResourceKey<Block>, Block>> created = new ArrayList<>();
             BuiltInRegistries.BLOCK.entrySet().forEach(entry -> {
-                ResourceLocation name = entry.getKey().location();
+                Identifier name = entry.getKey().identifier();
                 Block block = entry.getValue();
                 Registration.tryApply(block, name, (key, obj) -> created.add(Pair.of(key, obj)));
             });

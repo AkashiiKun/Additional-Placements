@@ -4,9 +4,7 @@ import com.firemerald.additionalplacements.block.VerticalSlabBlock;
 import com.firemerald.additionalplacements.client.models.definitions.SlabModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class SlabModelDef implements IBlockModelDef<VerticalSlabBlock> {
@@ -18,7 +16,7 @@ public class SlabModelDef implements IBlockModelDef<VerticalSlabBlock> {
     private SlabModelDef() {}
 
     @Override
-    public ResourceLocation getBaseModelPrefix(VerticalSlabBlock block) {
+    public Identifier getBaseModelPrefix(VerticalSlabBlock block) {
         return SlabModels.BASE_MODEL_FOLDER;
     }
 

@@ -3,7 +3,7 @@ package com.firemerald.additionalplacements.block.interfaces.neoforge;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.util.BlockRotation;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

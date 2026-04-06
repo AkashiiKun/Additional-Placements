@@ -6,27 +6,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import com.mojang.blaze3d.vertex.VertexFormatElement;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.data.AtlasIds;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.util.BlockRotation;
-import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
+import org.joml.Vector3fc;
 
 public class BlockModelUtils {
 	static {
@@ -38,114 +34,120 @@ public class BlockModelUtils {
 		else return state;
 	}
 
-	public static BakedQuad retexture(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex, int vertexSize, int uvOffset) {
+	public static BakedQuad retexture(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex) {
 		return transformed(
 				jsonBakedQuad,
-				BlockModelUtils.updateVertices(
-						jsonBakedQuad.vertices(),
-						jsonBakedQuad.sprite(),
-						newSprite,
-						vertexSize,
-						uvOffset
-				),
+				(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors) -> {
+					System.arraycopy(oldPos, 0, newPos, 0, oldPos.length);
+					updateUVs(oldTex, newTex, jsonBakedQuad.sprite(), newSprite);
+					if (oldNorms != null) System.arraycopy(oldNorms, 0, newNorms, 0, oldNorms.length);
+					if (oldColors != null) System.arraycopy(oldColors, 0, newColors, 0, oldColors.length);
+				},
 				newTintIndex,
 				jsonBakedQuad.direction(),
 				newSprite
 		);
 	}
 
+	@FunctionalInterface
+	public interface QuadTransform {
+		void transform(Vector3fc[] sourcePos, long[] sourceTex, Vector3fc @Nullable [] sourceNorms, int @Nullable [] sourceCols, Vector3fc[] desPos, long[] desTex, Vector3fc @Nullable [] desNorms, int @Nullable [] desCols);
+	}
+
+	public static BakedQuad transformed(BakedQuad originalQuad, QuadTransform quadTransform, int tintIndex, Direction direction, TextureAtlasSprite sprite) {
+		Vector3fc[] oldPos = getVertices(originalQuad);
+		long[] oldTex = getUVs(originalQuad);
+		Vector3fc @Nullable [] oldNorms = getNorms(originalQuad);
+		int @Nullable [] oldColors = getColors(originalQuad);
+		Vector3fc[] newPos = oldPos.clone();
+		long[] newTex = oldTex.clone();
+		Vector3fc[] newNorms = oldNorms == null ? null : oldNorms.clone();
+		int[] newColors = oldColors == null ? null : oldColors.clone();
+		quadTransform.transform(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors);
+		return transformed(originalQuad, newPos, newTex, newNorms, newColors, tintIndex, direction, sprite);
+	}
+
 	@ExpectPlatform
-	public static BakedQuad transformed(BakedQuad originalQuad, int[] vertexData, int tintIndex, Direction direction, TextureAtlasSprite sprite) {
+	public static BakedQuad transformed(BakedQuad originalQuad, Vector3fc[] newPos, long[] newTex, Vector3fc @Nullable [] newNorm, int @Nullable [] newColor, int tintIndex, Direction direction, TextureAtlasSprite sprite) {
 		throw new AssertionError();
 	}
 
-	public static final float[] ZERO_POINT = {0, 0, 0};
+	public static final Vector3fc ZERO_POINT = new Vector3f();
 
-	public static float getFaceSize(int[] vertices, int vertexSize, int posOffset) {
-		float[] first = newVertex(vertices, 0, posOffset);
-		float[] prev = new float[3];
-		float[] cur = newVertex(vertices, vertexSize, first, posOffset);
+	public static float getFaceSize(Vector3fc[] vertices) {
+		Vector3f first = newVertex(vertices, 0);
+		Vector3f prev = new Vector3f();
+		Vector3f cur = newVertex(vertices, 1, first);
 		float size = 0;
-		for (int vertexIndex = vertexSize * 2; vertexIndex < vertices.length; vertexIndex += vertexSize)
-		{
-			float[] tmp = prev;
+		for (int vertexIndex = 2; vertexIndex < vertices.length; vertexIndex++) {
+			Vector3f tmp = prev;
 			prev = cur;
-			cur = getVertex(vertices, vertexIndex, first, posOffset, tmp);
+			cur = getVertex(vertices, vertexIndex, first, tmp);
 			size += getArea(prev, cur);
 		}
 		return size;
 	}
 
-	public static float[] newVertex(int[] vertices, int vertexIndex, int posOffset) {
-		return newVertex(vertices, vertexIndex, ZERO_POINT, posOffset);
+	public static Vector3f newVertex(Vector3fc[] vertices, int vertexIndex) {
+		return newVertex(vertices, vertexIndex, ZERO_POINT);
 	}
 
-	public static float[] newVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset) {
-		return new float[] {
-			Float.intBitsToFloat(vertices[vertexIndex + posOffset]) - origin[0],
-			Float.intBitsToFloat(vertices[vertexIndex + posOffset + 1]) - origin[1],
-			Float.intBitsToFloat(vertices[vertexIndex + posOffset + 2]) - origin[2]
-		};
+	public static Vector3f newVertex(Vector3fc[] vertices, int vertexIndex, Vector3fc origin) {
+		return new Vector3f(vertices[vertexIndex]).sub(origin);
 	}
 
-	public static float[] getVertex(int[] vertices, int vertexIndex, int posOffset, float[] des) {
-		return getVertex(vertices, vertexIndex, ZERO_POINT, posOffset, des);
+	public static Vector3f getVertex(Vector3fc[] vertices, int vertexIndex, Vector3f des) {
+		return getVertex(vertices, vertexIndex, ZERO_POINT, des);
 	}
 
-	public static float[] getVertex(int[] vertices, int vertexIndex, float[] origin, int posOffset, float[] des) {
-		des[0] = Float.intBitsToFloat(vertices[vertexIndex + posOffset]) - origin[0];
-		des[1] = Float.intBitsToFloat(vertices[vertexIndex + posOffset + 1]) - origin[1];
-		des[2] = Float.intBitsToFloat(vertices[vertexIndex + posOffset + 2]) - origin[2];
-		return des;
+	public static Vector3f getVertex(Vector3fc[] vertices, int vertexIndex, Vector3fc origin, Vector3f des) {
+		return vertices[vertexIndex].get(des).sub(origin);
 	}
 
-	public static float getArea(float[] ab, float[] ac) {
+	public static float getArea(Vector3f ab, Vector3f ac) {
 		return .5f * Mth.sqrt(
-				Mth.square(ab[0] * ac[1] - ab[1] * ac[0]) +
-				Mth.square(ab[1] * ac[2] - ab[2] * ac[1]) +
-				Mth.square(ab[2] * ac[0] - ab[0] * ac[2])
+				Mth.square(ab.x * ac.y - ab.y * ac.x) +
+				Mth.square(ab.y * ac.z - ab.z * ac.y) +
+				Mth.square(ab.z * ac.x - ab.x * ac.z)
 				);
 	}
 
-	public static int[] updateVertices(int[] vertices, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertexSize, int uvOffset) {
-		int[] updatedVertices = vertices.clone();
-		for (int vertexIndex = uvOffset; vertexIndex < vertices.length; vertexIndex += vertexSize) {
-			updatedVertices[vertexIndex] = changeUVertexElementSprite(oldSprite, newSprite, vertices[vertexIndex]);
-			updatedVertices[vertexIndex + 1] = changeVVertexElementSprite(oldSprite, newSprite, vertices[vertexIndex + 1]);
+	public static void updateUVs(long[] source, long[] des, TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite) {
+		for (int uvIndex = 0; uvIndex < source.length; uvIndex++) {
+			des[uvIndex] = changeUVSprite(oldSprite, newSprite, source[uvIndex]);
 	    }
-		return updatedVertices;
+	}
+
+	private static long changeUVSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, long packedUV) {
+		float u = getU(packedUV);
+		float v = getV(packedUV);
+		return packUV(
+				newSprite.getU(getUOffset(oldSprite, getU(packedUV))),
+				newSprite.getV(getVOffset(oldSprite, getV(packedUV)))
+		);
 	}
 
 	private static int changeUVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex) {
-		return Float.floatToRawIntBits(newSprite.getU(oldSprite.getUOffset(Float.intBitsToFloat(vertex))));
+		return Float.floatToRawIntBits(newSprite.getU(BlockModelUtils.getUOffset(oldSprite, Float.intBitsToFloat(vertex))));
 	}
 
 	private static int changeVVertexElementSprite(TextureAtlasSprite oldSprite, TextureAtlasSprite newSprite, int vertex) {
-		return Float.floatToRawIntBits(newSprite.getV(oldSprite.getVOffset(Float.intBitsToFloat(vertex))));
+		return Float.floatToRawIntBits(newSprite.getV(BlockModelUtils.getVOffset(oldSprite, Float.intBitsToFloat(vertex))));
 	}
 
-	public static int[] copyVertices(int[] originalData) {
-		int[] newData = new int[originalData.length];
-		System.arraycopy(originalData, 0, newData, 0, originalData.length); //direct copy
-		return newData;
-	}
-
-	public static int[] copyVertices(int[] originalData, int vertexSize, int shiftLeft) {
-		int[] newData = new int[originalData.length];
-		//shiftLeft %= originalData.length / vertexSize;
+	@SuppressWarnings("SuspiciousSystemArraycopy")
+    public static <T> void shiftData(T source, T des, int size, int shiftLeft) {
+		//shiftLeft %= originalData.length;
 		if (shiftLeft == 0) {
-			System.arraycopy(originalData, 0, newData, 0, originalData.length); //direct copy
+			System.arraycopy(source, 0, des, 0, size); //direct copy
 		} else {
-			int lengthLeft = shiftLeft * vertexSize;
-			int lengthRight = originalData.length - lengthLeft;
-			System.arraycopy(originalData, lengthLeft, newData, 0, lengthRight); //copy [middle to end] to [start to middle]
-			System.arraycopy(originalData, 0, newData, lengthRight, lengthLeft); //copy [start to middle] to [middle to end]
+			int lengthRight = size - shiftLeft;
+			System.arraycopy(source, shiftLeft, des, 0, lengthRight); //copy [middle to end] to [start to middle]
+			System.arraycopy(source, 0, des, lengthRight, shiftLeft); //copy [start to middle] to [middle to end]
 		}
-		return newData;
 	}
 
-	@SuppressWarnings("deprecation")
-	public static Pair<TextureAtlasSprite, Integer> getSidedTexture(List<BlockModelPart> fromModel, Direction fromSide, int vertexSize, int posOffset) {
+	public static Pair<TextureAtlasSprite, Integer> getSidedTexture(List<BlockModelPart> fromModel, Direction fromSide) {
 		Map<Pair<TextureAtlasSprite, Integer>, Double> weights = new HashMap<>();
 		List<BakedQuad> referenceQuads = fromModel.stream().flatMap(part -> part.getQuads(fromSide).stream()).toList();
 		if (fromSide != null && (referenceQuads.isEmpty() || referenceQuads.stream().noneMatch(quad -> quad.direction() == fromSide))) //no valid culled sides
@@ -154,7 +156,7 @@ public class BlockModelUtils {
 			referenceQuads.forEach(referredBakedQuad -> {
 				if (fromSide == null || referredBakedQuad.direction() == fromSide) { //only for quads facing the correct side
 					Pair<TextureAtlasSprite, Integer> tex = Pair.of(referredBakedQuad.sprite(), referredBakedQuad.tintIndex());
-					weights.merge(tex, (double) BlockModelUtils.getFaceSize(referredBakedQuad.vertices(), vertexSize, posOffset), Double::sum);
+					weights.merge(tex, (double) BlockModelUtils.getFaceSize(getVertices(referredBakedQuad)), Double::sum);
 				}
 			});
 			return weights.entrySet().stream().max((e1, e2) -> (int) Math.signum(e2.getValue() - e1.getValue())).map(Map.Entry::getKey).orElse(
@@ -165,10 +167,6 @@ public class BlockModelUtils {
 	}
 
 	public static List<BakedQuad> retexturedQuads(List<BlockModelPart> originalModel, BlockModelPart ourModel, Direction side) {
-		VertexFormat format = DefaultVertexFormat.BLOCK; //TODO
-		int vertexSize = format.getVertexSize() / 4;
-		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
-		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
 		@SuppressWarnings("unchecked")
 		Pair<TextureAtlasSprite, Integer>[] textures = new Pair[6];
 		List<BakedQuad> originalQuads = ourModel.getQuads(side);
@@ -177,28 +175,76 @@ public class BlockModelUtils {
 			Direction modelSide = originalQuad.direction();
 			int dirIndex = modelSide.get3DDataValue();
 			Pair<TextureAtlasSprite, Integer> texture = textures[dirIndex];
-			if (texture == null) texture = textures[dirIndex] = getSidedTexture(originalModel, modelSide, vertexSize, posOffset);
-    		bakedQuads.add(retexture(originalQuad, texture.getLeft(), texture.getRight(), vertexSize, uvOffset));
+			if (texture == null) texture = textures[dirIndex] = getSidedTexture(originalModel, modelSide);
+    		bakedQuads.add(retexture(originalQuad, texture.getLeft(), texture.getRight()));
 		}
 		return bakedQuads;
 	}
 
 	public static List<BakedQuad> rotatedQuads(BlockModelPart model, BlockRotation rotation, boolean rotateTex, Direction side) {
-		VertexFormat format = DefaultVertexFormat.BLOCK; //TODO
-		int vertexSize = format.getVertexSize() / 4;
-		int posOffset = format.getOffset(VertexFormatElement.POSITION) / 4;
-		int uvOffset = format.getOffset(VertexFormatElement.UV) / 4;
-		int normOffset = format.getOffset(VertexFormatElement.NORMAL) / 4;
 		List<BakedQuad> originalQuads = model.getQuads(rotation.unapply(side));
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
 		for (BakedQuad originalQuad : originalQuads) {
     		bakedQuads.add(transformed(
 					originalQuad,
-					rotation.applyVertices(originalQuad.direction(), originalQuad.vertices(), vertexSize, posOffset, uvOffset, normOffset, rotateTex, originalQuad.sprite()),
+					(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors) -> {
+						rotation.rotateVertices(originalQuad.direction(), oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors, rotateTex, originalQuad.sprite());
+					},
 					originalQuad.tintIndex(),
 					rotation.apply(originalQuad.direction()),
     				originalQuad.sprite()));
 		}
 		return bakedQuads;
+	}
+
+	public static float getUOffset(TextureAtlasSprite sprite, float offset) {
+		float f = sprite.getU1() - sprite.getU0();
+		return (offset - sprite.getU0()) / f;
+	}
+
+	public static float getVOffset(TextureAtlasSprite sprite, float offset) {
+		float f = sprite.getV1() - sprite.getV0();
+		return (offset - sprite.getV0()) / f;
+	}
+
+	public static Vector3fc[] getVertices(BakedQuad quad) {
+		return new Vector3fc[] {
+				quad.position0(),
+				quad.position1(),
+				quad.position2(),
+				quad.position3()
+		};
+	}
+
+	public static long[] getUVs(BakedQuad quad) {
+		return new long[] {
+				quad.packedUV0(),
+				quad.packedUV1(),
+				quad.packedUV2(),
+				quad.packedUV3()
+		};
+	}
+
+	@ExpectPlatform
+	@Nullable
+	public static Vector3fc[] getNorms(BakedQuad quad) {
+		throw new AssertionError();
+	}
+
+	@ExpectPlatform
+    public static int @Nullable [] getColors(BakedQuad quad) {
+		throw new AssertionError();
+	}
+
+	public static float getU(long packedUV) {
+		return Float.intBitsToFloat((int) ((packedUV & 0xFFFFFFFF00000000L) >> 32));
+	}
+
+	public static float getV(long packedUV) {
+		return Float.intBitsToFloat((int) (packedUV & 0x00000000FFFFFFFFL));
+	}
+
+	public static long packUV(float u, float v) {
+		return ((long) Float.floatToRawIntBits(v)) | (((long) Float.floatToRawIntBits(u)) << 32);
 	}
 }

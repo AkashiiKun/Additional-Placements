@@ -19,7 +19,7 @@ import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.StairBlock;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -48,14 +48,14 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 
 	public static class Builder<T extends StairBlock, U extends AdditionalPlacementBlock<T> & ISimpleRotationBlock & IStairBlock<T>> extends BuilderBase<T, U, VerticalStairsGenerationType<T, U>, Builder<T, U>> {
 		@Override
-		public VerticalStairsGenerationType<T, U> construct(ResourceLocation name, String description) {
+		public VerticalStairsGenerationType<T, U> construct(Identifier name, String description) {
 			return new VerticalStairsGenerationType<>(name, description, this);
 		}
 	}
 
 	private final Blocklist verticalConnectionsEnabled, mixedConnectionsEnabled;
 
-	protected VerticalStairsGenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
+	protected VerticalStairsGenerationType(Identifier name, String description, BuilderBase<T, U, ?, ?> builder) {
 		super(name, description, builder);
 		this.verticalConnectionsEnabled = builder.verticalConnectionsEnabled;
 		this.mixedConnectionsEnabled = builder.mixedConnectionsEnabled;
@@ -85,7 +85,7 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 		return tag;
 	}
 
-	public static void addBlockEntry(CompoundTag tag, ResourceLocation id) {
+	public static void addBlockEntry(CompoundTag tag, Identifier id) {
 		ListTag modList;
 		Optional<ListTag> modListOpt = tag.getList(id.getNamespace());
 		if (modListOpt.isPresent()) modList = modListOpt.get();
@@ -96,12 +96,12 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 	@Override
 	public void checkClientData(CompoundTag tag, Consumer<MessageTree> onError) {
 		if (tag != null) {
-			Set<ResourceLocation> noVertical = loadEntries(tag, "noVertical");
-			Set<ResourceLocation> noMixed = loadEntries(tag, "noMixed");
+			Set<Identifier> noVertical = loadEntries(tag, "noVertical");
+			Set<Identifier> noMixed = loadEntries(tag, "noMixed");
 
-			Map<String, List<ResourceLocation>> mismatched = new HashMap<>();
+			Map<String, List<Identifier>> mismatched = new HashMap<>();
 			this.forEachCreated(entry -> {
-				ResourceLocation id = entry.originalId();
+				Identifier id = entry.originalId();
 				if (!entry.newBlock().additionalplacements$connectionsType().allowVertical) { //simple
 					if (!noVertical.contains(id)) {
 						mismatched.computeIfAbsent("no_vertical_connections", u -> new ArrayList<>()).add(id);
@@ -127,14 +127,14 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 		}
 	}
 
-	public static Set<ResourceLocation> loadEntries(CompoundTag tag, String key) {
+	public static Set<Identifier> loadEntries(CompoundTag tag, String key) {
 		Optional<CompoundTag> entriesOpt = tag.getCompound(key);
 		if (entriesOpt.isPresent()) {
 			CompoundTag entries = entriesOpt.get();
-			Set<ResourceLocation> set = new HashSet<>();
+			Set<Identifier> set = new HashSet<>();
 			entries.keySet().forEach(modId -> {
 				entries.getList(modId).ifPresent(modList -> {
-					modList.forEach(nameTag -> nameTag.asString().ifPresent(name -> set.add(ResourceLocation.tryBuild(modId, name))));
+					modList.forEach(nameTag -> nameTag.asString().ifPresent(name -> set.add(Identifier.tryBuild(modId, name))));
 				});
 			});
 			return set;
@@ -150,7 +150,7 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public U construct(T block, ResourceKey<Block> key, ResourceLocation blockId) {
+	public U construct(T block, ResourceKey<Block> key, Identifier blockId) {
 		return (U) AdditionalStairBlock.of(block, key,
 				!verticalConnectionsEnabled.test(block, blockId) ? StairConnectionsType.SIMPLE :
 					!mixedConnectionsEnabled.test(block, blockId) ? StairConnectionsType.EXTENDED :

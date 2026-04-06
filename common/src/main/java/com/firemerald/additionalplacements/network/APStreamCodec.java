@@ -2,7 +2,7 @@ package com.firemerald.additionalplacements.network;
 
 import java.util.function.Function;
 
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 

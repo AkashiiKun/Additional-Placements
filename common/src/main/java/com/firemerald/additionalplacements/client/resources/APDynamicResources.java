@@ -12,12 +12,10 @@ import com.firemerald.additionalplacements.generation.Registration;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.packs.PackLocationInfo;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.server.packs.PackSelectionConfig;
@@ -79,7 +77,7 @@ public class APDynamicResources implements PackResources {
     }
 
     @Override
-    public IoSupplier<InputStream> getResource(@NotNull PackType packType, @NotNull ResourceLocation resourceLocation) {
+    public IoSupplier<InputStream> getResource(@NotNull PackType packType, @NotNull Identifier resourceLocation) {
         if (packType != PackType.CLIENT_RESOURCES) return null;
         else if (!resourceLocation.getNamespace().equals(AdditionalPlacementsMod.MOD_ID)) return null;
         else if (!resourceLocation.getPath().endsWith(".json")) return null;
@@ -102,7 +100,7 @@ public class APDynamicResources implements PackResources {
         if (packType == PackType.CLIENT_RESOURCES && AdditionalPlacementsMod.MOD_ID.equals(domain)) {
             if ("blockstates".equals(path)) {
                 Registration.forEach(type -> type.forEachCreated(entry -> {
-                    ResourceLocation id = entry.newId();
+                    Identifier id = entry.newId();
                     resourceOutput.accept(
                             AdditionalPlacementsMod.rl("blockstates/" + id.getPath() + ".json"),
                             DynamicBlockstateJson.INSTANCE);

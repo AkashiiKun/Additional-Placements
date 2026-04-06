@@ -6,12 +6,12 @@ import com.firemerald.additionalplacements.client.models.definitions.*;
 
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.PropertyDispatch;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.PressurePlateBlock;
 
 public class PressurePlateModelsGenerator extends PressurePlateBaseModelsGenerator<PressurePlateBlock, AdditionalPressurePlateBlock, PressurePlateModelsGenerator> {
 	@Override
-	public PropertyDispatch<MultiVariant> dispatch(ResourceLocation modelPrefix) {
+	public PropertyDispatch<MultiVariant> dispatch(Identifier modelPrefix) {
 		return PropertyDispatch.initial(AdditionalFloorBlock.PLACING, PressurePlateBlock.POWERED).generate((placing, powered) -> variantOf(PressurePlateModels.getModel(placing, powered), modelPrefix));
 	}
 }

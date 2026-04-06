@@ -3,7 +3,7 @@ package com.firemerald.additionalplacements.client.block.modeldef;
 import com.firemerald.additionalplacements.block.AdditionalBasePressurePlateBlock;
 import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public abstract class BasePressurePlateModelDef<T extends AdditionalBasePressurePlateBlock<?>> implements IBlockModelDef<T> {
     static {
@@ -13,7 +13,7 @@ public abstract class BasePressurePlateModelDef<T extends AdditionalBasePressure
     protected BasePressurePlateModelDef() {}
 
     @Override
-    public ResourceLocation getBaseModelPrefix(T block) {
+    public Identifier getBaseModelPrefix(T block) {
         return PressurePlateModels.BASE_MODEL_FOLDER;
     }
 

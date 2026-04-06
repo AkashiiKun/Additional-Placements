@@ -2,9 +2,9 @@ package com.firemerald.additionalplacements.config.blocklist;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.generation.CreatedBlockEntry;
-import net.minecraft.ResourceLocationException;
+import net.minecraft.IdentifierException;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -72,9 +72,9 @@ public class Blocklist {
                     return new InvalidBlocklistEntry(key);
                 }
                 try {
-                    ResourceLocation tag = ResourceLocation.parse(key.substring(2));
+                    Identifier tag = Identifier.parse(key.substring(2));
                     return new TagBlocklistEntry(value, TagKey.create(Registries.BLOCK, tag));
-                } catch (ResourceLocationException e) {
+                } catch (IdentifierException e) {
                     AdditionalPlacementsMod.LOGGER.warn("Invalid blocklist key {}: invalid tag", key, e);
                     return new InvalidBlocklistEntry(key);
                 }
@@ -91,9 +91,9 @@ public class Blocklist {
                     }
                 }
                 try {
-                    ResourceLocation id = ResourceLocation.parse(key.substring(1));
+                    Identifier id = Identifier.parse(key.substring(1));
                     return new IDBlocklistEntry(value, id);
-                } catch (ResourceLocationException e) {
+                } catch (IdentifierException e) {
                     AdditionalPlacementsMod.LOGGER.warn("Invalid blocklist key {}: invalid id", key, e);
                     return new InvalidBlocklistEntry(key);
                 }
@@ -110,7 +110,7 @@ public class Blocklist {
         return c == '_' || c == '-' || (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == '.';
     }
 
-    public boolean test(Block block, ResourceLocation id) {
+    public boolean test(Block block, Identifier id) {
         for (int i = blocklist.length - 1; i >= 0; --i) {
             BlocklistResult res = blocklist[i].apply(block, id);
             if (res == BlocklistResult.ALLOW) return true;

@@ -5,7 +5,7 @@ import java.util.function.BiFunction;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 
 public class SimpleGenerationType<T extends Block, U extends AdditionalPlacementBlock<T>> extends GenerationType<T, U> {
@@ -20,20 +20,20 @@ public class SimpleGenerationType<T extends Block, U extends AdditionalPlacement
 
 	public static class Builder<T extends Block, U extends AdditionalPlacementBlock<T>> extends BuilderBase<T, U, SimpleGenerationType<T, U>, Builder<T, U>> {
 		@Override
-		public SimpleGenerationType<T, U> construct(ResourceLocation name, String description) {
+		public SimpleGenerationType<T, U> construct(Identifier name, String description) {
 			return new SimpleGenerationType<>(name, description, this);
 		}
 	}
 
 	private final BiFunction<? super T, ResourceKey<Block>, ? extends U> constructor;
 
-	protected SimpleGenerationType(ResourceLocation name, String description, BuilderBase<T, U, ?, ?> builder) {
+	protected SimpleGenerationType(Identifier name, String description, BuilderBase<T, U, ?, ?> builder) {
 		super(name, description, builder);
 		this.constructor = builder.constructor;
 	}
 
 	@Override
-	public U construct(T block, ResourceKey<Block> key, ResourceLocation blockId) {
+	public U construct(T block, ResourceKey<Block> key, Identifier blockId) {
 		return constructor.apply(block, key);
 	}
 

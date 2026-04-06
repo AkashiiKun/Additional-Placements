@@ -1,7 +1,7 @@
 package com.firemerald.additionalplacements.client.models.neoforge;
 
 import com.firemerald.additionalplacements.client.models.PlacementModelWrapper;
-import net.minecraft.MethodsReturnNonnullByDefault;
+import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;

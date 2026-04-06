@@ -11,7 +11,7 @@ import com.firemerald.additionalplacements.config.blocklist.IDBlocklistEntry;
 import com.firemerald.additionalplacements.generation.GenerationType.BuilderBase;
 
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.*;
 
 public class APGenerationTypes implements RegistrationInitializer {
@@ -26,19 +26,19 @@ public class APGenerationTypes implements RegistrationInitializer {
 		slab                    = get(register, SlabBlock.class                 , "slab"                   , "Slabs"                   ,
 				new SimpleRotatableGenerationType.Builder<SlabBlock, VerticalSlabBlock>()
 						.modelRotationEnabled(new Blocklist(true, true,
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("sandstone_slab")),
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("cut_sandstone_slab")),
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("red_sandstone_slab")),
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("cut_red_sandstone_slab"))))
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("sandstone_slab")),
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("cut_sandstone_slab")),
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("red_sandstone_slab")),
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("cut_red_sandstone_slab"))))
 						.textureRotationEnabled(new Blocklist(true, true,
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("smooth_stone_slab"))))
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("smooth_stone_slab"))))
 				.constructor(VerticalSlabBlock::of)
 				.addsProperties("ap_axis"));
 		stairs                  = get(register, StairBlock.class                , "stairs"                 , "Stairs"                  ,
 				new VerticalStairsGenerationType.Builder<StairBlock, AdditionalStairBlock>()
 						.modelRotationEnabled(new Blocklist(true, true,
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("sandstone_stairs")),
-								new IDBlocklistEntry(false, ResourceLocation.withDefaultNamespace("red_sandstone_stairs"))))
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("sandstone_stairs")),
+								new IDBlocklistEntry(false, Identifier.withDefaultNamespace("red_sandstone_stairs"))))
 				.addsProperties("front_top_shape"));
 		carpet                  = get(register, CarpetBlock.class               , "carpet"                 , "Carpets"                 , AdditionalCarpetBlock::of,                "ap_placing");
 		pressurePlate           = get(register, PressurePlateBlock.class        , "pressure_plate"         , "Regular pressure plates" , AdditionalPressurePlateBlock::of,         "ap_placing");

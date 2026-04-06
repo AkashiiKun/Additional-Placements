@@ -21,7 +21,7 @@ public class MixinMappedRegistry {
     @Inject(method = "register(ILnet/minecraft/resources/ResourceKey;Ljava/lang/Object;Lnet/minecraft/core/RegistrationInfo;)Lnet/minecraft/core/Holder$Reference;", at = @At("RETURN"))
     private void onRegister(int id, ResourceKey<?> key, Object value, RegistrationInfo info, CallbackInfoReturnable<Holder.Reference<?>> ci) {
         if (this == BuiltInRegistries.BLOCK && AdditionalPlacementsNeoForge.dynamicRegistration) {
-            Registration.tryApply((Block) value, key.location(), (rl, block) -> Registry.register(BuiltInRegistries.BLOCK, rl, block));
+            Registration.tryApply((Block) value, key.identifier(), (rl, block) -> Registry.register(BuiltInRegistries.BLOCK, rl, block));
         }
     }
 }

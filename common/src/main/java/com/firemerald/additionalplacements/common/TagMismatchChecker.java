@@ -3,15 +3,14 @@ package com.firemerald.additionalplacements.common;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.IntPredicate;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.server.permissions.PermissionSet;
+import net.minecraft.server.permissions.Permissions;
 import org.apache.commons.lang3.tuple.Triple;
 
 import com.mojang.brigadier.CommandDispatcher;
@@ -130,9 +129,9 @@ public class TagMismatchChecker extends Thread {
 		}
 	}
 
-	public static boolean canGenerateTags(Player player, IntPredicate hasPermission) {
+	public static boolean canGenerateTags(Player player, PermissionSet permissions) {
 		if (PlatformUtils.isClient()) return canGenerateTagsClient(player);
-		else return hasPermission.test(2);
+		else return permissions.hasPermission(Permissions.COMMANDS_GAMEMASTER);
 	}
 
 	public static boolean canGenerateTagsClient(Player player) {
@@ -142,10 +141,10 @@ public class TagMismatchChecker extends Thread {
 	}
 
 	public static boolean canGenerateTags(Player player) {
-		return canGenerateTags(player, player::hasPermissions);
+		return canGenerateTags(player, player.permissions());
 	}
 
 	public static boolean canGenerateTags(CommandSourceStack source) {
-		return source.source instanceof RconConsoleSource || source.source instanceof MinecraftServer || (source.getEntity() instanceof Player && canGenerateTags((Player) source.getEntity(), source::hasPermission));
+		return source.source instanceof RconConsoleSource || source.source instanceof MinecraftServer || (source.getEntity() instanceof Player && canGenerateTags((Player) source.getEntity(), source.permissions()));
 	}
 }
