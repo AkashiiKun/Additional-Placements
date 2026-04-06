@@ -19,9 +19,9 @@ public class StairsBlockHighlight implements IBlockHighlight<IStairBlock<?>> {
 
     private StairsBlockHighlight() {}
 
-    float ARROW_OFFSET = -0.4375f;
-    float ARROW_OUTER = 0.375f;
-    float ARROW_INNER = 0.125f;
+    public static final float ARROW_OFFSET = -0.4375f;
+    public static final float ARROW_OUTER = 0.375f;
+    public static final float ARROW_INNER = 0.125f;
 
     @Override
     public void additionalplacements$renderPlacementPreview(IStairBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
@@ -52,8 +52,8 @@ public class StairsBlockHighlight implements IBlockHighlight<IStairBlock<?>> {
         pose.popPose();
     }
 
-    float OUTER_EDGE = .5f;
-    float INNER_EDGE = .25f;
+    public static float OUTER_EDGE = .5f;
+    public static float INNER_EDGE = .25f;
 
     @Override
     public void additionalplacements$renderPlacementHighlight(IStairBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {

@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.network.server;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.ClientConfigurationPacket;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;

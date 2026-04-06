@@ -4,7 +4,6 @@ import com.firemerald.additionalplacements.network.client.ClientPlayPacket;
 import com.firemerald.additionalplacements.network.fabric.APPacketImpl;
 import com.firemerald.additionalplacements.network.server.ServerPlayPacket;
 import com.firemerald.additionalplacements.network.server.fabric.ServerPlayPacketImpl;
-import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 

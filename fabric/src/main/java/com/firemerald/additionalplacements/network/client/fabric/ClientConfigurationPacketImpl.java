@@ -4,7 +4,6 @@ import com.firemerald.additionalplacements.network.client.ClientConfigurationPac
 import com.firemerald.additionalplacements.network.fabric.APPacketImpl;
 import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
 import com.firemerald.additionalplacements.network.server.fabric.ServerConfigurationPacketImpl;
-import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.fabricmc.fabric.api.client.networking.v1.ClientConfigurationNetworking;
 import net.minecraft.network.FriendlyByteBuf;
 

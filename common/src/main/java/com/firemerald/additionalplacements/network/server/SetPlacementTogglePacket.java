@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.network.server;
 import com.firemerald.additionalplacements.client.APClientData;
 import com.firemerald.additionalplacements.common.IAPServerPlayer;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.client.ClientPlayPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.FriendlyByteBuf;

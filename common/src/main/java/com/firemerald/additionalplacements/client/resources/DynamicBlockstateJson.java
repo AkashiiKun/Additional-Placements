@@ -5,7 +5,6 @@ import net.minecraft.server.packs.resources.IoSupplier;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -16,7 +15,7 @@ public class DynamicBlockstateJson implements IoSupplier<InputStream> {
     private DynamicBlockstateJson() {}
 
     @Override
-    public @NotNull InputStream get() throws IOException {
+    public @NotNull InputStream get() {
         return new ByteArrayInputStream(BYTES);
     }
 }
