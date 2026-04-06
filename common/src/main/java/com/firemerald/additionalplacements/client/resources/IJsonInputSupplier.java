@@ -1,7 +1,6 @@
 package com.firemerald.additionalplacements.client.resources;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
@@ -16,7 +15,7 @@ public interface IJsonInputSupplier extends IoSupplier<InputStream> {
     Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     @Override
-    default @NotNull InputStream get() throws IOException {
+    default @NotNull InputStream get() {
         return new ByteArrayInputStream(GSON.toJson(getJson()).getBytes(StandardCharsets.UTF_8));
     }
 
