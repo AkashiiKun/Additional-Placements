@@ -62,8 +62,7 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		this.parentBlock = parentBlock;
 	}
 
-	@SuppressWarnings("unchecked")
-    @Override
+	@Override
 	public T additionalplacements$getOtherBlock() {
 		return parentBlock;
 	}
