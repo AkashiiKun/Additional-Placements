@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.client.models.rotated.neoforge;
 
-import com.firemerald.additionalplacements.client.models.neoforge.BlockModelUtilsImpl;
 import com.firemerald.additionalplacements.client.models.neoforge.PlacementModelWrapperImpl;
 import com.firemerald.additionalplacements.client.models.rotated.BakedRotatedPlacementModel;
 import com.firemerald.additionalplacements.client.models.BlockModelUtils;

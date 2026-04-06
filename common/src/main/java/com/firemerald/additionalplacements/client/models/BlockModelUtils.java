@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.renderer.RenderType;
@@ -26,7 +25,6 @@ import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
-import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Environment(EnvType.CLIENT)

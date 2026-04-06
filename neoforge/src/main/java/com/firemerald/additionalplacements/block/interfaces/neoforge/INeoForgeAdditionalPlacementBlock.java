@@ -22,7 +22,6 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
-import net.minecraft.world.phys.HitResult;
 import net.neoforged.neoforge.common.ItemAbility;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import net.neoforged.neoforge.common.util.TriState;
