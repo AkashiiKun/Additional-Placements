@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlight;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Camera;
@@ -53,8 +52,7 @@ public class ClientModEvents {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
                 if (verticalBlock.additionalplacements$hasAdditionalStates()) {
-                    //noinspection unchecked
-                    ((IBlockHighlight<IPlacementBlock<?>>) verticalBlock.getBlockHighlight().get()).additionalplacements$renderHighlight(verticalBlock, poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, delta);
+                    verticalBlock.additionalplacements$renderHighlight(poseStack, multiBufferSource.getBuffer(RenderType.LINES), player, target, camera, delta);
                 }
             }
         }
