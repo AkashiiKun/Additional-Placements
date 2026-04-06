@@ -10,9 +10,7 @@ import com.firemerald.additionalplacements.compat.LoadedMods;
 import com.firemerald.additionalplacements.network.fabric.APNetworkImpl;
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeConfigRegistry;
 import fuzs.forgeconfigapiport.fabric.api.neoforge.v4.NeoForgeModConfigEvents;
-import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
-import net.neoforged.fml.config.ModConfig;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.config.APConfigs;
@@ -27,7 +25,6 @@ import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.block.Block;
