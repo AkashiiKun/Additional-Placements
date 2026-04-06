@@ -23,7 +23,7 @@ public abstract class MixinBlockModel implements IBlockModelExtensions {
     @Unique
     private IAPUnbakedModel<?> additionalplacements$model = null;
     @Shadow
-    public abstract ItemOverrides getItemOverrides(ModelBaker baker, BlockModel model);
+    protected abstract ItemOverrides getItemOverrides(ModelBaker baker, BlockModel model);
 
     @Inject(method = "bake(Lnet/minecraft/client/resources/model/ModelBaker;Lnet/minecraft/client/renderer/block/model/BlockModel;Ljava/util/function/Function;Lnet/minecraft/client/resources/model/ModelState;Z)Lnet/minecraft/client/resources/model/BakedModel;",
             at = @At("HEAD"), cancellable = true)

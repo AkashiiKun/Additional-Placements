@@ -6,7 +6,6 @@ import com.firemerald.additionalplacements.client.models.definitions.StateModelD
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 
