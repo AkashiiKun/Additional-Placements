@@ -25,8 +25,8 @@ public class MixinLevelRenderer {
             if (blockOutlineRenderState.isTranslucent() != isTranslucent) return;
             Minecraft minecraft = Minecraft.getInstance();
             if (!(minecraft.hitResult instanceof BlockHitResult hitResult && hitResult.getType() == HitResult.Type.BLOCK && hitResult.getBlockPos().equals(blockOutlineRenderState.pos()))) return;
-            ClientModEvents.performBlockHighlight(levelRenderState, (block, highlight, player, deltaTracker) ->
-                    highlight.additionalplacements$renderHighlight(block, poseStack, bufferSource, player, hitResult, levelRenderState, deltaTracker));
+            ClientModEvents.performBlockHighlight(levelRenderState, (block, player, deltaTracker) ->
+                    block.additionalplacements$renderHighlight(poseStack, bufferSource, player, hitResult, levelRenderState, deltaTracker));
         }
     }
 }
