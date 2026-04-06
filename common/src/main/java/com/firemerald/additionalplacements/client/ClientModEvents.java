@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.client;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlight;
 import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlightAction;
 import com.firemerald.additionalplacements.config.APConfigs;
 import net.minecraft.client.Minecraft;
@@ -48,9 +47,7 @@ public class ClientModEvents {
             Block block = ((BlockItem) stack.getItem()).getBlock();
             if (block instanceof IPlacementBlock<?> verticalBlock) {
                 if (verticalBlock.additionalplacements$hasAdditionalStates()) {
-                    @SuppressWarnings("unchecked")
-                    IBlockHighlight<IPlacementBlock<?>> highlight = (IBlockHighlight<IPlacementBlock<?>>) verticalBlock.getBlockHighlight().get();
-                    highlightAction.perform(verticalBlock, highlight, player, minecraft.getDeltaTracker());
+                    highlightAction.perform(verticalBlock, player, minecraft.getDeltaTracker());
                 }
             }
         }
