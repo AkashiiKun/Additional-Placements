@@ -4,8 +4,6 @@ import com.firemerald.additionalplacements.client.models.IAPCustomBlockModelDefi
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public interface BlockModelDefinitionExtensions {
     @Nullable
     IAPCustomBlockModelDefinition additionalplacements$getCustomModelDefinition();

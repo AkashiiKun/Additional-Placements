@@ -15,7 +15,6 @@ import com.firemerald.additionalplacements.util.MessageTree;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -131,11 +130,11 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 		if (entriesOpt.isPresent()) {
 			CompoundTag entries = entriesOpt.get();
 			Set<ResourceLocation> set = new HashSet<>();
-			entries.keySet().forEach(modId -> {
-				entries.getList(modId).ifPresent(modList -> {
-					modList.forEach(nameTag -> nameTag.asString().ifPresent(name -> set.add(ResourceLocation.tryBuild(modId, name))));
-				});
-			});
+			entries.keySet().forEach(modId ->
+					entries.getList(modId).ifPresent(modList ->
+							modList.forEach(nameTag ->
+									nameTag.asString().ifPresent(name ->
+											set.add(ResourceLocation.tryBuild(modId, name))))));
 			return set;
 		} else return Collections.emptySet();
 	}
