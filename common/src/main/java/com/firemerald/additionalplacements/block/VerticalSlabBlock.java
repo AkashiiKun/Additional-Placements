@@ -19,8 +19,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -184,7 +184,7 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	public ResourceLocation getBaseModelPrefix() {
+	public Identifier getBaseModelPrefix() {
 		return SlabModels.BASE_MODEL_FOLDER;
 	}
 

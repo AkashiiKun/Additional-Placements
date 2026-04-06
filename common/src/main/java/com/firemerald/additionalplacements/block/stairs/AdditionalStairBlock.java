@@ -24,8 +24,8 @@ import com.firemerald.additionalplacements.util.BlockRotation;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
@@ -152,7 +152,7 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
-	public ResourceLocation getBaseModelPrefix() {
+	public Identifier getBaseModelPrefix() {
 		return StairModels.BASE_MODEL_FOLDER;
 	}
 

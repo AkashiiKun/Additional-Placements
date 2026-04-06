@@ -7,8 +7,8 @@ import com.firemerald.additionalplacements.client.models.definitions.StateModelD
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelReader;
@@ -76,7 +76,7 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 	}
 
 	@Override
-	public ResourceLocation getBaseModelPrefix() {
+	public Identifier getBaseModelPrefix() {
 		return CarpetModels.BASE_MODEL_FOLDER;
 	}
 

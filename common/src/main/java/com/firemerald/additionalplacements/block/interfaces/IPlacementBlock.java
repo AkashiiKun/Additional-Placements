@@ -6,8 +6,9 @@ import java.util.function.Function;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.state.LevelRenderState;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
@@ -106,28 +107,29 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 			Vec3 pos = renderState.cameraRenderState.pos;
 
 			boolean highContrast = renderState.blockOutlineRenderState.highContrast();
+			float lineWidth = Minecraft.getInstance().getWindow().getAppropriateLineWidth();
 			float[] previewColor;
 			if (highContrast) {
 				float[] backgroundColor = APConfigs.client().previewColorHCB();
-				if (backgroundColor[3] > 0) additionalplacements$renderPlacementPreview(pose, bufferSource.getBuffer(RenderType.secondaryBlockOutline()), player, result, delta, backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
+				if (backgroundColor[3] > 0) additionalplacements$renderPlacementPreview(pose, bufferSource.getBuffer(RenderTypes.secondaryBlockOutline()), player, result, delta, backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3], 7f);
 				previewColor = APConfigs.client().previewColorHC();
 			} else previewColor = APConfigs.client().previewColor();
-			if (previewColor[3] > 0) additionalplacements$renderPlacementPreview(pose, bufferSource.getBuffer(RenderType.lines()), player, result, delta, previewColor[0], previewColor[1], previewColor[2], previewColor[3]);
+			if (previewColor[3] > 0) additionalplacements$renderPlacementPreview(pose, bufferSource.getBuffer(RenderTypes.lines()), player, result, delta, previewColor[0], previewColor[1], previewColor[2], previewColor[3], lineWidth);
 			pose.mulPose(DIRECTION_TRANSFORMS[result.getDirection().ordinal()]);
 			float[] gridColor;
 			if (highContrast) {
 				float[] backgroundColor = APConfigs.client().gridColorHCB();
-				if (backgroundColor[3] > 0) additionalplacements$renderPlacementHighlight(pose, bufferSource.getBuffer(RenderType.secondaryBlockOutline()), player, result, delta, backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3]);
+				if (backgroundColor[3] > 0) additionalplacements$renderPlacementHighlight(pose, bufferSource.getBuffer(RenderTypes.secondaryBlockOutline()), player, result, delta, backgroundColor[0], backgroundColor[1], backgroundColor[2], backgroundColor[3], 7f);
 				gridColor = APConfigs.client().gridColorHC();
 			} else gridColor = APConfigs.client().gridColor();
-			if (gridColor[3] > 0) additionalplacements$renderPlacementHighlight(pose, bufferSource.getBuffer(RenderType.lines()), player, result, delta, gridColor[0], gridColor[1], gridColor[2], highContrast ? 0.4f : gridColor[3]);
+			if (gridColor[3] > 0) additionalplacements$renderPlacementHighlight(pose, bufferSource.getBuffer(RenderTypes.lines()), player, result, delta, gridColor[0], gridColor[1], gridColor[2], highContrast ? 0.4f : gridColor[3], lineWidth);
 			pose.popPose();
 		}
 	}
 
-	default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {}
+	default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {}
 
-	void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a);
+	void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width);
 
 	default boolean additionalplacements$enablePlacement(@Nullable Player player) {
 		return additionalplacements$getGenerationType().placementEnabled() && (!(player instanceof IAPPlayer apPlayer) || apPlayer.additionalplacements$isPlacementEnabled());

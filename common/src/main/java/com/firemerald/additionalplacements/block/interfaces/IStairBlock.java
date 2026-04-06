@@ -199,7 +199,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	float ARROW_INNER = 0.125f;
 
 	@Override
-	default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+	default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {
 		if (!additionalplacements$connectionsType().allowFlipped) return;
 		ComplexFacing facing = additionalplacements$getFacing(result.getDirection(),
 				(float) (result.getLocation().x - result.getBlockPos().getX() - .5),
@@ -216,7 +216,7 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 				0, 0, 0, 1
 		));
 		PoseStack.Pose lastPose = pose.last();
-		BlockHighlightHelper.lineLoop(vertexConsumer, lastPose, ARROW_OFFSET, r, g, b, a,
+		BlockHighlightHelper.lineLoop(vertexConsumer, lastPose, ARROW_OFFSET, r, g, b, a, width,
 				0          ,  ARROW_OUTER,
 				ARROW_OUTER,  0          ,
 				ARROW_INNER,  0          ,
@@ -231,30 +231,35 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 	float INNER_EDGE = .25f;
 
 	@Override
-	default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+	default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {
 		PoseStack.Pose lastPose = pose.last();
 
 		//outer box
 		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-				OUTER_EDGE);
+				OUTER_EDGE,
+				width);
 
 		if (additionalplacements$connectionsType().allowFlipped) {
 			//inner edges
 			BlockHighlightHelper.lineCenteredGrid(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-					INNER_EDGE, OUTER_EDGE);
+					INNER_EDGE, OUTER_EDGE,
+					width);
 
 			//middle cross
 			BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-					OUTER_EDGE);
+					OUTER_EDGE,
+					width);
 		} else {
 			//corners
 			BlockHighlightHelper.lineOctal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
 					INNER_EDGE, INNER_EDGE,
-					OUTER_EDGE, INNER_EDGE);
+					OUTER_EDGE, INNER_EDGE,
+					width);
 
 			//middle cross
 			BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
-					INNER_EDGE);
+					INNER_EDGE,
+					width);
 		}
 	}
 

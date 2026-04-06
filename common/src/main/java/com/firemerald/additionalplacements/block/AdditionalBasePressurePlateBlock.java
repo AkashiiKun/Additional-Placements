@@ -6,8 +6,8 @@ import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBl
 import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -153,7 +153,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	public ResourceLocation getBaseModelPrefix() {
+	public Identifier getBaseModelPrefix() {
 		return PressurePlateModels.BASE_MODEL_FOLDER;
 	}
 
