@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.network.client;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import org.apache.commons.lang3.tuple.Triple;

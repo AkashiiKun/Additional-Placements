@@ -7,7 +7,6 @@ import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStateFixer;
-import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import com.firemerald.additionalplacements.client.models.definitions.SlabModels;
 import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.config.APConfigs;
