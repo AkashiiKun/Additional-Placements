@@ -104,6 +104,7 @@ public interface IPlacementBlock<T extends Block> extends ItemLike, IGenerationC
 				default:
 			}
 			Vec3 pos = renderState.cameraRenderState.pos;
+			pose.translate(hitX - pos.x + .5, hitY - pos.y + .5, hitZ - pos.z + .5);
 
 			boolean highContrast = renderState.blockOutlineRenderState.highContrast();
 			float[] previewColor;
