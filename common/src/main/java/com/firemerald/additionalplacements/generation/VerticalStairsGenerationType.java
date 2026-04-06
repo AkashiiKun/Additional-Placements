@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.generation;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
