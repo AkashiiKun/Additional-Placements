@@ -9,7 +9,6 @@ import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.mojang.blaze3d.vertex.VertexFormatElement;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.data.AtlasIds;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -20,7 +19,6 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.texture.MissingTextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -142,7 +140,6 @@ public class BlockModelUtils {
 		return newData;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static Pair<TextureAtlasSprite, Integer> getSidedTexture(List<BlockModelPart> fromModel, Direction fromSide, int vertexSize, int posOffset) {
 		Map<Pair<TextureAtlasSprite, Integer>, Double> weights = new HashMap<>();
 		List<BakedQuad> referenceQuads = fromModel.stream().flatMap(part -> part.getQuads(fromSide).stream()).toList();
