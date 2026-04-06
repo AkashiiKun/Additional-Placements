@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.network.client.neoforge;
 import com.firemerald.additionalplacements.network.neoforge.APPacketImpl;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.PacketFlow;
-import net.neoforged.neoforge.network.handling.IPayloadContext;
 
 public interface ClientPacketImpl<T extends FriendlyByteBuf> extends APPacketImpl<T> {
     @Override
