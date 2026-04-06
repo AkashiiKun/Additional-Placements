@@ -2,7 +2,6 @@ package com.firemerald.additionalplacements.block.stairs;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.AdditionalPlacementLiquidBlock;
@@ -17,7 +16,8 @@ import com.firemerald.additionalplacements.block.stairs.v2.V2StairFacing;
 import com.firemerald.additionalplacements.block.stairs.v2.V2StairShape;
 import com.firemerald.additionalplacements.block.stairs.v2.V2StairShapeState;
 import com.firemerald.additionalplacements.block.stairs.vanilla.VanillaStairShapeState;
-import com.firemerald.additionalplacements.client.block.modeldef.StairsModelDef;
+import com.firemerald.additionalplacements.client.models.definitions.StairModels;
+import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.util.BlockRotation;
 
@@ -25,6 +25,7 @@ import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BeaconBeamBlock;
 import net.minecraft.world.level.block.Block;
@@ -151,9 +152,18 @@ public abstract class AdditionalStairBlock extends AdditionalPlacementLiquidBloc
 	}
 
 	@Override
-	@NotNull
-	public Supplier<StairsModelDef> getModelDef() {
-		return () -> StairsModelDef.INSTANCE;
+	public ResourceLocation getBaseModelPrefix() {
+		return StairModels.BASE_MODEL_FOLDER;
+	}
+
+	@Override
+	public StateModelDefinition getModelDefinition(BlockState state) {
+		return StairModels.getModelDefinition(additionalplacements$getShapeState(state));
+	}
+
+	@Override
+	public String[] getAllModels() {
+		return StairModels.MODELS;
 	}
 
 	@Override

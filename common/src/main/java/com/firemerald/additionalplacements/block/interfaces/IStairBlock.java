@@ -2,11 +2,13 @@ package com.firemerald.additionalplacements.block.interfaces;
 
 import java.util.List;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
-import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlight;
-import com.firemerald.additionalplacements.client.block.highlight.StairsBlockHighlight;
+import com.firemerald.additionalplacements.client.BlockHighlightHelper;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.ScheduledTickAccess;
@@ -33,6 +35,7 @@ import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Matrix4f;
 
 public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneConnectable {
 	interface IVanillaStairBlock extends IStairBlock<AdditionalStairBlock>, IVanillaBlock<AdditionalStairBlock> {
@@ -191,13 +194,69 @@ public interface IStairBlock<T extends Block> extends IPlacementBlock<T>, IPaneC
 		return CommonStairShape.STRAIGHT;
 	}
 
+	float ARROW_OFFSET = -0.4375f;
+	float ARROW_OUTER = 0.375f;
+	float ARROW_INNER = 0.125f;
+
 	@Override
-	default Supplier<? extends IBlockHighlight<?>> getBlockHighlight() {
-		//PlatformUtils.checkIsClient(); check omitted for performance
-		return () -> StairsBlockHighlight.INSTANCE;
+	default void additionalplacements$renderPlacementPreview(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+		if (!additionalplacements$connectionsType().allowFlipped) return;
+		ComplexFacing facing = additionalplacements$getFacing(result.getDirection(),
+				(float) (result.getLocation().x - result.getBlockPos().getX() - .5),
+				(float) (result.getLocation().y - result.getBlockPos().getY() - .5),
+				(float) (result.getLocation().z - result.getBlockPos().getZ() - .5));
+		//z is up
+		//y is forward
+		//x is right
+		pose.pushPose();
+		pose.mulPose(new Matrix4f(
+				facing.right  .getStepX(), facing.right  .getStepY(), facing.right  .getStepZ(), 0,
+				facing.forward.getStepX(), facing.forward.getStepY(), facing.forward.getStepZ(), 0,
+				facing.up     .getStepX(), facing.up     .getStepY(), facing.up     .getStepZ(), 0,
+				0, 0, 0, 1
+		));
+		PoseStack.Pose lastPose = pose.last();
+		BlockHighlightHelper.lineLoop(vertexConsumer, lastPose, ARROW_OFFSET, r, g, b, a,
+				0          ,  ARROW_OUTER,
+				ARROW_OUTER,  0          ,
+				ARROW_INNER,  0          ,
+				ARROW_INNER, -ARROW_OUTER,
+				-ARROW_INNER, -ARROW_OUTER,
+				-ARROW_INNER,  0          ,
+				-ARROW_OUTER,  0          );
+		pose.popPose();
 	}
 
+	float OUTER_EDGE = .5f;
 	float INNER_EDGE = .25f;
+
+	@Override
+	default void additionalplacements$renderPlacementHighlight(PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a) {
+		PoseStack.Pose lastPose = pose.last();
+
+		//outer box
+		BlockHighlightHelper.lineCenteredSquare(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
+				OUTER_EDGE);
+
+		if (additionalplacements$connectionsType().allowFlipped) {
+			//inner edges
+			BlockHighlightHelper.lineCenteredGrid(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
+					INNER_EDGE, OUTER_EDGE);
+
+			//middle cross
+			BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
+					OUTER_EDGE);
+		} else {
+			//corners
+			BlockHighlightHelper.lineOctal(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
+					INNER_EDGE, INNER_EDGE,
+					OUTER_EDGE, INNER_EDGE);
+
+			//middle cross
+			BlockHighlightHelper.lineCenteredCross(vertexConsumer, lastPose, -OUTER_EDGE, r, g, b, a,
+					INNER_EDGE);
+		}
+	}
 
 	@Override
     default GenerationType<?, ?> additionalplacements$getGenerationType() {

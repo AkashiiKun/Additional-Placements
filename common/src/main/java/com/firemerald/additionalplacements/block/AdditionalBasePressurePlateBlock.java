@@ -3,9 +3,11 @@ package com.firemerald.additionalplacements.block;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlock;
 import com.firemerald.additionalplacements.block.interfaces.IBasePressurePlateBlockExtensions;
 
+import com.firemerald.additionalplacements.client.models.definitions.PressurePlateModels;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -148,5 +150,15 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	@Override
 	public int getDirectSignal(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
 		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.additionalplacements$getSignalForStatePublic(state) : 0;
+	}
+
+	@Override
+	public ResourceLocation getBaseModelPrefix() {
+		return PressurePlateModels.BASE_MODEL_FOLDER;
+	}
+
+	@Override
+	public String[] getAllModels() {
+		return PressurePlateModels.MODELS;
 	}
 }
