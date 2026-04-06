@@ -56,9 +56,9 @@ public class ClientEventHandler {
         if (!APConfigs.client().enablePlacementHighlight.get()) return;
         BlockHitResult hitResult = event.getHitResult();
         if (hitResult.getType() != HitResult.Type.BLOCK) return;
-        ClientModEvents.performBlockHighlight(event.getLevelRenderState(), (block, highlight, player, deltaTracker) ->
+        ClientModEvents.performBlockHighlight(event.getLevelRenderState(), (block, player, deltaTracker) ->
                 event.addCustomRenderer((renderState, buffer, poseStack, translucentPass, levelRenderState) -> {
-                    highlight.additionalplacements$renderHighlight(block, poseStack, buffer, player, hitResult, levelRenderState, deltaTracker);
+                    block.additionalplacements$renderHighlight(poseStack, buffer, player, hitResult, levelRenderState, deltaTracker);
                     return false;
                 }));
     }

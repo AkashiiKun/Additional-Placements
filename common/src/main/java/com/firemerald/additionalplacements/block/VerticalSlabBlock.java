@@ -2,13 +2,13 @@ package com.firemerald.additionalplacements.block;
 
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISlabBlock;
 import com.firemerald.additionalplacements.block.interfaces.IStateFixer;
-import com.firemerald.additionalplacements.client.block.modeldef.SlabModelDef;
+import com.firemerald.additionalplacements.client.models.definitions.SlabModels;
+import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.util.BlockRotation;
 import com.firemerald.additionalplacements.util.VoxelShapes;
@@ -20,6 +20,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Direction.AxisDirection;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -183,8 +184,17 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	@NotNull
-	public Supplier<SlabModelDef> getModelDef() {
-		return () -> SlabModelDef.INSTANCE;
+	public ResourceLocation getBaseModelPrefix() {
+		return SlabModels.BASE_MODEL_FOLDER;
+	}
+
+	@Override
+	public StateModelDefinition getModelDefinition(BlockState state) {
+		return SlabModels.getModel(state);
+	}
+
+	@Override
+	public String[] getAllModels() {
+		return SlabModels.MODELS;
 	}
 }

@@ -6,5 +6,5 @@ import net.minecraft.world.entity.player.Player;
 
 @FunctionalInterface
 public interface IBlockHighlightAction {
-    void perform(IPlacementBlock<?> block, IBlockHighlight<IPlacementBlock<?>> highlight, Player player, DeltaTracker deltaTracker);
+    void perform(IPlacementBlock<?> block, Player player, DeltaTracker deltaTracker);
 }

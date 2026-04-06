@@ -1,12 +1,12 @@
 package com.firemerald.additionalplacements.block;
 
 import java.util.*;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.firemerald.additionalplacements.client.block.modeldef.IBlockModelDef;
+import com.firemerald.additionalplacements.client.models.definitions.StateModelDefinition;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.*;
 import org.apache.commons.lang3.tuple.Triple;
@@ -368,5 +368,9 @@ public abstract class AdditionalPlacementBlock<T extends Block> extends Block im
 		return false;
 	}
 
-	public abstract Supplier<? extends IBlockModelDef<?>> getModelDef();
+    public abstract Identifier getBaseModelPrefix();
+
+	public abstract StateModelDefinition getModelDefinition(BlockState state);
+
+	public abstract String[] getAllModels();
 }
