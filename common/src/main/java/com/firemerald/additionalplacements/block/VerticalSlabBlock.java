@@ -80,8 +80,7 @@ public abstract class VerticalSlabBlock extends AdditionalPlacementLiquidBlock<S
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canBeReplaced(@NotNull BlockState state, BlockPlaceContext context) {
+    public boolean canBeReplaced(@NotNull BlockState state, BlockPlaceContext context) {
 		return additionalplacements$enablePlacement(context.getClickedPos(), context.getLevel(), context.getClickedFace(), context.getPlayer()) && additionalplacements$canBeReplacedImpl(state, context);
 	}
 

@@ -82,8 +82,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canSurvive(BlockState state, @NotNull LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, @NotNull LevelReader level, BlockPos pos) {
 		Direction dir = state.getValue(PLACING);
 		BlockPos blockpos = pos.relative(dir);
 		return canSupportRigidBlock(level, blockpos, dir.getOpposite()) || canSupportCenter(level, blockpos, dir.getOpposite());
@@ -107,8 +106,7 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity) {
+    public void entityInside(@NotNull BlockState state, Level level, @NotNull BlockPos pos, @NotNull Entity entity) {
 		if (!level.isClientSide) {
 			int strength = plateMethods.additionalplacements$getSignalForStatePublic(state);
 			if (strength == 0) this.checkPressed(entity, level, pos, state, strength);
@@ -150,14 +148,12 @@ public abstract class AdditionalBasePressurePlateBlock<T extends BasePressurePla
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public int getSignal(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
+    public int getSignal(@NotNull BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
 		return this.plateMethods.additionalplacements$getSignalForStatePublic(state);
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public int getDirectSignal(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
+    public int getDirectSignal(BlockState state, @NotNull BlockGetter level, @NotNull BlockPos pos, @NotNull Direction dir) {
 		return dir == state.getValue(PLACING).getOpposite() ? plateMethods.additionalplacements$getSignalForStatePublic(state) : 0;
 	}
 

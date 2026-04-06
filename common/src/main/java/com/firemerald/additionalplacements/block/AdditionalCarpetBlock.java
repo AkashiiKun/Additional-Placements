@@ -71,8 +71,7 @@ public abstract class AdditionalCarpetBlock extends AdditionalFloorBlock<CarpetB
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
+    public boolean canSurvive(BlockState state, LevelReader level, BlockPos pos) {
 		return !level.isEmptyBlock(pos.relative(state.getValue(PLACING)));
 	}
 

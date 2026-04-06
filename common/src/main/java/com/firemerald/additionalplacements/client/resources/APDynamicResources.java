@@ -1,6 +1,5 @@
 package com.firemerald.additionalplacements.client.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -164,7 +163,7 @@ public class APDynamicResources implements PackResources {
     }
 
     @Override
-    public <T> T getMetadataSection(@NotNull MetadataSectionSerializer<T> metadataSectionSerializer) throws IOException {
+    public <T> T getMetadataSection(@NotNull MetadataSectionSerializer<T> metadataSectionSerializer) {
         return null;
     }
 
