@@ -28,7 +28,6 @@ import net.minecraft.server.packs.repository.PackCompatibility;
 import net.minecraft.server.packs.repository.PackSource;
 import net.minecraft.server.packs.resources.IoSupplier;
 import net.minecraft.world.flag.FeatureFlagSet;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.Property;
 import org.jetbrains.annotations.NotNull;
@@ -90,9 +89,10 @@ public class APDynamicResources implements PackResources {
         else if (!resourceLocation.getPath().endsWith(".json")) return null;
         else if (resourceLocation.getPath().startsWith("blockstates/")) { //blockstate json
             String blockName = resourceLocation.getPath().substring(12, resourceLocation.getPath().length() - 5);
-            Block block = BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName)).get().value();
-            if (block instanceof AdditionalPlacementBlock<?> placement) return new BlockStateJsonSupplier(placement, blockName);
-            else return null;
+            return BuiltInRegistries.BLOCK.get(AdditionalPlacementsMod.rl(blockName)).map(reference -> {
+               if (reference.value() instanceof AdditionalPlacementBlock<?> placement) return new BlockStateJsonSupplier(placement, blockName);
+               else return null;
+            }).orElse(null);
         }
         else if (resourceLocation.getPath().startsWith("models/block/") && resourceLocation.getPath().endsWith("/model.json")) {
             String key = resourceLocation.getPath().substring(13, resourceLocation.getPath().length() - 11);
