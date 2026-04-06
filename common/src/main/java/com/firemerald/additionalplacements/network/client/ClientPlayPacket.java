@@ -4,7 +4,6 @@ import com.firemerald.additionalplacements.network.APPacket;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.Connection;
 
 import java.util.function.Consumer;
 

@@ -26,11 +26,11 @@ public class APNetworkImpl {
     }
 
     public static void sendToServer(ServerPacket packet) {
-        if (packet instanceof ServerPacketImpl serverPacket) sendTo(serverPacket, PacketDistributor.SERVER.noArg());
+        if (packet instanceof ServerPacketImpl<?> serverPacket) sendTo(serverPacket, PacketDistributor.SERVER.noArg());
     }
 
     public static void sendToClient(ClientPacket packet, ServerPlayer player) {
-        if (packet instanceof ClientPacketImpl clientPacket) sendTo(clientPacket, PacketDistributor.PLAYER.with(player));
+        if (packet instanceof ClientPacketImpl<?> clientPacket) sendTo(clientPacket, PacketDistributor.PLAYER.with(player));
     }
 
     public static void sendTo(CustomPacketPayload packet, PacketDistributor.PacketTarget target) {

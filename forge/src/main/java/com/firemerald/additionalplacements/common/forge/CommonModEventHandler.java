@@ -10,8 +10,6 @@ import com.firemerald.additionalplacements.forge.AdditionalPlacementsForge;
 import com.firemerald.additionalplacements.generation.forge.RegistrationImpl;
 import com.firemerald.additionalplacements.network.forge.APNetworkImpl;
 import fuzs.forgeconfigapiport.forge.api.neoforge.v4.NeoForgeConfigRegistry;
-import fuzs.forgeconfigapiport.forge.api.neoforge.v4.NeoForgeConfigSpecAdapter;
-import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import org.apache.commons.lang3.tuple.Pair;

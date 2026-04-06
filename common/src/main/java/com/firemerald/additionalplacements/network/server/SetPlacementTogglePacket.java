@@ -5,7 +5,6 @@ import com.firemerald.additionalplacements.common.IAPServerPlayer;
 
 import com.firemerald.additionalplacements.network.APPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.network.Connection;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 
