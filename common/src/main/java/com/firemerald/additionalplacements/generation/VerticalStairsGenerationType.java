@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.generation;
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.ISimpleRotationBlock;
@@ -16,7 +15,6 @@ import com.firemerald.additionalplacements.util.MessageTree;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.Identifier;
@@ -132,11 +130,11 @@ public class VerticalStairsGenerationType<T extends StairBlock, U extends Additi
 		if (entriesOpt.isPresent()) {
 			CompoundTag entries = entriesOpt.get();
 			Set<Identifier> set = new HashSet<>();
-			entries.keySet().forEach(modId -> {
-				entries.getList(modId).ifPresent(modList -> {
-					modList.forEach(nameTag -> nameTag.asString().ifPresent(name -> set.add(Identifier.tryBuild(modId, name))));
-				});
-			});
+			entries.keySet().forEach(modId ->
+					entries.getList(modId).ifPresent(modList ->
+							modList.forEach(nameTag ->
+									nameTag.asString().ifPresent(name ->
+											set.add(Identifier.tryBuild(modId, name))))));
 			return set;
 		} else return Collections.emptySet();
 	}

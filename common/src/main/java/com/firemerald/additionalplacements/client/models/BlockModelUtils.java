@@ -187,9 +187,8 @@ public class BlockModelUtils {
 		for (BakedQuad originalQuad : originalQuads) {
     		bakedQuads.add(transformed(
 					originalQuad,
-					(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors) -> {
-						rotation.rotateVertices(originalQuad.direction(), oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors, rotateTex, originalQuad.sprite());
-					},
+					(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors) ->
+							rotation.rotateVertices(originalQuad.direction(), oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors, rotateTex, originalQuad.sprite()),
 					originalQuad.tintIndex(),
 					rotation.apply(originalQuad.direction()),
     				originalQuad.sprite()));
