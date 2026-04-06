@@ -1,11 +1,6 @@
 package com.firemerald.additionalplacements.network.client;
 
-import com.firemerald.additionalplacements.network.APPacket;
-
 import com.firemerald.additionalplacements.network.server.ServerPlayPacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
 import java.util.function.Consumer;

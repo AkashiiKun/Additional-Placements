@@ -3,7 +3,6 @@ package com.firemerald.additionalplacements.network.server;
 import java.util.*;
 import java.util.function.Consumer;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.CheckDataConfigurationTask;
 import com.firemerald.additionalplacements.network.client.ClientConfigurationPacket;
 import dev.architectury.injectables.annotations.ExpectPlatform;

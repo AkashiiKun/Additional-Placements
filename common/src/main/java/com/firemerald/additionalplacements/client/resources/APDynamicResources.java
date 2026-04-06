@@ -1,13 +1,10 @@
 package com.firemerald.additionalplacements.client.resources;
 
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import com.firemerald.additionalplacements.AdditionalPlacementsMod;
 import com.firemerald.additionalplacements.block.*;
-import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition;
 import com.firemerald.additionalplacements.generation.Registration;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
@@ -115,7 +112,7 @@ public class APDynamicResources implements PackResources {
     }
 
     @Override
-    public <T> T getMetadataSection(MetadataSectionType<T> type) throws IOException {
+    public <T> T getMetadataSection(MetadataSectionType<T> type) {
         return null;
     }
 

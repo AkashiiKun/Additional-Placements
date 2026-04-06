@@ -4,9 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import com.firemerald.additionalplacements.network.APPacket;
 import com.firemerald.additionalplacements.network.server.ServerConfigurationPacket;
-import com.firemerald.additionalplacements.util.PlatformUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;

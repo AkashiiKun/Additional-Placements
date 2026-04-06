@@ -17,8 +17,8 @@ public class SlabBlockHighlight implements IBlockHighlight<ISlabBlock<?>> {
 
     private SlabBlockHighlight() {}
 
-    float OUTER_EDGE = .5f;
-    float INNER_EDGE = .25f;
+    public static final float OUTER_EDGE = .5f;
+    public static final float INNER_EDGE = .25f;
 
     @Override
     public void additionalplacements$renderPlacementHighlight(ISlabBlock<?> block, PoseStack pose, VertexConsumer vertexConsumer, Player player, BlockHitResult result, DeltaTracker delta, float r, float g, float b, float a, float width) {
