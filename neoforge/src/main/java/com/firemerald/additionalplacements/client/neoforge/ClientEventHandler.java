@@ -8,7 +8,6 @@ import com.firemerald.additionalplacements.config.APConfigs;
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.minecraft.client.gui.screens.DisconnectedScreen;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
