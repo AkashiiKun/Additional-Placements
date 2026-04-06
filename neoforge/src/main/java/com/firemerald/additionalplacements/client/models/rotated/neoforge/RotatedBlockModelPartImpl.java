@@ -4,7 +4,6 @@ import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.neoforge.WrappedBlockModelPartImpl;
 import com.firemerald.additionalplacements.client.models.rotated.RotatedBlockModelPart;
 import com.firemerald.additionalplacements.util.BlockRotation;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.world.level.block.state.BlockState;
