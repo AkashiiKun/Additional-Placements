@@ -1,7 +1,5 @@
 package com.firemerald.additionalplacements.client.gui;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ComponentPath;
 import net.minecraft.client.gui.narration.NarratedElementType;

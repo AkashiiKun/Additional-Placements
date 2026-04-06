@@ -1,10 +1,6 @@
 package com.firemerald.additionalplacements.client.models.neoforge;
 
 import com.firemerald.additionalplacements.client.models.WrappedBlockModelPart;
-import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
 import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
 import net.minecraft.util.TriState;
 import net.minecraft.world.level.block.state.BlockState;

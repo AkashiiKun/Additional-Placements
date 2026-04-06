@@ -3,8 +3,6 @@ package com.firemerald.additionalplacements.client;
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.color.block.BlockColor;
 import net.minecraft.core.BlockPos;

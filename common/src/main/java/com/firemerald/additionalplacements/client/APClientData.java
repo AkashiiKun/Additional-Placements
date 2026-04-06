@@ -6,8 +6,6 @@ import com.firemerald.additionalplacements.network.server.SetPlacementTogglePack
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import com.mojang.blaze3d.platform.InputConstants;
 
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
