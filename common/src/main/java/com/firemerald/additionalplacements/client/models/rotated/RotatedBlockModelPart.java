@@ -34,7 +34,7 @@ public abstract class RotatedBlockModelPart implements WrappedBlockModelPart {
     }
 
     @Override
-    public BlockModelPart getParticle() {
+    public BlockModelPart getVisual() {
         return wrapped;
     }
 
