@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 public interface PlacementModelWrapper extends BlockStateModel {
     BlockStateModel getWrappedModel();
 
-    BlockStateModel getParticleModel();
+    BlockStateModel getVisualModel();
 
     Stream<BlockModelPart> wrapParts(RandomSource random);
 
@@ -23,6 +23,6 @@ public interface PlacementModelWrapper extends BlockStateModel {
 
     @Override
     default @NotNull TextureAtlasSprite particleIcon() {
-        return getParticleModel().particleIcon();
+        return getVisualModel().particleIcon();
     }
 }

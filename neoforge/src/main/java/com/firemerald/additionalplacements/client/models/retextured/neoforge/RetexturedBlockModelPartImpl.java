@@ -3,9 +3,6 @@ package com.firemerald.additionalplacements.client.models.retextured.neoforge;
 import com.firemerald.additionalplacements.client.models.neoforge.WrappedBlockModelPartImpl;
 import com.firemerald.additionalplacements.client.models.retextured.RetexturedBlockModelPart;
 import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
-import net.minecraft.world.level.block.state.BlockState;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -16,11 +13,5 @@ public class RetexturedBlockModelPartImpl extends RetexturedBlockModelPart imple
 
     protected RetexturedBlockModelPartImpl(BlockModelPart wrapped, List<BlockModelPart> originalModel) {
         super(wrapped, originalModel);
-    }
-
-    @Override
-    @NotNull
-    public ChunkSectionLayer getRenderType(@NotNull BlockState state) {
-        return getWrapped().getRenderType(state);
     }
 }
