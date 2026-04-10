@@ -1,5 +1,6 @@
 package com.firemerald.additionalplacements.client.models.neoforge;
 
+import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.WrappedBlockModelPart;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.util.TriState;
@@ -8,7 +9,9 @@ import net.neoforged.neoforge.client.extensions.BlockModelPartExtension;
 
 public interface WrappedBlockModelPartImpl extends WrappedBlockModelPart, BlockModelPartExtension {
     @Override
-    RenderType getRenderType(BlockState state);
+    default RenderType getRenderType(BlockState state) {
+        return getVisual().getRenderType(BlockModelUtils.getModeledState(state));
+    }
 
     @Override
     default TriState ambientOcclusion() {
