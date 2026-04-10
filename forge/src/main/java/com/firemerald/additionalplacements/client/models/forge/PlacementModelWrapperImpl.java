@@ -28,12 +28,12 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
 
     @Override
     default boolean useAmbientOcclusion(@NotNull BlockState state) {
-        return getWrappedModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state));
+        return getVisualModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state));
     }
 
     @Override
     default boolean useAmbientOcclusion(@NotNull BlockState state, @NotNull RenderType renderType) {
-        return getWrappedModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state), renderType);
+        return getVisualModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state), renderType);
     }
 
     @Override
@@ -44,26 +44,26 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
 
     @Override
     default @NotNull ModelData getModelData(@NotNull BlockAndTintGetter level, @NotNull BlockPos pos, @NotNull BlockState state, @NotNull ModelData modelData) {
-        return getWrappedModel().getModelData(level, pos, BlockModelUtils.getModeledState(state), modelData);
+        return getVisualModel().getModelData(level, pos, BlockModelUtils.getModeledState(state), modelData);
     }
 
     @Override
     default @NotNull TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
-        return getParticleModel().getParticleIcon(data);
+        return getVisualModel().getParticleIcon(data);
     }
 
     @Override
     default @NotNull ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand, @NotNull ModelData data) {
-        return getWrappedModel().getRenderTypes(BlockModelUtils.getModeledState(state), rand, data);
+        return getVisualModel().getRenderTypes(BlockModelUtils.getModeledState(state), rand, data);
     }
 
     @Override
     default @NotNull List<RenderType> getRenderTypes(@NotNull ItemStack itemStack, boolean fabulous) {
-        return getWrappedModel().getRenderTypes(itemStack, fabulous);
+        return getVisualModel().getRenderTypes(itemStack, fabulous);
     }
 
     @Override
     default @NotNull List<BakedModel> getRenderPasses(@NotNull ItemStack itemStack, boolean fabulous) {
-        return getWrappedModel().getRenderPasses(itemStack, fabulous);
+        return getVisualModel().getRenderPasses(itemStack, fabulous);
     }
 }
