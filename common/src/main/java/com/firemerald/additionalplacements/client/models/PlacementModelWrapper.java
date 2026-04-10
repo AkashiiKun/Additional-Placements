@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
 public interface PlacementModelWrapper extends BakedModel {
     BakedModel getWrappedModel();
 
-    BakedModel getParticleModel();
+    BakedModel getVisualModel();
 
     @Override
     default boolean useAmbientOcclusion() {
-        return getWrappedModel().useAmbientOcclusion();
+        return getVisualModel().useAmbientOcclusion();
     }
 
     @Override
@@ -22,12 +22,12 @@ public interface PlacementModelWrapper extends BakedModel {
 
     @Override
     default boolean usesBlockLight() {
-        return getWrappedModel().isGui3d();
+        return getVisualModel().usesBlockLight();
     }
 
     @Override
     default @NotNull TextureAtlasSprite getParticleIcon() {
-        return getParticleModel().getParticleIcon();
+        return getVisualModel().getParticleIcon();
     }
 
     @Override

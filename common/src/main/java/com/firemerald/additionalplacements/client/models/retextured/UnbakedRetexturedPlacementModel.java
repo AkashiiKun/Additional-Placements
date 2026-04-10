@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class UnbakedRetexturedPlacementModel implements IAPUnbakedModel {
 	public final ResourceLocation ourModelLocation;
-	private UnbakedModel ourModel;
 	public final BlockState theirModelState;
 
 	public UnbakedRetexturedPlacementModel(RetexturedModelData data) {
@@ -18,11 +17,11 @@ public class UnbakedRetexturedPlacementModel implements IAPUnbakedModel {
 
 	@Override
 	public @NotNull BakedModel bake(ModelBaker baker, ModelState modelState) {
-		return BakedRetexturedPlacementModel.of(UnbakedModel.bakeWithTopModelValues(ourModel, baker, modelState), theirModelState);
+		return BakedRetexturedPlacementModel.of(baker.bake(ourModelLocation, modelState), theirModelState);
 	}
 
 	@Override
 	public void resolveDependencies(UnbakedModel.Resolver modelGetter) {
-		ourModel = modelGetter.resolve(ourModelLocation);
+		modelGetter.resolve(ourModelLocation);
 	}
 }
