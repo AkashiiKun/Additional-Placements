@@ -12,6 +12,6 @@ public interface WrappedBlockModelPartImpl extends WrappedBlockModelPart, BlockM
 
     @Override
     default TriState ambientOcclusion() {
-        return getWrapped().ambientOcclusion();
+        return getVisual().ambientOcclusion();
     }
 }
