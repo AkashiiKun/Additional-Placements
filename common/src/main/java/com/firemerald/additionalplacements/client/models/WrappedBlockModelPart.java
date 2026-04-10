@@ -7,15 +7,15 @@ import org.jetbrains.annotations.NotNull;
 public interface WrappedBlockModelPart extends BlockModelPart {
     BlockModelPart getWrapped();
 
-    BlockModelPart getParticle();
+    BlockModelPart getVisual();
 
     @Override
     default boolean useAmbientOcclusion() {
-        return getWrapped().useAmbientOcclusion();
+        return getVisual().useAmbientOcclusion();
     }
 
     @Override
     default @NotNull TextureAtlasSprite particleIcon() {
-        return getWrapped().particleIcon();
+        return getVisual().particleIcon();
     }
 }

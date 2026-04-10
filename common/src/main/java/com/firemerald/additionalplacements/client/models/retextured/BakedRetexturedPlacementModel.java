@@ -18,7 +18,8 @@ public abstract class BakedRetexturedPlacementModel implements PlacementModelWra
 		throw new AssertionError();
 	}
 
-	public final BlockStateModel ourModel;
+	private BlockStateModel ourModel;
+	private boolean ourModelMissing = false;
 	private final BlockState theirModelState;
 	private BlockStateModel theirModel;
 
@@ -27,25 +28,37 @@ public abstract class BakedRetexturedPlacementModel implements PlacementModelWra
 		this.theirModelState = theirModelState;
 	}
 
-	public BlockStateModel theirModel() {
-		if (theirModel != null) return theirModel;
-		else return theirModel = Unwrapper.unwrap(Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState));
-	}
-
 	@Override
 	public BlockStateModel getWrappedModel() {
+		if (ourModel == null) {
+			ourModel = Unwrapper.unwrap(Minecraft.getInstance().getModelManager().getMissingBlockStateModel());
+			ourModelMissing = true;
+		}
 		return ourModel;
 	}
 
 	@Override
-	public BlockStateModel getParticleModel() {
-		return theirModel();
+	public BlockStateModel getVisualModel() {
+		if (theirModel == null) {
+			BlockStateModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState);
+			if (model == null) model = Minecraft.getInstance().getModelManager().getMissingBlockStateModel();
+			theirModel = Unwrapper.unwrap(model);
+		}
+		return theirModel;
+	}
+
+	public boolean wasModelMissing() {
+		return ourModelMissing;
 	}
 
 	@Override
 	public Stream<BlockModelPart> wrapParts(RandomSource random) {
-		List<BlockModelPart> theirParts = theirModel().collectParts(random);
-		if (theirParts.isEmpty()) return Stream.empty();
-		return getWrappedModel().collectParts(random).stream().map(ourPart -> RetexturedBlockModelPart.of(ourPart, theirParts));
+		Stream<BlockModelPart> wrappedParts = getWrappedModel().collectParts(random).stream();
+		if (wasModelMissing()) return wrappedParts;
+		else {
+			List<BlockModelPart> theirParts = getVisualModel().collectParts(random);
+			if (theirParts.isEmpty()) return Stream.empty();
+			return wrappedParts.map(ourPart -> RetexturedBlockModelPart.of(ourPart, theirParts));
+		}
 	}
 }
