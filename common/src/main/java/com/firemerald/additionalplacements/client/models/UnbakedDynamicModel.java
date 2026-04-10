@@ -6,14 +6,21 @@ import com.firemerald.additionalplacements.client.models.retextured.BakedRetextu
 import com.firemerald.additionalplacements.client.models.rotated.BakedRotatedPlacementModel;
 import com.firemerald.additionalplacements.util.BlockRotation;
 import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.model.SimpleModelWrapper;
 import net.minecraft.client.renderer.block.model.SingleVariant;
-import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.resources.model.BlockModelRotation;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 
-public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements BlockStateModel.UnbakedRoot {
+public final class UnbakedDynamicModel implements BlockStateModel.UnbakedRoot {
+    private final AdditionalPlacementBlock<?> block;
+
+    public UnbakedDynamicModel(AdditionalPlacementBlock<?> block) {
+        this.block = block;
+    }
+
     @Override
     @NotNull
     public BlockStateModel bake(BlockState state, ModelBaker baker) {
@@ -24,16 +31,9 @@ public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements 
             return BakedRotatedPlacementModel.of(theirModelState, modelRotation, rotatesTexture);
         } else {
             StateModelDefinition modelDefinition = block.getModelDefinition(state);
-            SingleVariant.Unbaked ourModel = new SingleVariant.Unbaked(new Variant(
-                    modelDefinition.location(block.getBaseModelPrefix()),
-                    new Variant.SimpleModelState(
-                            modelDefinition.xRotation(),
-                            modelDefinition.yRotation(),
-                            true
-                    )
-            ));
+            OurModelKey operationKey = new OurModelKey(modelDefinition, block.getBaseModelPrefix());
             BlockState theirModelState = block.getModelState(state);
-            return BakedRetexturedPlacementModel.of(ourModel.bake(baker), theirModelState);
+            return BakedRetexturedPlacementModel.of(baker.compute(operationKey), theirModelState);
         }
     }
 
@@ -47,5 +47,16 @@ public record UnbakedDynamicModel(AdditionalPlacementBlock<?> block) implements 
     public void resolveDependencies(Resolver resolver) {
         ResourceLocation rootFolder = block.getBaseModelPrefix();
         for (String model : block.getAllModels()) resolver.markDependency(rootFolder.withSuffix(model));
+    }
+
+    public record OurModelKey(StateModelDefinition modelDefinition, ResourceLocation baseModelPrefix) implements ModelBaker.SharedOperationKey<BlockStateModel> {
+        @Override
+        public BlockStateModel compute(ModelBaker baker) {
+            return new SingleVariant(SimpleModelWrapper.bake(
+                    baker,
+                    modelDefinition.location(baseModelPrefix),
+                    BlockModelRotation.by(modelDefinition.xRotation(), modelDefinition.yRotation()).withUvLock()
+            ));
+        }
     }
 }

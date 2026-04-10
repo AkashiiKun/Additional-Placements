@@ -17,6 +17,6 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper, Fabric
 
     @Override
     default TextureAtlasSprite particleSprite(BlockAndTintGetter blockView, BlockPos pos, BlockState state) {
-        return getParticleModel().particleSprite(blockView, pos, BlockModelUtils.getModeledState(state));
+        return getVisualModel().particleSprite(blockView, pos, BlockModelUtils.getModeledState(state));
     }
 }

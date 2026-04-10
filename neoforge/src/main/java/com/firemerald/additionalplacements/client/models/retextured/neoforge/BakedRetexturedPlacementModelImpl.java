@@ -26,8 +26,13 @@ public class BakedRetexturedPlacementModelImpl extends BakedRetexturedPlacementM
 
 	@Override
 	public Stream<BlockModelPart> wrapParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random) {
-		List<BlockModelPart> theirParts = theirModel().collectParts(level, pos, BlockModelUtils.getModeledState(state), random);
-		return getWrappedModel().collectParts(level, pos, state, random).stream().map(ourPart -> RetexturedBlockModelPart.of(ourPart, theirParts));
+		Stream<BlockModelPart> wrappedParts = getWrappedModel().collectParts(level, pos, state, random).stream();
+		if (wasModelMissing()) return wrappedParts;
+		else {
+			List<BlockModelPart> theirParts = getVisualModel().collectParts(level, pos, BlockModelUtils.getModeledState(state), random);
+			if (theirParts.isEmpty()) return Stream.empty();
+			return wrappedParts.map(ourPart -> RetexturedBlockModelPart.of(ourPart, theirParts));
+		}
 	}
 
 	@Override

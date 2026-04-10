@@ -31,7 +31,7 @@ public abstract class RetexturedBlockModelPart implements WrappedBlockModelPart 
     }
 
     @Override
-    public BlockModelPart getParticle() {
+    public BlockModelPart getVisual() {
         return originalModel.getFirst();
     }
 
