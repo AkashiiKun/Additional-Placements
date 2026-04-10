@@ -6,6 +6,7 @@ import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.util.BlockRotation;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
@@ -27,6 +28,7 @@ public class BakedRotatedPlacementModelImpl extends BakedRotatedPlacementModel i
 	@Override
 	public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
 		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.rotatedQuads(modelRotation, rotatesTexture, side, dir -> getWrappedModel().getQuads(modelState, dir, rand, data, renderType), renderType);
+		BakedModel wrappedModel = getWrappedModel();
+		return BlockModelUtils.rotatedQuads(modelRotation, rotatesTexture, side, dir -> wrappedModel.getQuads(modelState, dir, rand, data, renderType), renderType);
 	}
 }
