@@ -20,7 +20,8 @@ public class BakedRetexturedPlacementModel implements PlacementModelWrapper {
 		throw new AssertionError();
 	}
 
-	public final BakedModel ourModel;
+	private BakedModel ourModel;
+	private boolean ourModelMissing = false;
 	private final BlockState theirModelState;
 	private BakedModel theirModel;
 
@@ -29,24 +30,37 @@ public class BakedRetexturedPlacementModel implements PlacementModelWrapper {
 		this.theirModelState = theirModelState;
 	}
 
-	public BakedModel theirModel() {
-		if (theirModel != null) return theirModel;
-		else return theirModel = Unwrapper.unwrap(Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState));
-	}
-
 	@Override
 	public BakedModel getWrappedModel() {
+		if (ourModel == null) {
+			ourModel = Unwrapper.unwrap(Minecraft.getInstance().getModelManager().getMissingModel());
+			ourModelMissing = true;
+		}
 		return ourModel;
 	}
 
+	public boolean wasModelMissing() {
+		return ourModelMissing;
+	}
+
 	@Override
-	public BakedModel getParticleModel() {
-		return theirModel();
+	public BakedModel getVisualModel() {
+		if (theirModel == null) {
+			BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState);
+			if (model == null) model = Minecraft.getInstance().getModelManager().getMissingModel();
+			theirModel = Unwrapper.unwrap(model);
+		}
+		return theirModel;
 	}
 
 	@Override
 	public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand) {
-		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.retexturedQuads(side, dir -> ourModel.getQuads(state, dir, rand), dir -> theirModel().getQuads(modelState, dir, rand), null);
+		BakedModel wrappedModel = getWrappedModel();
+		if (wasModelMissing()) return wrappedModel.getQuads(state, side, rand);
+		else {
+			BakedModel theirModel = getVisualModel();
+			BlockState modelState = BlockModelUtils.getModeledState(state);
+			return BlockModelUtils.retexturedQuads(side, dir -> wrappedModel.getQuads(state, dir, rand), dir -> theirModel.getQuads(modelState, dir, rand), null);
+		}
 	}
 }
