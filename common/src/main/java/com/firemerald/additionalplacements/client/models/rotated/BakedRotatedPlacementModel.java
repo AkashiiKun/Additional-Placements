@@ -34,12 +34,16 @@ public class BakedRotatedPlacementModel implements PlacementModelWrapper {
 
 	@Override
 	public BakedModel getWrappedModel() {
-		if (theirModel != null) return theirModel;
-		else return theirModel = Unwrapper.unwrap(Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState));
+		if (theirModel == null) {
+			BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState);
+			if (model == null) model = Minecraft.getInstance().getModelManager().getMissingModel();
+			theirModel = Unwrapper.unwrap(model);
+		}
+		return theirModel;
 	}
 
 	@Override
-	public BakedModel getParticleModel() {
+	public BakedModel getVisualModel() {
 		return getWrappedModel();
 	}
 
@@ -47,6 +51,7 @@ public class BakedRotatedPlacementModel implements PlacementModelWrapper {
 	@Deprecated
 	public @NotNull List<BakedQuad> getQuads(BlockState state, Direction side, @NotNull RandomSource rand) {
 		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.rotatedQuads(modelRotation, rotatesTexture, side, dir -> getWrappedModel().getQuads(modelState, dir, rand), null);
+		BakedModel wrappedModel = getWrappedModel();
+		return BlockModelUtils.rotatedQuads(modelRotation, rotatesTexture, side, dir -> wrappedModel.getQuads(modelState, dir, rand), null);
 	}
 }

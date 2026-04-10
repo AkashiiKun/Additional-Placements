@@ -12,7 +12,6 @@ import java.util.function.Function;
 
 public class UnbakedRetexturedPlacementModel<T extends UnbakedRetexturedPlacementModel<T>> implements IAPUnbakedModel<T> {
 	public final ResourceLocation ourModelLocation;
-	private UnbakedModel ourModel;
 	public final BlockState theirModelState;
 
 	public UnbakedRetexturedPlacementModel(RetexturedModelData data) {
@@ -22,11 +21,11 @@ public class UnbakedRetexturedPlacementModel<T extends UnbakedRetexturedPlacemen
 
 	@Override
 	public BakedModel bake(ModelBaker baker, Function<Material, TextureAtlasSprite> spriteGetter, ModelState modelState, List<ItemOverride> overrides) {
-		return BakedRetexturedPlacementModel.of(ourModel.bake(baker, spriteGetter, modelState), theirModelState);
+		return BakedRetexturedPlacementModel.of(baker.bake(ourModelLocation, modelState), theirModelState);
 	}
 
 	@Override
 	public void resolveDependencies(UnbakedModel.Resolver modelGetter) {
-		ourModel = modelGetter.resolve(ourModelLocation);
+		modelGetter.resolve(ourModelLocation);
 	}
 }

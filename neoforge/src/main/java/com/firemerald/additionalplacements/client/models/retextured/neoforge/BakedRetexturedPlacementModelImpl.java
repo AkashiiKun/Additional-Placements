@@ -26,7 +26,12 @@ public class BakedRetexturedPlacementModelImpl extends BakedRetexturedPlacementM
 
 	@Override
 	public @NotNull List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData data, @Nullable RenderType renderType) {
-		BlockState modelState = BlockModelUtils.getModeledState(state);
-		return BlockModelUtils.retexturedQuads(side, dir -> ourModel.getQuads(state, dir, rand, data, renderType), dir -> theirModel().getQuads(modelState, dir, rand, data, renderType), renderType);
+		BakedModel wrappedModel = getWrappedModel();
+		if (wasModelMissing()) return wrappedModel.getQuads(state, side, rand, data, renderType);
+		else {
+			BakedModel theirModel = getVisualModel();
+			BlockState modelState = BlockModelUtils.getModeledState(state);
+			return BlockModelUtils.retexturedQuads(side, dir -> wrappedModel.getQuads(state, dir, rand, data, renderType), dir -> theirModel.getQuads(modelState, dir, rand, data, renderType), renderType);
+		}
 	}
 }

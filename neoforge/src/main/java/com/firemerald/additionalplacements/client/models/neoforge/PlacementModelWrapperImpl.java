@@ -31,7 +31,7 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
 
     @Override
     default TriState useAmbientOcclusion(BlockState state, ModelData data, RenderType renderType) {
-        return getWrappedModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state), data, renderType);
+        return getVisualModel().useAmbientOcclusion(BlockModelUtils.getModeledState(state), data, renderType);
     }
 
     @Override
@@ -42,26 +42,26 @@ public interface PlacementModelWrapperImpl extends PlacementModelWrapper {
 
     @Override
     default ModelData getModelData(BlockAndTintGetter level, BlockPos pos, BlockState state, ModelData modelData) {
-        return getWrappedModel().getModelData(level, pos, BlockModelUtils.getModeledState(state), modelData);
+        return getVisualModel().getModelData(level, pos, BlockModelUtils.getModeledState(state), modelData);
     }
 
     @Override
     default TextureAtlasSprite getParticleIcon(ModelData data) {
-        return getParticleModel().getParticleIcon(data);
+        return getVisualModel().getParticleIcon(data);
     }
 
     @Override
     default ChunkRenderTypeSet getRenderTypes(BlockState state, RandomSource rand, ModelData data) {
-        return getWrappedModel().getRenderTypes(BlockModelUtils.getModeledState(state), rand, data);
+        return getVisualModel().getRenderTypes(BlockModelUtils.getModeledState(state), rand, data);
     }
 
     @Override
     default List<RenderType> getRenderTypes(ItemStack itemStack) {
-        return getWrappedModel().getRenderTypes(itemStack);
+        return getVisualModel().getRenderTypes(itemStack);
     }
 
     @Override
     default List<BakedModel> getRenderPasses(ItemStack itemStack) {
-        return getWrappedModel().getRenderPasses(itemStack);
+        return getVisualModel().getRenderPasses(itemStack);
     }
 }
