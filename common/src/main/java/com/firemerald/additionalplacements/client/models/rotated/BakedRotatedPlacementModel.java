@@ -31,12 +31,16 @@ public abstract class BakedRotatedPlacementModel implements PlacementModelWrappe
 
 	@Override
 	public BlockStateModel getWrappedModel() {
-		if (theirModel != null) return theirModel;
-		else return theirModel = Unwrapper.unwrap(Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState));
+		if (theirModel == null) {
+			BlockStateModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(theirModelState);
+			if (model == null) model = Minecraft.getInstance().getModelManager().getMissingBlockStateModel();
+			theirModel = Unwrapper.unwrap(model);
+		}
+		return theirModel;
 	}
 
 	@Override
-	public BlockStateModel getParticleModel() {
+	public BlockStateModel getVisualModel() {
 		return getWrappedModel();
 	}
 
