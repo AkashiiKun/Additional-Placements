@@ -1,13 +1,14 @@
 package com.firemerald.additionalplacements.client.models;
 
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
+import org.jspecify.annotations.NonNull;
 
-public interface WrappedBlockModelPart extends BlockModelPart {
-    BlockModelPart getWrapped();
+public interface WrappedBlockModelPart extends BlockStateModelPart {
+    BlockStateModelPart getWrapped();
 
-    BlockModelPart getVisual();
+    BlockStateModelPart getVisual();
 
     @Override
     default boolean useAmbientOcclusion() {
@@ -15,7 +16,13 @@ public interface WrappedBlockModelPart extends BlockModelPart {
     }
 
     @Override
-    default @NotNull TextureAtlasSprite particleIcon() {
-        return getVisual().particleIcon();
+    default Material.@NonNull Baked particleMaterial() {
+        return getVisual().particleMaterial();
+    }
+
+    @BakedQuad.MaterialFlags
+    @Override
+    default int materialFlags() {
+        return getVisual().materialFlags();
     }
 }

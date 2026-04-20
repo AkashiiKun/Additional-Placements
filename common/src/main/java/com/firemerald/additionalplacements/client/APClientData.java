@@ -41,7 +41,7 @@ public class APClientData {
 		LocalPlayer player = Minecraft.getInstance().player;
 		if (player != null) {
 			synchronizePlacementEnabled();
-			if (showMessage) player.displayClientMessage(Component.translatable(placementEnabled ? "msg.additionalplacements.placement_enable" : "msg.additionalplacements.placement_disable"), true);
+			if (showMessage) player.sendSystemMessage(Component.translatable(placementEnabled ? "msg.additionalplacements.placement_enable" : "msg.additionalplacements.placement_disable"));
 		}
 	}
 

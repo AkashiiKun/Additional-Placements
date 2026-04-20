@@ -7,15 +7,16 @@ import java.util.Map;
 
 import com.firemerald.additionalplacements.util.PlatformUtils;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.Sheets;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.renderer.chunk.ChunkSectionLayer;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.data.AtlasIds;
-import org.apache.commons.lang3.tuple.Pair;
 
 import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.util.BlockRotation;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
@@ -34,16 +35,15 @@ public class BlockModelUtils {
 		else return state;
 	}
 
-	public static BakedQuad retexture(BakedQuad jsonBakedQuad, TextureAtlasSprite newSprite, int newTintIndex) {
+	public static BakedQuad retexture(BakedQuad jsonBakedQuad, BakedQuad.MaterialInfo newSprite) {
 		return transformed(
 				jsonBakedQuad,
 				(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors) -> {
 					System.arraycopy(oldPos, 0, newPos, 0, oldPos.length);
-					updateUVs(oldTex, newTex, jsonBakedQuad.sprite(), newSprite);
+					updateUVs(oldTex, newTex, jsonBakedQuad.materialInfo().sprite(), newSprite.sprite());
 					if (oldNorms != null) System.arraycopy(oldNorms, 0, newNorms, 0, oldNorms.length);
 					if (oldColors != null) System.arraycopy(oldColors, 0, newColors, 0, oldColors.length);
 				},
-				newTintIndex,
 				jsonBakedQuad.direction(),
 				newSprite
 		);
@@ -54,7 +54,7 @@ public class BlockModelUtils {
 		void transform(Vector3fc[] sourcePos, long[] sourceTex, Vector3fc @Nullable [] sourceNorms, int @Nullable [] sourceCols, Vector3fc[] desPos, long[] desTex, Vector3fc @Nullable [] desNorms, int @Nullable [] desCols);
 	}
 
-	public static BakedQuad transformed(BakedQuad originalQuad, QuadTransform quadTransform, int tintIndex, Direction direction, TextureAtlasSprite sprite) {
+	public static BakedQuad transformed(BakedQuad originalQuad, QuadTransform quadTransform, Direction direction, BakedQuad.MaterialInfo sprite) {
 		Vector3fc[] oldPos = getVertices(originalQuad);
 		long[] oldTex = getUVs(originalQuad);
 		Vector3fc @Nullable [] oldNorms = getNorms(originalQuad);
@@ -64,11 +64,11 @@ public class BlockModelUtils {
 		Vector3fc[] newNorms = oldNorms == null ? null : oldNorms.clone();
 		int[] newColors = oldColors == null ? null : oldColors.clone();
 		quadTransform.transform(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors);
-		return transformed(originalQuad, newPos, newTex, newNorms, newColors, tintIndex, direction, sprite);
+		return transformed(originalQuad, newPos, newTex, newNorms, newColors, direction, sprite);
 	}
 
 	@ExpectPlatform
-	public static BakedQuad transformed(BakedQuad originalQuad, Vector3fc[] newPos, long[] newTex, Vector3fc @Nullable [] newNorm, int @Nullable [] newColor, int tintIndex, Direction direction, TextureAtlasSprite sprite) {
+	public static BakedQuad transformed(BakedQuad originalQuad, Vector3fc[] newPos, long[] newTex, Vector3fc @Nullable [] newNorm, int @Nullable [] newColor, Direction direction, BakedQuad.MaterialInfo sprite) {
 		throw new AssertionError();
 	}
 
@@ -147,51 +147,53 @@ public class BlockModelUtils {
 		}
 	}
 
-	public static Pair<TextureAtlasSprite, Integer> getSidedTexture(List<BlockModelPart> fromModel, Direction fromSide) {
-		Map<Pair<TextureAtlasSprite, Integer>, Double> weights = new HashMap<>();
+	public static BakedQuad.MaterialInfo getSidedTexture(List<BlockStateModelPart> fromModel, Direction fromSide) {
+		Map<BakedQuad.MaterialInfo, Double> weights = new HashMap<>();
 		List<BakedQuad> referenceQuads = fromModel.stream().flatMap(part -> part.getQuads(fromSide).stream()).toList();
 		if (fromSide != null && (referenceQuads.isEmpty() || referenceQuads.stream().noneMatch(quad -> quad.direction() == fromSide))) //no valid culled sides
 			referenceQuads = fromModel.stream().flatMap(part -> part.getQuads(null).stream()).toList();
 		if (!referenceQuads.isEmpty()) {
 			referenceQuads.forEach(referredBakedQuad -> {
 				if (fromSide == null || referredBakedQuad.direction() == fromSide) { //only for quads facing the correct side
-					Pair<TextureAtlasSprite, Integer> tex = Pair.of(referredBakedQuad.sprite(), referredBakedQuad.tintIndex());
+					BakedQuad.MaterialInfo tex = referredBakedQuad.materialInfo();
 					weights.merge(tex, (double) BlockModelUtils.getFaceSize(getVertices(referredBakedQuad)), Double::sum);
 				}
 			});
 			return weights.entrySet().stream().max((e1, e2) -> (int) Math.signum(e2.getValue() - e1.getValue())).map(Map.Entry::getKey).orElse(
-					Pair.of(Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).missingSprite(), -1)
+					missingTex()
 			);
 		}
-		else return Pair.of(Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).missingSprite(), -1);
+		else return missingTex();
 	}
 
-	public static List<BakedQuad> retexturedQuads(List<BlockModelPart> originalModel, BlockModelPart ourModel, Direction side) {
-		@SuppressWarnings("unchecked")
-		Pair<TextureAtlasSprite, Integer>[] textures = new Pair[6];
+	public static BakedQuad.MaterialInfo missingTex() {
+		return new BakedQuad.MaterialInfo(Minecraft.getInstance().getAtlasManager().getAtlasOrThrow(AtlasIds.BLOCKS).missingSprite(), ChunkSectionLayer.SOLID, Sheets.cutoutBlockItemSheet(), -1, false, 0);
+	}
+
+	public static List<BakedQuad> retexturedQuads(List<BlockStateModelPart> originalModel, BlockStateModelPart ourModel, Direction side) {
+		BakedQuad.MaterialInfo[] textures = new BakedQuad.MaterialInfo[6];
 		List<BakedQuad> originalQuads = ourModel.getQuads(side);
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
 		for (BakedQuad originalQuad : originalQuads) {
 			Direction modelSide = originalQuad.direction();
 			int dirIndex = modelSide.get3DDataValue();
-			Pair<TextureAtlasSprite, Integer> texture = textures[dirIndex];
+			BakedQuad.MaterialInfo texture = textures[dirIndex];
 			if (texture == null) texture = textures[dirIndex] = getSidedTexture(originalModel, modelSide);
-    		bakedQuads.add(retexture(originalQuad, texture.getLeft(), texture.getRight()));
+    		bakedQuads.add(retexture(originalQuad, texture));
 		}
 		return bakedQuads;
 	}
 
-	public static List<BakedQuad> rotatedQuads(BlockModelPart model, BlockRotation rotation, boolean rotateTex, Direction side) {
+	public static List<BakedQuad> rotatedQuads(BlockStateModelPart model, BlockRotation rotation, boolean rotateTex, Direction side) {
 		List<BakedQuad> originalQuads = model.getQuads(rotation.unapply(side));
 		List<BakedQuad> bakedQuads = new ArrayList<>(originalQuads.size());
 		for (BakedQuad originalQuad : originalQuads) {
     		bakedQuads.add(transformed(
 					originalQuad,
 					(oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors) ->
-							rotation.rotateVertices(originalQuad.direction(), oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors, rotateTex, originalQuad.sprite()),
-					originalQuad.tintIndex(),
+							rotation.rotateVertices(originalQuad.direction(), oldPos, oldTex, oldNorms, oldColors, newPos, newTex, newNorms, newColors, rotateTex, originalQuad.materialInfo().sprite()),
 					rotation.apply(originalQuad.direction()),
-    				originalQuad.sprite()));
+    				originalQuad.materialInfo()));
 		}
 		return bakedQuads;
 	}

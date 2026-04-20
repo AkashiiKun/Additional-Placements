@@ -3,8 +3,8 @@ package com.firemerald.additionalplacements.client.models.retextured;
 import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.WrappedBlockModelPart;
 import dev.architectury.injectables.annotations.ExpectPlatform;
-import net.minecraft.client.renderer.block.model.BakedQuad;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
 import net.minecraft.core.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,25 +13,25 @@ import java.util.List;
 
 public abstract class RetexturedBlockModelPart implements WrappedBlockModelPart {
     @ExpectPlatform
-    public static RetexturedBlockModelPart of(BlockModelPart wrapped, List<BlockModelPart> originalModel) {
+    public static RetexturedBlockModelPart of(BlockStateModelPart wrapped, List<BlockStateModelPart> originalModel) {
         throw new AssertionError();
     }
 
-    public final BlockModelPart wrapped;
-    public final List<BlockModelPart> originalModel;
+    public final BlockStateModelPart wrapped;
+    public final List<BlockStateModelPart> originalModel;
 
-    protected RetexturedBlockModelPart(BlockModelPart wrapped, List<BlockModelPart> originalModel) {
+    protected RetexturedBlockModelPart(BlockStateModelPart wrapped, List<BlockStateModelPart> originalModel) {
         this.wrapped = wrapped;
         this.originalModel = originalModel;
     }
 
     @Override
-    public BlockModelPart getWrapped() {
+    public BlockStateModelPart getWrapped() {
         return wrapped;
     }
 
     @Override
-    public BlockModelPart getVisual() {
+    public BlockStateModelPart getVisual() {
         return originalModel.getFirst();
     }
 

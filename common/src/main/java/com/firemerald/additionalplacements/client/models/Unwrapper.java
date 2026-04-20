@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.client.models;
 
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 
 import java.util.ArrayList;
 import java.util.List;

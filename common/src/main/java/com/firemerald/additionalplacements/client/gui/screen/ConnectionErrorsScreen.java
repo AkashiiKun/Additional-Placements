@@ -5,7 +5,6 @@ import com.firemerald.additionalplacements.util.MessageTree;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
@@ -38,14 +37,6 @@ public class ConnectionErrorsScreen extends Screen {
     @Override
     public @NotNull Font getFont() {
         return font;
-    }
-
-
-    @Override
-    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
-        errorList.render(guiGraphics, mouseX, mouseY, partialTick);
-        okButton.render(guiGraphics, mouseX, mouseY, partialTick);
     }
 
 	public Minecraft getMinecraft() {

@@ -1,28 +1,22 @@
 package com.firemerald.additionalplacements.client.models;
 
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.RandomSource;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 public interface PlacementModelWrapper extends BlockStateModel {
     BlockStateModel getWrappedModel();
 
     BlockStateModel getVisualModel();
 
-    Stream<BlockModelPart> wrapParts(RandomSource random);
-
     @Override
-    default void collectParts(RandomSource random, List<BlockModelPart> output) {
-        wrapParts(random).forEach(output::add);
+    default @NotNull Material.Baked particleMaterial() {
+        return getVisualModel().particleMaterial();
     }
 
     @Override
-    default @NotNull TextureAtlasSprite particleIcon() {
-        return getVisualModel().particleIcon();
+    default @BakedQuad.MaterialFlags int materialFlags() {
+        return getVisualModel().materialFlags();
     }
 }

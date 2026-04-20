@@ -1,7 +1,6 @@
 package com.firemerald.additionalplacements.client.neoforge;
 
 import com.firemerald.additionalplacements.client.APClientData;
-import com.firemerald.additionalplacements.client.ClientModEvents;
 import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition;
 import com.firemerald.additionalplacements.client.models.neoforge.DynamicModelsDefinitionImpl;
 import com.firemerald.additionalplacements.client.resources.APDynamicResources;
@@ -10,11 +9,9 @@ import com.firemerald.additionalplacements.util.PlatformUtils;
 import net.minecraft.data.DataProvider;
 import net.minecraft.server.packs.PackType;
 import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterBlockStateModels;
-import net.neoforged.neoforge.client.event.RegisterColorHandlersEvent;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 import net.neoforged.neoforge.event.AddPackFindersEvent;
@@ -23,11 +20,6 @@ import net.neoforged.neoforge.event.AddPackFindersEvent;
 public class ClientModEventHandler {
     static {
         PlatformUtils.checkIsClient();
-    }
-
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onRegisterBlockColorHandlers(RegisterColorHandlersEvent.Block event) {
-        ClientModEvents.addBlockColors(event::register);
     }
 
     @SubscribeEvent

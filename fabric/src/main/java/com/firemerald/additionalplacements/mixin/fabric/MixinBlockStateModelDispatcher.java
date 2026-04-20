@@ -1,6 +1,6 @@
 package com.firemerald.additionalplacements.mixin.fabric;
 
-import com.firemerald.additionalplacements.client.fabric.BlockModelDefinitionExtensions;
+import com.firemerald.additionalplacements.client.fabric.BlockStateModelDispatcherExtensions;
 import com.firemerald.additionalplacements.client.models.DynamicModelsDefinition;
 import com.firemerald.additionalplacements.client.models.IAPCustomBlockModelDefinition;
 import com.firemerald.additionalplacements.client.models.fabric.DynamicModelsDefinitionImpl;
@@ -9,8 +9,8 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.*;
-import net.minecraft.client.renderer.block.model.BlockModelDefinition;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelDispatcher;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -29,12 +29,12 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-@Mixin(BlockModelDefinition.class)
-public class MixinBlockModelDefinition implements BlockModelDefinitionExtensions {
+@Mixin(BlockStateModelDispatcher.class)
+public class MixinBlockStateModelDispatcher implements BlockStateModelDispatcherExtensions {
     @Mutable
     @Final
     @Shadow
-    public static Codec<BlockModelDefinition> CODEC;
+    public static Codec<BlockStateModelDispatcher> CODEC;
 
     @Unique
     public IAPCustomBlockModelDefinition additionalplacements$customModelDefinition = null;
@@ -60,13 +60,13 @@ public class MixinBlockModelDefinition implements BlockModelDefinitionExtensions
         if (original) {
             return Objects.equals(
                     additionalplacements$customModelDefinition,
-                    ((BlockModelDefinitionExtensions) other).additionalplacements$getCustomModelDefinition());
+                    ((BlockStateModelDispatcherExtensions) other).additionalplacements$getCustomModelDefinition());
         } else return false;
     }
 
     @Inject(method = "<clinit>", at = @At("TAIL"))
     private static void modifyCodec(CallbackInfo ci) {
-        final Codec<BlockModelDefinition> vanillaCodec = CODEC;
+        final Codec<BlockStateModelDispatcher> vanillaCodec = CODEC;
         final MapCodec<Identifier> keyCodec = Identifier.CODEC.fieldOf("neoforge:definition_type");
         final Codec<IAPCustomBlockModelDefinition> moddedCodec = new MapCodec<IAPCustomBlockModelDefinition>() {
             @Override
@@ -96,19 +96,19 @@ public class MixinBlockModelDefinition implements BlockModelDefinitionExtensions
         }.codec();
         CODEC = new Codec<>() {
             @Override
-            public <T> DataResult<Pair<BlockModelDefinition, T>> decode(DynamicOps<T> ops, T input) {
+            public <T> DataResult<Pair<BlockStateModelDispatcher, T>> decode(DynamicOps<T> ops, T input) {
                 DataResult<Pair<IAPCustomBlockModelDefinition, T>> modded = moddedCodec.decode(ops, input);
                 if (modded.isSuccess()) return modded.map(pair -> {
-                    BlockModelDefinition definition = new BlockModelDefinition(Optional.empty(), Optional.empty());
-                    ((BlockModelDefinitionExtensions) (Object) definition).additionalplacements$setCustomModelDefinition(pair.getFirst());
+                    BlockStateModelDispatcher definition = new BlockStateModelDispatcher(Optional.empty(), Optional.empty());
+                    ((BlockStateModelDispatcherExtensions) (Object) definition).additionalplacements$setCustomModelDefinition(pair.getFirst());
                     return Pair.of(definition, pair.getSecond());
                 });
                 else return vanillaCodec.decode(ops, input);
             }
 
             @Override
-            public <T> DataResult<T> encode(BlockModelDefinition input, DynamicOps<T> ops, T prefix) {
-                IAPCustomBlockModelDefinition customDefinition = ((BlockModelDefinitionExtensions) (Object) input).additionalplacements$getCustomModelDefinition();
+            public <T> DataResult<T> encode(BlockStateModelDispatcher input, DynamicOps<T> ops, T prefix) {
+                IAPCustomBlockModelDefinition customDefinition = ((BlockStateModelDispatcherExtensions) (Object) input).additionalplacements$getCustomModelDefinition();
                 if (customDefinition != null) return moddedCodec.encode(customDefinition, ops, prefix);
                 else return vanillaCodec.encode(input, ops, prefix);
             }

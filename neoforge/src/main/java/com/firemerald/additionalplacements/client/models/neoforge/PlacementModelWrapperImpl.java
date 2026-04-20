@@ -1,36 +1,38 @@
 package com.firemerald.additionalplacements.client.models.neoforge;
 
+import com.firemerald.additionalplacements.client.models.BlockModelUtils;
 import com.firemerald.additionalplacements.client.models.PlacementModelWrapper;
 import com.mojang.logging.annotations.MethodsReturnNonnullByDefault;
-import net.minecraft.client.renderer.block.model.BlockModelPart;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModelPart;
+import net.minecraft.client.resources.model.geometry.BakedQuad;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.extensions.BlockStateModelExtension;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
-import java.util.stream.Stream;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public interface PlacementModelWrapperImpl extends PlacementModelWrapper, BlockStateModelExtension {
-    Stream<BlockModelPart> wrapParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random);
-
     @Override
     @Nullable
     Object createGeometryKey(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random);
 
     @Override
-    default void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockModelPart> parts) {
-        wrapParts(level, pos, state, random).forEach(parts::add);
+    void collectParts(BlockAndTintGetter level, BlockPos pos, BlockState state, RandomSource random, List<BlockStateModelPart> parts);
+
+    @Override
+    default Material.Baked particleMaterial(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+        return getVisualModel().particleMaterial(level, pos, BlockModelUtils.getModeledState(state));
     }
 
     @Override
-    default TextureAtlasSprite particleIcon(BlockAndTintGetter level, BlockPos pos, BlockState state) {
-        return getVisualModel().particleIcon(level, pos, state);
+    default @BakedQuad.MaterialFlags int materialFlags(BlockAndTintGetter level, BlockPos pos, BlockState state) {
+        return getVisualModel().materialFlags(level, pos, BlockModelUtils.getModeledState(state));
     }
 }

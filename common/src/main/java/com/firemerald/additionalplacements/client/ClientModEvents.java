@@ -1,19 +1,14 @@
 package com.firemerald.additionalplacements.client;
 
-import com.firemerald.additionalplacements.block.AdditionalPlacementBlock;
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
 import com.firemerald.additionalplacements.client.block.highlight.IBlockHighlightAction;
 import com.firemerald.additionalplacements.config.APConfigs;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.renderer.state.LevelRenderState;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.client.renderer.state.level.LevelRenderState;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-
-import java.util.function.BiConsumer;
 
 public class ClientModEvents {
     public static void onInput() {
@@ -51,9 +46,5 @@ public class ClientModEvents {
                 }
             }
         }
-    }
-
-    public static void addBlockColors(BiConsumer<BlockColor, Block[]> register) {
-        register.accept(new AdditionalBlockColor(), BuiltInRegistries.BLOCK.stream().filter(block -> block instanceof AdditionalPlacementBlock<?> additionalPlacementBlock && !additionalPlacementBlock.hasCustomColors()).toArray(Block[]::new));
     }
 }

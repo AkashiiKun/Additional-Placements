@@ -5,8 +5,9 @@
   "minVersion": "0.8",
   "plugin": "com.firemerald.additionalplacements.mixin.APMixinPlugin",
   "client": [
-    "MixinWrapperBlockStateModel",
-    "MixinLocalPlayer"
+    "MixinBlockColors",
+    "MixinLocalPlayer",
+    "MixinWrapperBlockStateModel"
   ],
   "mixins": [
     "MixinBasePressurePlateBlock",

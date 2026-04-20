@@ -24,6 +24,7 @@ import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.pathfinder.PathType;
 import net.neoforged.neoforge.common.ItemAbility;
+import net.neoforged.neoforge.common.enums.BubbleColumnDirection;
 import net.neoforged.neoforge.common.extensions.IBlockExtension;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,7 +131,7 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default boolean onTreeGrow(BlockState state, LevelReader level, BiConsumer<BlockPos, BlockState> placeFunction, RandomSource randomSource, BlockPos pos, TreeConfiguration config) {
+    default boolean onTreeGrow(BlockState state, WorldGenLevel level, BiConsumer<BlockPos, BlockState> placeFunction, RandomSource randomSource, BlockPos pos, TreeConfiguration config) {
         BlockState modelState = getModelState(state);
         BiConsumer<BlockPos, BlockState> newPlaceFunction = (placePos, placeState) -> {
             if (placePos.equals(pos)) placeState = AdditionalPlacementBlock.applyChanges(state, modelState, placeState);
@@ -291,7 +292,7 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndTintGetter level, BlockPos pos, FluidState fluidState) {
+    default boolean shouldDisplayFluidOverlay(BlockState state, BlockAndLightGetter level, BlockPos pos, FluidState fluidState) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().shouldDisplayFluidOverlay(modelState, level, pos, fluidState);
     }
@@ -335,7 +336,7 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     }
 
     @Override
-    default BlockState getAppearance(BlockState state, BlockAndTintGetter level, BlockPos pos, Direction side, @Nullable BlockState queryState, @Nullable BlockPos queryPos) {
+    default BlockState getAppearance(BlockState state, BlockAndLightGetter level, BlockPos pos, Direction side, @org.jspecify.annotations.Nullable BlockState queryState, @org.jspecify.annotations.Nullable BlockPos queryPos) {
         BlockState modelState = getModelState(state);
         BlockState newModelState = modelState.getAppearance(level, pos, getRotation(state).unapply(side), queryState, queryPos);
         return AdditionalPlacementBlock.applyChanges(modelState, modelState, newModelState);
@@ -346,5 +347,17 @@ public interface INeoForgeAdditionalPlacementBlock<T extends Block> extends IPla
     default PushReaction getPistonPushReaction(BlockState state) {
         BlockState modelState = getModelState(state);
         return modelState.getBlock().getPistonPushReaction(state);
+    }
+
+    @Override
+    default boolean isEmpty(BlockState state) {
+        BlockState modelState = getModelState(state);
+        return modelState.getBlock().isEmpty(modelState);
+    }
+
+    @Override
+    default BubbleColumnDirection getBubbleColumnDirection(BlockState state) {
+        BlockState modelState = getModelState(state);
+        return modelState.getBlock().getBubbleColumnDirection(modelState);
     }
 }

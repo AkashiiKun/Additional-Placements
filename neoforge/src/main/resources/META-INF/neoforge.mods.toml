@@ -16,14 +16,14 @@ Adds additional placements for blocks:\nSlabs can be placed vertically.\nStairs 
 [[dependencies.additionalplacements]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21,)"
+versionRange = "[26,)"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.additionalplacements]]
 modId = "minecraft"
 type = "required"
-versionRange = "[1.21.11,)"
+versionRange = "[26.1,)"
 ordering = "NONE"
 side = "BOTH"
 

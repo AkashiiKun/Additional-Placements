@@ -12,7 +12,8 @@ import net.minecraft.client.data.models.BlockModelGenerators;
 import net.minecraft.client.data.models.MultiVariant;
 import net.minecraft.client.data.models.blockstates.MultiVariantGenerator;
 import net.minecraft.client.data.models.model.ModelLocationUtils;
-import net.minecraft.client.renderer.block.model.Variant;
+import net.minecraft.client.renderer.block.dispatch.Variant;
+import net.minecraft.client.resources.model.sprite.Material;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.random.WeightedList;
 import net.minecraft.world.level.block.Block;
@@ -84,7 +85,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return textures(BetterTextureMapping.sideAll(block, suffix));
 	}
 	
-	public V sideAll(Identifier texture) {
+	public V sideAll(Material texture) {
 		return textures(BetterTextureMapping.sideAll(texture));
 	}
 	
@@ -96,7 +97,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return textures(BetterTextureMapping.pillar(block, suffix));
 	}
 	
-	public V pillar(Identifier side, Identifier end) {
+	public V pillar(Material side, Material end) {
 		return textures(BetterTextureMapping.pillar(side, end));
 	}
 	
@@ -108,7 +109,7 @@ public abstract class BlockModelGenerator<T extends Block, U extends AdditionalP
 		return textures(BetterTextureMapping.complete(block, suffix));
 	}
 	
-	public V complete(Identifier side, Identifier top, Identifier bottom) {
+	public V complete(Material side, Material top, Material bottom) {
 		return textures(BetterTextureMapping.complete(side, top, bottom));
 	}
 	

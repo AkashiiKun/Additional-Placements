@@ -3,9 +3,9 @@ package com.firemerald.additionalplacements.client.models.rotated.fabric;
 import com.firemerald.additionalplacements.client.models.fabric.PlacementModelWrapperImpl;
 import com.firemerald.additionalplacements.client.models.rotated.BakedRotatedPlacementModel;
 import com.firemerald.additionalplacements.util.BlockRotation;
+import net.minecraft.client.renderer.block.BlockAndTintGetter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 

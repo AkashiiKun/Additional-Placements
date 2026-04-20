@@ -6,7 +6,7 @@ import com.firemerald.additionalplacements.client.gui.screen.ConnectionErrorsScr
 import com.firemerald.additionalplacements.util.MessageTree;
 
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.FormattedCharSequence;
 
@@ -46,11 +46,11 @@ public class ConnectionErrorsList extends BetterObjectSelectionList<ConnectionEr
 		}
 
 		@Override
-		public void render(GuiGraphics guiGraphics, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
+		public void render(GuiGraphicsExtractor guiGraphics, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick) {
             Font font = screen.getFont();
             int y = top + 2;
             for (FormattedCharSequence string : split) {
-            	guiGraphics.drawString(font, string, left + 5 + tabulation, y, 0xFFFFFF, false);
+            	guiGraphics.text(font, string, left + 5 + tabulation, y, 0xFFFFFF, false);
                 y += font.lineHeight;
             }
 		}

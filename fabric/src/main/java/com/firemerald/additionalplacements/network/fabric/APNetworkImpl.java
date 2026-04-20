@@ -40,22 +40,22 @@ public class APNetworkImpl {
     }
 
     public static <T extends ClientPlayPacketImpl> void registerClientPlayPacket(CustomPacketPayload.Type<T> type, Function<RegistryFriendlyByteBuf, T> fromBuffer) {
-        PayloadTypeRegistry.playS2C().register(type, new APStreamCodec<>(fromBuffer));
+        PayloadTypeRegistry.clientboundPlay().register(type, new APStreamCodec<>(fromBuffer));
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) ClientPlayNetworking.registerGlobalReceiver(type, ClientPlayPacketImpl::handleClient);
     }
 
     public static <T extends ServerPlayPacketImpl> void registerServerPlayPacket(CustomPacketPayload.Type<T> type, Function<RegistryFriendlyByteBuf, T> fromBuffer) {
-        PayloadTypeRegistry.playC2S().register(type, new APStreamCodec<>(fromBuffer));
+        PayloadTypeRegistry.serverboundPlay().register(type, new APStreamCodec<>(fromBuffer));
         ServerPlayNetworking.registerGlobalReceiver(type, ServerPlayPacketImpl::handleServer);
     }
 
     public static <T extends ClientConfigurationPacketImpl> void registerClientConfigurationPacket(CustomPacketPayload.Type<T> type, Function<FriendlyByteBuf, T> fromBuffer) {
-        PayloadTypeRegistry.configurationS2C().register(type, new APStreamCodec<>(fromBuffer));
+        PayloadTypeRegistry.clientboundConfiguration().register(type, new APStreamCodec<>(fromBuffer));
         if (FabricLoader.getInstance().getEnvironmentType() == EnvType.CLIENT) ClientConfigurationNetworking.registerGlobalReceiver(type, ClientConfigurationPacketImpl::handleClient);
     }
 
     public static <T extends ServerConfigurationPacketImpl> void registerServerConfigurationPacket(CustomPacketPayload.Type<T> type, Function<FriendlyByteBuf, T> fromBuffer) {
-        PayloadTypeRegistry.configurationC2S().register(type, new APStreamCodec<>(fromBuffer));
+        PayloadTypeRegistry.serverboundConfiguration().register(type, new APStreamCodec<>(fromBuffer));
         ServerConfigurationNetworking.registerGlobalReceiver(type, ServerConfigurationPacketImpl::handleServer);
     }
 

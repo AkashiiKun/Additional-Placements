@@ -2,7 +2,7 @@ package com.firemerald.additionalplacements.mixin;
 
 import com.firemerald.additionalplacements.client.models.WrapperBlockStateModelExtension;
 import net.fabricmc.fabric.api.client.model.loading.v1.wrapper.WrapperBlockStateModel;
-import net.minecraft.client.renderer.block.model.BlockStateModel;
+import net.minecraft.client.renderer.block.dispatch.BlockStateModel;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 

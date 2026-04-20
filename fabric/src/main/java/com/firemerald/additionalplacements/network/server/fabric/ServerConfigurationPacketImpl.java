@@ -9,7 +9,7 @@ import net.minecraft.network.FriendlyByteBuf;
 
 public interface ServerConfigurationPacketImpl extends APPacketImpl<FriendlyByteBuf>, ServerConfigurationPacket {
     default void handleServer(ServerConfigurationNetworking.Context context) {
-        ClientConfigurationPacket reply = handleServer(context.server()::execute, context.networkHandler()::disconnect, context.networkHandler()::completeTask);
+        ClientConfigurationPacket reply = handleServer(context.server()::execute, context.packetListener()::disconnect, context.packetListener()::completeTask);
         if (reply instanceof ClientConfigurationPacketImpl apPacket) apPacket.send(context.responseSender());
     }
 }

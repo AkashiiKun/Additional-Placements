@@ -37,7 +37,7 @@ public class CommonEventHandler {
 
     @SubscribeEvent
     public static void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (CommonModEvents.misMatchedTags && TagMismatchChecker.canGenerateTags(event.getEntity())) ((ServerPlayer) event.getEntity()).sendSystemMessage(CommonModEvents.autoGenerateFailed ? TagMismatchChecker.FAILED : TagMismatchChecker.MESSAGE);
+        if (CommonModEvents.misMatchedTags && TagMismatchChecker.canGenerateTags(event.getEntity())) event.getEntity().sendSystemMessage(CommonModEvents.autoGenerateFailed ? TagMismatchChecker.FAILED : TagMismatchChecker.MESSAGE);
     }
 
     @SubscribeEvent

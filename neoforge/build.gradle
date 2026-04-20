@@ -1,5 +1,13 @@
+import dev.architectury.at.AccessTransformSet
+import dev.architectury.at.io.AccessTransformFormats
+import dev.architectury.loom.accesstransformer.Aw2At
+import dev.architectury.loom.util.LfWriter
+
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+
 plugins {
-    id 'com.github.johnrengelman.shadow'
+    id 'com.gradleup.shadow'
 }
 
 architectury {
@@ -23,10 +31,6 @@ loom {
     }
 }
 
-remapJar {
-    atAccessWideners.add loom.accessWidenerPath.get().asFile.name
-}
-
 configurations {
     common {
         canBeResolved = true
@@ -47,20 +51,20 @@ configurations {
 dependencies {
     neoForge "net.neoforged:neoforge:$rootProject.neoforge_version"
 
-    common(project(path: ':common', configuration: 'namedElements')) { transitive false }
+    common(project(path: ':common')) { transitive false }
     shadowBundle project(path: ':common', configuration: 'transformProductionNeoForge')
 
-    //modCompileOnly "maven.modrinth:double-slabs:$doubleslabs_version"
-    modImplementation "maven.modrinth:balm:$balm_version"
-    modImplementation "maven.modrinth:kleeslabs:$kleeslabs_version"
-    //modCompileOnly "maven.modrinth:continuity:$continuity_version"
-    //modCompileOnly "curse.maven:ctm-267602:$ctm_file"
+    //compileOnly "maven.modrinth:double-slabs:$doubleslabs_version"
+    implementation "maven.modrinth:balm:$balm_version"
+    implementation "maven.modrinth:kleeslabs:$kleeslabs_version"
+    //compileOnly "maven.modrinth:continuity:$continuity_version"
+    //compileOnly "curse.maven:ctm-267602:$ctm_file"
 
-    //modImplementation("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
-    //modImplementation "net.createmod.ponder:ponder-neoforge:$ponder_version+mc$create_mc_version"
-    //modCompileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-$create_mc_version:$flywheel_version"
-    //modRuntimeOnly "dev.engine-room.flywheel:flywheel-neoforge-$create_mc_version:$flywheel_version"
-    //modImplementation "com.tterrag.registrate:Registrate:$registrate_version"
+    //implementation("com.simibubi.create:create-$create_mc_version:$create_version:slim") { transitive = false }
+    //implementation "net.createmod.ponder:ponder-neoforge:$ponder_version+mc$create_mc_version"
+    //compileOnly "dev.engine-room.flywheel:flywheel-neoforge-api-$create_mc_version:$flywheel_version"
+    //runtimeOnly "dev.engine-room.flywheel:flywheel-neoforge-$create_mc_version:$flywheel_version"
+    //implementation "com.tterrag.registrate:Registrate:$registrate_version"
 }
 
 processResources {
@@ -76,6 +80,23 @@ shadowJar {
     archiveClassifier = 'dev-shadow'
 }
 
-remapJar {
-    input.set shadowJar.archiveFile
+jar {
+    dependsOn shadowJar
+    //the following script manually merges the shadow jar into the main jar
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from (zipTree(shadowJar.archiveFile))
+
+    //the following script is a really sucky way to convert an access widener to an access transformer in lack of a task that PROPERLY does that.
+    AccessTransformSet at
+    File awFile = loom.accessWidenerPath.get().asFile
+    try (BufferedReader reader = Files.newBufferedReader(awFile.toPath(), StandardCharsets.UTF_8)) {
+        at = Aw2At.toAccessTransformSet(reader)
+    }
+    java.nio.file.Path tempPath = java.nio.file.Path.of("temp").toAbsolutePath()
+    java.nio.file.Path atPath = tempPath.resolve("META-INF/accesstransformer.cfg")
+    Files.createDirectories(atPath.getParent())
+    try (Writer writer = new LfWriter(Files.newBufferedWriter(atPath))) {
+        AccessTransformFormats.FML.write(writer, at)
+    }
+    from tempPath.toString()
 }

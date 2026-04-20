@@ -9,8 +9,9 @@ import java.util.function.Predicate;
 import com.google.common.collect.Lists;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractContainerWidget;
+import net.minecraft.client.gui.components.AbstractScrollArea;
 import net.minecraft.client.gui.components.events.ContainerEventHandler;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.layouts.HeaderAndFooterLayout;
@@ -47,7 +48,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	private E hovered;
 
 	public AbstractBetterSelectionList(Minecraft minecraft, int x, int y, int width, int height, int normalItemHeight) {
-		super(x, y, width, height, CommonComponents.EMPTY);
+		super(x, y, width, height, CommonComponents.EMPTY, AbstractScrollArea.defaultSettings(normalItemHeight / 2));
 		this.minecraft = minecraft;
 		this.normalItemHeight = normalItemHeight;
 	}
@@ -182,14 +183,14 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		return false;
 	}
 
-	protected void renderHeader(GuiGraphics guiGraphics, int x, int y) {
+	protected void renderHeader(GuiGraphicsExtractor guiGraphics, int x, int y) {
 	}
 
-	protected void renderDecorations(GuiGraphics guiGraphics, int mouseX, int mouseY) {
+	protected void renderDecorations(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY) {
 	}
 
 	@Override
-	public void renderWidget(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+	public void extractWidgetRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
 		this.hovered = this.isMouseOver(mouseX, mouseY) ? this.getEntryAtPosition(mouseX, mouseY) : null;
 		this.renderListBackground(guiGraphics);
 		this.enableScissor(guiGraphics);
@@ -202,7 +203,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		this.renderListItems(guiGraphics, mouseX, mouseY, partialTick);
 		guiGraphics.disableScissor();
 		this.renderListSeparators(guiGraphics);
-		if (this.scrollbarVisible()) {
+		if (this.scrollable()) {
 			int scrollPos = this.getScrollbarPosition();
 			int scrollSize = (int)((float)(this.height * this.height) / (float)this.getMaxPosition());
 			scrollSize = Mth.clamp(scrollSize, 32, this.height - 8);
@@ -219,18 +220,18 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 	}
 
 	@Override
-	protected boolean scrollbarVisible() {
+	protected boolean scrollable() {
 		return this.getMaxScroll() > 0;
 	}
 
-	protected void renderListSeparators(GuiGraphics pGuiGraphics) {
+	protected void renderListSeparators(GuiGraphicsExtractor pGuiGraphics) {
 		Identifier headerSeparator = this.minecraft.level == null ? Screen.HEADER_SEPARATOR : Screen.INWORLD_HEADER_SEPARATOR;
 		Identifier footerSeparator = this.minecraft.level == null ? Screen.FOOTER_SEPARATOR : Screen.INWORLD_FOOTER_SEPARATOR;
 		pGuiGraphics.blit(RenderPipelines.GUI_TEXTURED, headerSeparator, this.getX(), this.getY() - 2, 0.0F, 0.0F, this.getWidth(), 2, 32, 2);
 		pGuiGraphics.blit(RenderPipelines.GUI_TEXTURED, footerSeparator, this.getX(), this.getBottom(), 0.0F, 0.0F, this.getWidth(), 2, 32, 2);
 	}
 
-	protected void renderListBackground(GuiGraphics pGuiGraphics) {
+	protected void renderListBackground(GuiGraphicsExtractor pGuiGraphics) {
 		Identifier resourcelocation = this.minecraft.level == null ? MENU_LIST_BACKGROUND : INWORLD_MENU_LIST_BACKGROUND;
 		pGuiGraphics.blit(
 				RenderPipelines.GUI_TEXTURED,
@@ -246,7 +247,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		);
 	}
 
-	protected void enableScissor(GuiGraphics guiGraphics) {
+	protected void enableScissor(GuiGraphicsExtractor guiGraphics) {
 		guiGraphics.enableScissor(this.getX(), this.getY(), this.getRight(), this.getBottom());
 	}
 
@@ -456,7 +457,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		return mouseY >= this.getY() && mouseY <= this.getBottom() && mouseX >= this.getX() && mouseX <= this.getRight();
 	}
 
-	protected void renderListItems(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+	protected void renderListItems(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
 		int left = this.getRowLeft();
 		int width = this.getRowWidth();
 		int top = this.getY() + this.headerHeight - (int) this.scrollAmount;
@@ -472,7 +473,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 	}
 
-	protected void renderItem(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, E entry, int left, int top, int width, int height) {
+	protected void renderItem(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick, E entry, int left, int top, int width, int height) {
 		entry.renderBack(guiGraphics, top, left, width, height, mouseX, mouseY, Objects.equals(this.hovered, entry), partialTick);
 		if (this.isSelectedItem(entry)) {
 			int outerColor = this.isFocused() ? -1 : 0xFF808080;
@@ -482,7 +483,7 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 		entry.render(guiGraphics, top, left, width, height, mouseX, mouseY, Objects.equals(this.hovered, entry), partialTick);
 	}
 
-	protected void renderSelection(GuiGraphics guiGraphics, int top, int width, int height, int outerColor, int innerColor) {
+	protected void renderSelection(GuiGraphicsExtractor guiGraphics, int top, int width, int height, int outerColor, int innerColor) {
 		int minX = this.getX() + (this.width - width) / 2;
 		int maxX = this.getX() + (this.width + width) / 2;
 		guiGraphics.fill(minX, top - 2, maxX, top + height + 2, outerColor);
@@ -581,9 +582,9 @@ public abstract class AbstractBetterSelectionList<E extends AbstractBetterSelect
 
 		public abstract int getHeight();
 
-		public abstract void render(GuiGraphics guiGraphics, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick);
+		public abstract void render(GuiGraphicsExtractor guiGraphics, int top, int left, int width, int height, int mouseX, int mouseY, boolean hovering, float partialTick);
 
-		public void renderBack(GuiGraphics guiGraphics, int top, int left, int width, int height, int mouseX, int mouseY, boolean isMouseOver, float partialTick) {
+		public void renderBack(GuiGraphicsExtractor guiGraphics, int top, int left, int width, int height, int mouseX, int mouseY, boolean isMouseOver, float partialTick) {
 		}
 
 		/**
