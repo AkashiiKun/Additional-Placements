@@ -57,14 +57,26 @@ processResources {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = 'dev-shadow'
+jar {
+    archiveClassifier = "raw"
 }
 
-jar {
-    dependsOn shadowJar
-    //the following script manually merges the shadow jar into the main jar
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from zipTree(shadowJar.archiveFile)
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()       // Remove default source set inclusion
+    from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
+
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = null           // shadowJar becomes the main artifact
+}
+
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
 }

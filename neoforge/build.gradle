@@ -75,16 +75,17 @@ processResources {
     }
 }
 
-shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = 'dev-shadow'
+jar {
+    archiveClassifier = "raw"
 }
 
-jar {
-    dependsOn shadowJar
-    //the following script manually merges the shadow jar into the main jar
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    from (zipTree(shadowJar.archiveFile))
+shadowJar {
+    dependsOn(jar)
+    mainSpec.sourcePaths.clear()       // Remove default source set inclusion
+    from(zipTree(jar.archiveFile))     // Unpack jar output (preserves Loom modifications)
+
+    configurations = [project.configurations.shadowBundle]
+    archiveClassifier = null           // shadowJar becomes the main artifact
 
     //the following script is a really sucky way to convert an access widener to an access transformer in lack of a task that PROPERLY does that.
     AccessTransformSet at
@@ -99,4 +100,15 @@ jar {
         AccessTransformFormats.FML.write(writer, at)
     }
     from tempPath.toString()
+}
+
+configurations {
+    apiElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
+    runtimeElements {
+        outgoing.artifacts.clear()
+        outgoing.artifact(shadowJar)
+    }
 }
