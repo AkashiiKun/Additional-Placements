@@ -30,7 +30,7 @@ jobs:
       - name: upload to github releases
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "build/libs/*"
+          artifacts: "fabric/build/libs/*"
           tag: "v${{ github.run_number }}"
           name: "Release v${{ github.run_number }}"
           body: "Automated build export from workflow run ${{ github.run_number }}."
