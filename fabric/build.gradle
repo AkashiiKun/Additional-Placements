@@ -45,7 +45,7 @@ dependencies {
     compileOnly "maven.modrinth:kleeslabs:$kleeslabs_version"
     //compileOnly "maven.modrinth:continuity:$continuity_version"
 
-    //compileOnly("com.simibubi.create:create-fabric-$create_mc_version:$create_version")
+    compileOnly(localRuntime "maven.modrinth:create-fly:26.1.2-6.0.9-4")
     localRuntime("com.terraformersmc:modmenu:$modmenu_version")
 }
 

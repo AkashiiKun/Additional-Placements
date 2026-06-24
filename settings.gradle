@@ -11,4 +11,3 @@ rootProject.name = 'additionalplacements-26.1'
 
 include 'common'
 include 'fabric'
-include 'neoforge'

@@ -1,12 +1,12 @@
 package com.firemerald.additionalplacements.mixin;
 
+import com.zurrtum.create.content.contraptions.StructureTransform;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.firemerald.additionalplacements.block.interfaces.IPlacementBlock;
-import com.simibubi.create.content.contraptions.StructureTransform;
 
 import net.minecraft.world.level.block.state.BlockState;
 
